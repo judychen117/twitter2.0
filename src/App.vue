@@ -1,6 +1,6 @@
 <template>
-  <div id="restaurant-forum">
-    <main role="main" class="mt-5 bg-white">
+  <div id="twitter-forum">
+    <main role="main" class="bg-white">
       <router-view />
     </main>
   </div>

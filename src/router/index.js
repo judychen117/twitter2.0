@@ -14,6 +14,11 @@ const router = new Router({
       component: Regist
     },
     {
+      path: '/tweets',
+      name: 'tweets-main',
+      component: () => import('./../views/TweetMain.vue')
+    },
+    {
       path: '*',
       name: 'not-found',
       component: NotFound
