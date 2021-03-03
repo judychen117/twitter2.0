@@ -9,12 +9,16 @@
 <script>
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 export default {
   components: {},
 };
 </script>
+
 <style>
+#twitter-forum,
+.bg-white {
+  height: 100%;
+  width: 100%;
 *,
 *::before,
 *::after {
