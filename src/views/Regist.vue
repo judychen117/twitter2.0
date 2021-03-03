@@ -1,7 +1,9 @@
 <template>
   <div class="container py-5">
     <form class="w-50" @submit.stop.prevent="handleSubmit">
-      <p>logo</p>
+      <div class="logo mb-4">
+            <img src="./../../public/Logo.png" alt="alphitter logo">
+        </div>
       <div class="text-center mb-4">
         <h1 class="h3 mb-3 font-weight-normal">建立你的帳號</h1>
       </div>
@@ -77,7 +79,7 @@
         />
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">
+      <button class="btn btn-lg btn-primary btn-block mb-3 mt-4" type="submit">
         註冊
       </button>
 
@@ -119,15 +121,17 @@ export default {
 input {
   color: 657786;
   background: #e5e5e5;
-  /* font-size: 0.8rem; */
+  height: 3.125rem;
+  font-size: 1rem;
 }
 button {
   background: #ff6600;
-  margin-top: 2rem;
+   font-size: 1.125rem;
 }
-.container {
+.container, .logo {
   display: flex;
   align-content: center;
   justify-content: center;
+  font-size: 1.125rem;
 }
 </style>
