@@ -14,6 +14,16 @@ const router = new Router({
       component: Regist
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('./../views/Login.vue')
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: () => import('./../views/Setting.vue')
+    },
+    {
       path: '/tweets',
       name: 'tweets-main',
       component: () => import('./../views/TweetMain.vue')
