@@ -2,11 +2,11 @@
   <div class="main-tweets">
     <NavBar />
     <div class="tweets-container">
+      <div class="tweets-header">
+        <a href="">首頁</a>
+      </div>
       <div class="tweets">
         <div class="tweets-post-card">
-          <div class="tweets-header">
-            <a href="">首頁</a>
-          </div>
           <div class="tweets-post">
             <a href="" class="tweets-avatar">
               <img src="../../public/img/UserAvatar.svg" alt="avatar" />
@@ -24,34 +24,7 @@
         </div>
         <div class="divider"></div>
         <div class="tweets-list">
-          <div class="tweets-card">
-            <div class="tweets-avatar">
-              <img src="../../public/img/UserAvatar.svg" alt="avatar" />
-            </div>
-            <div class="tweets-content">
-              <a href="" class="tweet tweets-title">
-                <h5 class="tweets-name">jason</h5>
-                <h5 class="tweets-id">@jason</h5>
-                <h5 class="tweets-time">3hr</h5>
-              </a>
-              <div class="tweet tweets-text">
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
-              </div>
-              <div class="tweet tweets-footer">
-                <a href="#" class="tweets-comment">
-                  <i class="fas fa-comment"></i>
-                  <span>33</span>
-                </a>
-                <a href="#" class="tweets-like">
-                  <i class="fas fa-heart"></i>
-                  <span>11</span>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TweetCard />
         </div>
       </div>
     </div>
@@ -63,18 +36,18 @@
 // const dummyData = {};
 import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
+import TweetCard from "./../components/TweetCard";
 
 export default {
   components: {
     RecommendUsers,
     NavBar,
+    TweetCard,
   },
 };
 </script>
 
-<style>
-
-
+<style scoped>
 /* main tweets */
 .main-tweets {
   width: 100%;
@@ -88,16 +61,16 @@ export default {
 .tweets-container {
   width: 600px;
   height: 100%;
-  border-left: 1px solid #8d8a8a;
-  border-right: 1px solid #8d8a8a;
+  border-left: 1px solid #e6ecf0;
+  border-right: 1px solid #e6ecf0;
   margin-right: 30px;
 }
 .tweets-header {
   height: 55px;
+  border-bottom: 1px solid #e6ecf0;
 }
 .tweets-post {
   height: auto;
-  border-top: 1px solid #8d8a8a;
   display: flex;
   position: relative;
 }
@@ -112,7 +85,7 @@ export default {
   height: 100%;
 }
 .tweets-card {
-  border-bottom: 1px solid #8d8a8a;
+  border-bottom: 1px solid #e6ecf0;
   display: flex;
   padding: 10px;
 }

@@ -24,6 +24,11 @@ const router = new Router({
       component: () => import('./../views/Setting.vue')
     },
     {
+      path: '/tweets/:tweet_id',
+      name: 'tweet-reply',
+      component: () => import('./../views/TweetReply.vue')
+    },
+    {
       path: '/tweets',
       name: 'tweets-main',
       component: () => import('./../views/TweetMain.vue')

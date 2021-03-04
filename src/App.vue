@@ -19,6 +19,9 @@ export default {
 .bg-white {
   height: 100%;
   width: 100%;
+}
+
+/* reset-css */
 *,
 *::before,
 *::after {
