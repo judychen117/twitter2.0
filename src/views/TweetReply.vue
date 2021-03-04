@@ -43,10 +43,18 @@
               </div>
               <div class="tweet-status-icon">
                 <a href="" class="re-tweet-icon">
-                  <i class="fas fa-comment"></i>
+                  <img
+                    src="../../public/img/commentIcon.svg"
+                    alt=""
+                    class="icon"
+                  />
                 </a>
                 <a href="" class="like-icon">
-                  <i class="fas fa-heart"></i>
+                  <img
+                    src="../../public/img/likeIcon.svg"
+                    alt=""
+                    class="icon"
+                  />
                 </a>
               </div>
             </div>
@@ -204,5 +212,9 @@ a {
 .id,
 .tweets-reply-time {
   color: #657786;
+}
+.icon {
+  width: 30px;
+  height: 30px;
 }
 </style>

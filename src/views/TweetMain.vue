@@ -8,13 +8,19 @@
       <div class="tweets">
         <div class="tweets-post-card">
           <div class="tweets-post">
-            <a href="" class="tweets-avatar">
-              <img src="../../public/img/UserAvatar.svg" alt="avatar" />
+            <a href="">
+              <img
+                src="../../public/img/UserAvatar.svg"
+                alt="avatar"
+                class="tweets-avatar"
+              />
             </a>
             <form class="tweets-form">
               <div class="tweets-text">
                 <label for="text"></label>
-                <textarea class="form-control" rows="3" name="text" />
+                <textarea class="form-control" rows="3" name="text">
+                有什麼新鮮事？
+                </textarea>
               </div>
               <div class="tweets-submit">
                 <button type="submit" class="tweets-button">推文</button>
@@ -48,15 +54,17 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none; /* 拿掉底線 */
+  color: #000000;
+}
 /* main tweets */
 .main-tweets {
   width: 100%;
   height: 100%;
   display: flex;
-  /* flex-direction: row; */
   justify-content: center;
-  /* flex-wrap: wrap; */
-  padding: 3rem 0;
+  /* padding: 3rem 0;   */
 }
 
 .tweets-container {
@@ -67,9 +75,16 @@ export default {
   margin-right: 30px;
 }
 .tweets-header {
+  line-height: 55px;
+  padding-left: 15px;
   height: 55px;
+  font-size: 18px;
   border-bottom: 1px solid #e6ecf0;
 }
+.tweets-post-card {
+  margin: 15px;
+}
+
 .tweets-post {
   height: auto;
   display: flex;
@@ -85,20 +100,13 @@ export default {
 .tweets-list {
   height: 100%;
 }
-.tweets-card {
-  border-bottom: 1px solid #e6ecf0;
-  display: flex;
-  padding: 10px;
-}
-.tweets-title {
-  display: flex;
-}
-.tweets-title > h5 {
-  margin-right: 10px;
-}
+
 .tweets-form {
   width: 100%;
-  margin-bottom: 50px;
+}
+textarea {
+  border: 0px;
+  resize: none;
 }
 .tweets-text {
   width: 100%;
@@ -108,25 +116,20 @@ export default {
   right: 0px;
   position: absolute;
 }
-.tweet {
-  padding: 5px;
-}
+
 .divider {
   width: 100%;
   height: 10px;
   background-color: #e6ecf0;
 }
-
-.tweets-like {
-  margin-left: 80px;
-}
 .tweets-button {
-  width: 64px;
-  height: 40px;
-  border-radius: 64px;
+  font-size: 15px;
+  width: auto;
+  height: auto;
+  border-radius: 62px;
   background: #ff6600;
   margin: 0;
-  padding: 0;
+  padding: 6px;
   border: 1px solid transparent;
   outline: none;
   color: #ffffff;
