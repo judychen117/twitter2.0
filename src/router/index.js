@@ -9,6 +9,11 @@ const router = new Router({
   linkExactActiveClass: 'active',
   routes: [
     {
+      path: '/',
+      name: 'root',
+      redirect: '/login'
+    },
+    {
       path: '/regist',
       name: 'regist',
       component: Regist
@@ -32,6 +37,11 @@ const router = new Router({
       path: '/tweets',
       name: 'tweets-main',
       component: () => import('./../views/TweetMain.vue')
+    },
+    {
+      path: '/admin',
+      name: 'admin-login',
+      component: () => import('./../views/AdminLogin.vue')
     },
     {
       path: '*',
