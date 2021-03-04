@@ -56,6 +56,7 @@ export default {
   /* flex-direction: row; */
   justify-content: center;
   /* flex-wrap: wrap; */
+  padding: 3rem 0;
 }
 
 .tweets-container {
