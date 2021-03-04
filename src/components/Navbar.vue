@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .nav-bar {
   margin-right: 40px;
   width: 235px;

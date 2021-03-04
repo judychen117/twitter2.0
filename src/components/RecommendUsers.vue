@@ -39,7 +39,7 @@
 export default {};
 </script>
 
-<style >
+<style scoped>
 /* Recommend Bar */
 .recommend {
   border-radius: 10px;
