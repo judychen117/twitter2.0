@@ -77,8 +77,8 @@ export default {
           email: this.email,
           password: this.password,
         });
-        const { data } = response;
 
+        const { data } = response;
         // 只要不成功就無法進下一個頁面以避免空值
         if (data.status !== "success") {
           throw new Error(data.message);

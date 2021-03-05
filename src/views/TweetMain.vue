@@ -39,16 +39,116 @@
 </template>
 
 <script>
-// const dummyData = {};
+// const dummyData = {
+//   users: [
+//     {
+//       id: 1,
+//       email: "user1@example.com",
+//       password: "$2a$10$rRG8l0ek0WvGbXHfestB6eNWlUZmFNBgyeKytmPfV8VN66CUjPtge",
+//       name: "user1",
+//       avatar: "https://loremflickr.com/320/240/user/?lock=71.88970419746622",
+//       introduction: null,
+//       role: "user",
+//       account: null,
+//       cover: null,
+//       createdAt: "2021-03-03T14:08:28.000Z",
+//       updatedAt: "2021-03-03T14:08:28.000Z",
+//       Followers: [],
+//       FollowerCount: 0,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 2,
+//       email: "user2@example.com",
+//       password: "$2a$10$q3.A3pJtu1afMaxQpIHcMenidTkpAzNLPjZNRIjVpL1Z3ggznUiei",
+//       name: "user2",
+//       avatar: "https://loremflickr.com/320/240/user/?lock=47.84394218399848",
+//       introduction: null,
+//       role: "user",
+//       account: null,
+//       cover: null,
+//       createdAt: "2021-03-03T14:08:28.000Z",
+//       updatedAt: "2021-03-03T14:08:28.000Z",
+//       Followers: [],
+//       FollowerCount: 0,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 3,
+//       email: "user3@example.com",
+//       password: "$2a$10$wPxvczmzGNszLSeHCKXJ2.7D.IUqIFtY6fjBpQqPO45JDCOaca7.i",
+//       name: "user3",
+//       avatar: "https://loremflickr.com/320/240/user/?lock=0.8636325727364724",
+//       introduction: null,
+//       role: "user",
+//       account: null,
+//       cover: null,
+//       createdAt: "2021-03-03T14:08:29.000Z",
+//       updatedAt: "2021-03-03T14:08:29.000Z",
+//       Followers: [],
+//       FollowerCount: 0,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 4,
+//       email: "user4@example.com",
+//       password: "$2a$10$KW/SklIW36fQskmvb9empuNF/VMP5kIW.UDNu75yE47QqQl9gdtKq",
+//       name: "user4",
+//       avatar: "https://loremflickr.com/320/240/user/?lock=33.60284782451577",
+//       introduction: null,
+//       role: "user",
+//       account: null,
+//       cover: null,
+//       createdAt: "2021-03-03T14:08:29.000Z",
+//       updatedAt: "2021-03-03T14:08:29.000Z",
+//       Followers: [],
+//       FollowerCount: 0,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 5,
+//       email: "user5@example.com",
+//       password: "$2a$10$EQTKVtMYxmAHpnx.66WjR.ptHVkM6xpsgz8lMzlSz6fsX5.xHUPjO",
+//       name: "user5",
+//       avatar: "https://loremflickr.com/320/240/user/?lock=23.613565054849772",
+//       introduction: null,
+//       role: "user",
+//       account: null,
+//       cover: null,
+//       createdAt: "2021-03-03T14:08:29.000Z",
+//       updatedAt: "2021-03-03T14:08:29.000Z",
+//       Followers: [],
+//       FollowerCount: 0,
+//       isFollowed: false,
+//     },
+//   ],
+// };
 import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
 import TweetCard from "./../components/TweetCard";
+import UsersAPI from "./../apis/user";
+// import authorizationAPI from "./../apis/authorization";
+// import { Toast } from "./../utils/helpers";
 
 export default {
   components: {
     RecommendUsers,
     NavBar,
     TweetCard,
+  },
+  created() {
+    this.fetchUsers();
+  },
+  methods: {
+    async fetchUsers() {
+      try {
+        const { data } = await UsersAPI.get();
+        console.log("data", data);
+      } catch (error) {
+        console.log("error");
+      }
+    },
+    // fetchUsers() {},
   },
 };
 </script>
