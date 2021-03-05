@@ -44,6 +44,11 @@ const router = new Router({
       component: () => import('./../views/AdminLogin.vue')
     },
     {
+      path: '/admin_tweets',
+      name: 'admin-tweets',
+      component: () => import('./../views/AdminTweets.vue')
+    },
+    {
       path: '*',
       name: 'not-found',
       component: NotFound

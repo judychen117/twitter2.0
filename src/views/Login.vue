@@ -38,7 +38,11 @@
         <div class="seperation"></div>
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mb-3 mt-4" type="submit">
+      <button
+        class="btn btn-lg btn-primary btn-block mb-3 mt-4"
+        :disabled="isProcessing"
+        type="submit"
+      >
         登入
       </button>
 
@@ -59,6 +63,7 @@ export default {
     return {
       email: "",
       password: "",
+      isProcessing: false,
     };
   },
   methods: {
@@ -71,13 +76,15 @@ export default {
           });
           return;
         }
-        //避免做出多次請求 this.isProcessing = true;
+        //避免做出多次請求
+        this.isProcessing = true;
 
         const response = await authorizationAPI.signIn({
           email: this.email,
           password: this.password,
         });
 
+        console.log("response", response);
         const { data } = response;
         // 只要不成功就無法進下一個頁面以避免空值
         if (data.status !== "success") {
@@ -96,7 +103,7 @@ export default {
           icon: "warning",
           title: "請確認您輸入了正確的帳號密碼",
         });
-        // this.isProcessing = false;
+        this.isProcessing = false;
         console.log(e);
       }
     },
