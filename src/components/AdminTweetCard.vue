@@ -9,7 +9,8 @@
           <a href="" class="tweet tweets-title">
             <div class="tweets-name">{{ tweet.User.name }}</div>
             <div class="tweets-id">{{ tweet.User.account }}</div>
-            <div class="tweets-time">3hr</div>
+            <span class="dot"></span>
+            <div class="tweets-time">{{tweet.createdAt | fromNow}}</div>
           </a>
           <div class="tweet tweets-text">
             <p class="card-text">
@@ -34,6 +35,7 @@
 <script>
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
+import {fromNowFilter} from './../utils/mixins'
 
 export default {
   data() {
@@ -75,6 +77,7 @@ export default {
       }
     },
   },
+  mixins: [fromNowFilter]
 };
 </script>
 
@@ -84,10 +87,14 @@ a {
   color: #000000;
 }
 .tweets-card {
-  border-bottom: 1px solid #e6ecf0;
-  display: flex;
-  padding: 15px;
-  position: relative;
+  border-bottom: 1px solid #E6ECF0;
+}
+.tweets-list {
+  margin: 60px 30px;
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1.5rem;
 }
 .tweets-avatar {
   width: 50px;
@@ -103,15 +110,22 @@ a {
 .tweets-title > h5 {
   margin-right: 10px;
 }
-.tweet {
-  padding: 5px;
-}
 .tweets-name {
   margin-right: 5px;
 }
 .tweets-id,
 .tweets-time {
   color: #657786;
+  font-weight: 300;
+}
+.dot {
+  background-color: #657786;
+  border-radius: 50%;
+  height: 0.5rem;
+  width: 0.5rem;
+  position: relative;
+  top: 8px;
+  margin: 0 0.5rem;
 }
 .icon {
   position: absolute;
@@ -119,12 +133,5 @@ a {
   height: 15px;
   top: 1rem;
   right: 1rem;
-}
-.tweets-list {
-  display: flex;
-  flex-direction: column;
-}
-.tweet {
-  width: 950px;
 }
 </style>

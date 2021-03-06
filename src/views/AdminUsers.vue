@@ -2,15 +2,11 @@
   <div class="main-tweets">
     <AdminNavBar />
     <div class="tweets-container">
-      <div class="tweets">
-        <div class="tweets-title">
+        <div class="page-title">
           <p>使用者列表</p>
         </div>
         <div class="divider"></div>
-        <div class="tweets-list">
-          <AdminUserCard />
-        </div>
-      </div>
+        <AdminUserCard />
     </div>
   </div>
 </template>
@@ -20,12 +16,11 @@
 import AdminNavBar from "./../components/AdminNavbar";
 import AdminUserCard from "./../components/AdminUserCard";
 
-
 export default {
   components: {
     AdminNavBar,
     AdminUserCard,
-  }
+  },
 };
 </script>
 
@@ -49,16 +44,9 @@ a {
   border-right: 1px solid #e6ecf0;
   margin-right: 30px;
 }
-.tweets-title {
+.page-title {
+  font-size: 18px;
   padding: 1rem 1rem;
-}
-.tweets-post {
-  height: auto;
-  display: flex;
-  position: relative;
-}
-.tweets-list {
-  height: 100%;
 }
 .divider {
   width: 100%;

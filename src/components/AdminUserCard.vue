@@ -1,12 +1,48 @@
 <template>
-  <div class="tweets-card">
-    <div class="tweets-table" v-for="user in users" :key="user.id" ></div>
+  <div class="user-cards">
+    <div class="user-card" v-for="user in users" :key="user.id">
+      <div class="user-pic">
+        <img :src="user.cover" alt="cover" />
+        <a href="" class="user-avatar">
+          <img :src="user.avator | emptyImage" alt="avatar" />
+        </a>
+      </div>
+      <div class="user-content">
+        <a href="">
+          <div class="user-name">{{ user.name }}</div>
+          <div class="user-id">{{ user.account }}</div>
+        </a>
+        <div class="user-activity">
+          <a href="#" class="tweets-coactivity">
+            <img
+              src="../../public/img/commentIcon.svg"
+              alt="comments"
+              class="icon"
+            />
+            <span>{{ user.Tweets.length }}</span>
+          </a>
+          <a href="#" class="tweets-like">
+            <img src="../../public/img/likeIcon.svg" alt="likes" class="icon" />
+            <span>{{ user.Likes.length }}</span>
+          </a>
+        </div>
+        <div class="user-follow">
+          <p>
+            <span class="following">{{ user.Followings.length }}個</span>跟隨中
+          </p>
+          <p>
+            <span class="follower">{{ user.Followers.length }}個位</span>跟隨者
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
+import { emptyImageFilter } from "./../utils/mixins";
 
 export default {
   data() {
@@ -22,7 +58,7 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data;
-        console.log(response.data);
+        this.users.filter(user=> user.role!=="admin")
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -32,6 +68,7 @@ export default {
       }
     },
   },
+  mixins: [emptyImageFilter],
   created() {
     this.fetchUsers();
   },
@@ -43,41 +80,57 @@ a {
   text-decoration: none; /* 拿掉底線 */
   color: #000000;
 }
-.tweets-card {
-  border-bottom: 1px solid #e6ecf0;
-  display: flex;
-  padding: 15px;
+.user-cards {
+  margin: 60px 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 1.5rem;
+}
+.user-card {
+  margin-left: 16px;
+  height: 314px;
+  width: 245px;
+  background: #f6f7f8;
+  display: relative;
+}
+.user-pic {
+  height: 140px;
+  width: 100%;
   position: relative;
 }
-.tweets-avatar {
-  width: 50px;
-  height: 50px;
+.user-avatar {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background-color: palegreen;
-  margin-right: 10px;
 }
-.tweets-title {
-  display: flex;
-  margin: 4px 0 4px 0;
+.user-content {
+  display: absolute;
+  text-align: center;
 }
-.tweets-title > h5 {
-  margin-right: 10px;
-}
-.tweet {
-  padding: 5px;
-}
-.tweets-name {
-  margin-right: 5px;
-}
-.tweets-id,
-.tweets-time {
+.user-id {
   color: #657786;
+  font-weight: 100;
+  padding-top: 0.5rem;
 }
 .icon {
-  position: absolute;
+  margin: 0 10px;
   width: 15;
   height: 15px;
-  top: 1rem;
-  right: 1rem;
+}
+.user-activity {
+  padding: 1rem 0;
+}
+.user-follow {
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+}
+.user-follow p {
+  padding: 0 0.5rem;
+  font-weight: 300;
+}
+.user-follow span {
+  font-weight: 500;
 }
 </style>
