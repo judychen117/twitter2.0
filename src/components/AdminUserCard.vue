@@ -2,18 +2,18 @@
   <div class="user-cards">
     <div class="user-card" v-for="user in users" :key="user.id">
       <div class="user-pic">
-        <img :src="user.cover" alt="cover" />
+        <img :src="user.cover | emptyCover" alt="cover" />
         <a href="" class="user-avatar">
           <img :src="user.avator | emptyImage" alt="avatar" />
         </a>
       </div>
       <div class="user-content">
-        <a href="">
+        <a href="" >
           <div class="user-name">{{ user.name }}</div>
           <div class="user-id">{{ user.account }}</div>
         </a>
         <div class="user-activity">
-          <a href="#" class="tweets-coactivity">
+          <a href="#" class="tweets-activity">
             <img
               src="../../public/img/commentIcon.svg"
               alt="comments"
@@ -58,7 +58,7 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data;
-        this.users.filter(user=> user.role!=="admin")
+        this.users.filter((user) => user.role !== "admin");
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -91,27 +91,35 @@ a {
   height: 314px;
   width: 245px;
   background: #f6f7f8;
-  display: relative;
+  border-top-left-radius: 10rem;
+  border-top-right-radius: 10rem;
 }
 .user-pic {
   height: 140px;
   width: 100%;
   position: relative;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 10rem;
 }
-.user-avatar {
+.user-avatar img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: palegreen;
+  border: 5px solid #fff;
+  position: absolute;
+  top: 4.5rem;
+  left: 4.5rem;
 }
 .user-content {
   display: absolute;
   text-align: center;
 }
+.user-name{
+  padding-top: 2rem;
+}
 .user-id {
   color: #657786;
   font-weight: 100;
-  padding-top: 0.5rem;
 }
 .icon {
   margin: 0 10px;
@@ -119,7 +127,7 @@ a {
   height: 15px;
 }
 .user-activity {
-  padding: 1rem 0;
+  padding: 0.8rem 0;
 }
 .user-follow {
   font-size: 12px;
