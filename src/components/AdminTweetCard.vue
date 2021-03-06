@@ -1,29 +1,31 @@
 <template>
   <div class="tweets-card">
-    <div class="tweets-table" v-for="tweet in tweets" :key="tweet.id">
-      <a href="" class="tweets-avatar">
-        <img src="../../public/img/UserAvatar.svg" alt="avatar" />
-      </a>
-      <div class="tweets-content">
-        <a href="" class="tweet tweets-title">
-          <div class="tweets-name">jason</div>
-          <div class="tweets-id">@jason・</div>
-          <div class="tweets-time">3hr</div>
+    <div class="tweets-list" v-for="tweet in tweets" :key="tweet.UserId">
+      <div class="tweet">
+        <a href="" class="tweets-avatar">
+          <img :src="tweet.User.avator" alt="avatar" />
         </a>
-        <div class="tweet tweets-text">
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-        </div>
-        <div class="tweet tweets-delete">
-          <a href="#">
-            <img
-              src="../../public/img/cancel.svg"
-              alt="deleteIcon"
-              class="icon"
-            />
+        <div class="tweets-content">
+          <a href="" class="tweet tweets-title">
+            <div class="tweets-name">{{ tweet.User.name }}</div>
+            <div class="tweets-id">{{ tweet.User.account }}</div>
+            <span class="dot"></span>
+            <div class="tweets-time">{{tweet.createdAt | fromNow}}</div>
           </a>
+          <div class="tweet tweets-text">
+            <p class="card-text">
+              {{ tweet.description }}
+            </p>
+          </div>
+          <div class="tweet tweets-delete">
+            <a href="#">
+              <img
+                src="../../public/img/cancel.svg"
+                alt="deleteIcon"
+                class="icon"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -33,13 +35,16 @@
 <script>
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
+import {fromNowFilter} from './../utils/mixins'
 
 export default {
   data() {
     return {
       tweets: [],
-      isProcessing: false,
     };
+  },
+  created() {
+    this.fetchTweets();
   },
   methods: {
     async fetchTweets() {
@@ -48,7 +53,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        this.tweets = response.data.tweets;
+        this.tweets = response.data;
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -72,9 +77,7 @@ export default {
       }
     },
   },
-  created() {
-    this.fetchTweets();
-  },
+  mixins: [fromNowFilter]
 };
 </script>
 
@@ -84,10 +87,14 @@ a {
   color: #000000;
 }
 .tweets-card {
-  border-bottom: 1px solid #e6ecf0;
-  display: flex;
-  padding: 15px;
-  position: relative;
+  border-bottom: 1px solid #E6ECF0;
+}
+.tweets-list {
+  margin: 60px 30px;
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1.5rem;
 }
 .tweets-avatar {
   width: 50px;
@@ -103,15 +110,22 @@ a {
 .tweets-title > h5 {
   margin-right: 10px;
 }
-.tweet {
-  padding: 5px;
-}
 .tweets-name {
   margin-right: 5px;
 }
 .tweets-id,
 .tweets-time {
   color: #657786;
+  font-weight: 300;
+}
+.dot {
+  background-color: #657786;
+  border-radius: 50%;
+  height: 0.5rem;
+  width: 0.5rem;
+  position: relative;
+  top: 8px;
+  margin: 0 0.5rem;
 }
 .icon {
   position: absolute;
