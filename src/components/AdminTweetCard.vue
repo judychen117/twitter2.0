@@ -1,29 +1,30 @@
 <template>
   <div class="tweets-card">
-    <div class="tweets-table" v-for="tweet in tweets" :key="tweet.id">
-      <a href="" class="tweets-avatar">
-        <img src="../../public/img/UserAvatar.svg" alt="avatar" />
-      </a>
-      <div class="tweets-content">
-        <a href="" class="tweet tweets-title">
-          <div class="tweets-name">jason</div>
-          <div class="tweets-id">@jason・</div>
-          <div class="tweets-time">3hr</div>
+    <div class="tweets-list" v-for="tweet in tweets" :key="tweet.UserId">
+      <div class="tweet">
+        <a href="" class="tweets-avatar">
+          <img :src="tweet.User.avator" alt="avatar" />
         </a>
-        <div class="tweet tweets-text">
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-        </div>
-        <div class="tweet tweets-delete">
-          <a href="#">
-            <img
-              src="../../public/img/cancel.svg"
-              alt="deleteIcon"
-              class="icon"
-            />
+        <div class="tweets-content">
+          <a href="" class="tweet tweets-title">
+            <div class="tweets-name">{{ tweet.User.name }}</div>
+            <div class="tweets-id">{{ tweet.User.account }}</div>
+            <div class="tweets-time">3hr</div>
           </a>
+          <div class="tweet tweets-text">
+            <p class="card-text">
+              {{ tweet.description }}
+            </p>
+          </div>
+          <div class="tweet tweets-delete">
+            <a href="#">
+              <img
+                src="../../public/img/cancel.svg"
+                alt="deleteIcon"
+                class="icon"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -38,8 +39,10 @@ export default {
   data() {
     return {
       tweets: [],
-      isProcessing: false,
     };
+  },
+  created() {
+    this.fetchTweets();
   },
   methods: {
     async fetchTweets() {
@@ -48,7 +51,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        this.tweets = response.data.tweets;
+        this.tweets = response.data;
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -71,9 +74,6 @@ export default {
         });
       }
     },
-  },
-  created() {
-    this.fetchTweets();
   },
 };
 </script>
@@ -119,5 +119,12 @@ a {
   height: 15px;
   top: 1rem;
   right: 1rem;
+}
+.tweets-list {
+  display: flex;
+  flex-direction: column;
+}
+.tweet {
+  width: 950px;
 }
 </style>
