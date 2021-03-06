@@ -1,35 +1,81 @@
 <template>
   <div class="tweets-card">
-    <a href="" class="tweets-avatar">
-      <img src="../../public/img/UserAvatar.svg" alt="avatar" />
-    </a>
-    <div class="tweets-content">
-      <a href="" class="tweet tweets-title">
-        <div class="tweets-name">jason</div>
-        <div class="tweets-id">@jason・</div>
-        <div class="tweets-time">3hr</div>
+    <div class="tweets-table" v-for="tweet in tweets" :key="tweet.id">
+      <a href="" class="tweets-avatar">
+        <img src="../../public/img/UserAvatar.svg" alt="avatar" />
       </a>
-      <div class="tweet tweets-text">
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-      </div>
-      <div class="tweet tweets-delete">
-        <a href="#">
-          <img
-            src="../../public/img/cancel.svg"
-            alt="deleteIcon"
-            class="icon"
-          />
+      <div class="tweets-content">
+        <a href="" class="tweet tweets-title">
+          <div class="tweets-name">jason</div>
+          <div class="tweets-id">@jason・</div>
+          <div class="tweets-time">3hr</div>
         </a>
+        <div class="tweet tweets-text">
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </p>
+        </div>
+        <div class="tweet tweets-delete">
+          <a href="#">
+            <img
+              src="../../public/img/cancel.svg"
+              alt="deleteIcon"
+              class="icon"
+            />
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import adminAPI from "./../apis/admin";
+import { Toast } from "./../utils/helpers";
+
+export default {
+  data() {
+    return {
+      tweets: [],
+      isProcessing: false,
+    };
+  },
+  methods: {
+    async fetchTweets() {
+      try {
+        const response = await adminAPI.tweets.getTweets();
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        this.tweets = response.data.tweets;
+      } catch (e) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得Tweets，請稍後再試",
+        });
+        console.log(e);
+      }
+    },
+    async deleteRestaurant(tweetId) {
+      try {
+        const { data } = await adminAPI.tweets.deleteTweet({ tweetId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.tweets = this.tweets.filter((tweet) => tweet.id !== tweetId);
+      } catch (e) {
+        Toast.fire({
+          icon: "error",
+          title: "無法刪除tweet，請稍後再試",
+        });
+      }
+    },
+  },
+  created() {
+    this.fetchTweets();
+  },
+};
 </script>
 
 <style scoped>
