@@ -8,7 +8,7 @@
         </div>
         <div class="divider"></div>
         <div class="tweets-list">
-          <AdminTweetCard />
+          <AdminTweetCard/>
           <AdminTweetCard />
         </div>
       </div>
@@ -21,11 +21,12 @@
 import AdminNavBar from "./../components/AdminNavbar";
 import AdminTweetCard from "./../components/AdminTweetCard";
 
+
 export default {
   components: {
     AdminNavBar,
     AdminTweetCard,
-  },
+  }
 };
 </script>
 
