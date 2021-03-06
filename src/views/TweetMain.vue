@@ -3,7 +3,7 @@
     <NavBar />
     <div class="tweets-container">
       <div class="tweets-header">
-        <a href="">首頁</a>
+        <router-link to="/tweets">首頁</router-link>
       </div>
       <div class="tweets">
         <div class="tweets-post-card">
@@ -15,10 +15,15 @@
                 class="tweets-avatar"
               />
             </a>
-            <form class="tweets-form">
+            <form class="tweets-form" @submit.stop.prevent="handleSubmit">
               <div class="tweets-text">
                 <label for="text"></label>
-                <textarea class="form-control" rows="3" name="text">
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  name="text"
+                  v-model="text"
+                >
                 有什麼新鮮事？
                 </textarea>
               </div>
@@ -30,7 +35,11 @@
         </div>
         <div class="divider"></div>
         <div class="tweets-list">
-          <TweetCard />
+          <TweetCard
+            v-for="tweet in tweets"
+            :key="tweet.id"
+            :initial-tweet="tweet"
+          />
         </div>
       </div>
     </div>
@@ -39,96 +48,11 @@
 </template>
 
 <script>
-// const dummyData = {
-//   users: [
-//     {
-//       id: 1,
-//       email: "user1@example.com",
-//       password: "$2a$10$rRG8l0ek0WvGbXHfestB6eNWlUZmFNBgyeKytmPfV8VN66CUjPtge",
-//       name: "user1",
-//       avatar: "https://loremflickr.com/320/240/user/?lock=71.88970419746622",
-//       introduction: null,
-//       role: "user",
-//       account: null,
-//       cover: null,
-//       createdAt: "2021-03-03T14:08:28.000Z",
-//       updatedAt: "2021-03-03T14:08:28.000Z",
-//       Followers: [],
-//       FollowerCount: 0,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 2,
-//       email: "user2@example.com",
-//       password: "$2a$10$q3.A3pJtu1afMaxQpIHcMenidTkpAzNLPjZNRIjVpL1Z3ggznUiei",
-//       name: "user2",
-//       avatar: "https://loremflickr.com/320/240/user/?lock=47.84394218399848",
-//       introduction: null,
-//       role: "user",
-//       account: null,
-//       cover: null,
-//       createdAt: "2021-03-03T14:08:28.000Z",
-//       updatedAt: "2021-03-03T14:08:28.000Z",
-//       Followers: [],
-//       FollowerCount: 0,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 3,
-//       email: "user3@example.com",
-//       password: "$2a$10$wPxvczmzGNszLSeHCKXJ2.7D.IUqIFtY6fjBpQqPO45JDCOaca7.i",
-//       name: "user3",
-//       avatar: "https://loremflickr.com/320/240/user/?lock=0.8636325727364724",
-//       introduction: null,
-//       role: "user",
-//       account: null,
-//       cover: null,
-//       createdAt: "2021-03-03T14:08:29.000Z",
-//       updatedAt: "2021-03-03T14:08:29.000Z",
-//       Followers: [],
-//       FollowerCount: 0,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 4,
-//       email: "user4@example.com",
-//       password: "$2a$10$KW/SklIW36fQskmvb9empuNF/VMP5kIW.UDNu75yE47QqQl9gdtKq",
-//       name: "user4",
-//       avatar: "https://loremflickr.com/320/240/user/?lock=33.60284782451577",
-//       introduction: null,
-//       role: "user",
-//       account: null,
-//       cover: null,
-//       createdAt: "2021-03-03T14:08:29.000Z",
-//       updatedAt: "2021-03-03T14:08:29.000Z",
-//       Followers: [],
-//       FollowerCount: 0,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 5,
-//       email: "user5@example.com",
-//       password: "$2a$10$EQTKVtMYxmAHpnx.66WjR.ptHVkM6xpsgz8lMzlSz6fsX5.xHUPjO",
-//       name: "user5",
-//       avatar: "https://loremflickr.com/320/240/user/?lock=23.613565054849772",
-//       introduction: null,
-//       role: "user",
-//       account: null,
-//       cover: null,
-//       createdAt: "2021-03-03T14:08:29.000Z",
-//       updatedAt: "2021-03-03T14:08:29.000Z",
-//       Followers: [],
-//       FollowerCount: 0,
-//       isFollowed: false,
-//     },
-//   ],
-// };
 import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
 import TweetCard from "./../components/TweetCard";
-import UsersAPI from "./../apis/user";
-// import authorizationAPI from "./../apis/authorization";
-// import { Toast } from "./../utils/helpers";
+import TweetsAPI from "./../apis/tweets";
+import { Toast } from "./../utils/helpers";
 
 export default {
   components: {
@@ -136,19 +60,43 @@ export default {
     NavBar,
     TweetCard,
   },
+  data() {
+    return {
+      tweets: [],
+      text: "",
+    };
+  },
   created() {
-    this.fetchUsers();
+    this.fetchTweets();
   },
   methods: {
-    async fetchUsers() {
+    async fetchTweets() {
       try {
-        const { data } = await UsersAPI.get();
-        console.log("data", data);
+        const { data } = await TweetsAPI.tweets.get();
+        this.tweets = data;
       } catch (error) {
-        console.log("error");
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法獲取推文,請稍後再試",
+        });
       }
     },
-    // fetchUsers() {},
+    async handleSubmit() {
+      try {
+        const description = this.text;
+        const { data } = await TweetsAPI.tweets.post({ description });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.text = "";
+        this.fetchTweets();
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法新增推文,請稍後再試",
+        });
+      }
+    },
   },
 };
 </script>
@@ -164,7 +112,8 @@ a {
   height: 100%;
   display: flex;
   justify-content: center;
-  /* padding: 3rem 0;   */
+  margin: 0;
+  padding: 0;
 }
 
 .tweets-container {
@@ -181,12 +130,13 @@ a {
   font-size: 18px;
   border-bottom: 1px solid #e6ecf0;
 }
+
 .tweets-post-card {
   margin: 15px;
 }
 
 .tweets-post {
-  height: auto;
+  height: 100%;
   display: flex;
   position: relative;
 }
@@ -198,7 +148,9 @@ a {
   margin-right: 10px;
 }
 .tweets-list {
-  height: 100%;
+  /* 暫時先設定固定高度 */
+  height: 500px;
+  overflow: scroll;
 }
 
 .tweets-form {

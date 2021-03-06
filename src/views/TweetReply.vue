@@ -4,7 +4,11 @@
     <div class="tweets-container">
       <div class="tweets-header">
         <a href="">
-          <img src="../../public/img/icon_back.svg" alt="" />
+          <img
+            src="../../public/img/icon_back.svg"
+            alt=""
+            @click.stop.prevent="$router.back()"
+          />
           <span>推文 </span>
         </a>
       </div>
@@ -12,32 +16,34 @@
         <div class="tweets-post-card">
           <div class="tweets-post">
             <div class="tweet-title">
-              <a href="" class="tweets-avatar">
-                <img src="../../public/img/UserAvatar.svg" alt="avatar" />
+              <a href="">
+                <img
+                  :src="tweetUser.avatar"
+                  alt="avatar"
+                  class="tweets-avatar"
+                />
               </a>
               <a class="tweets-name">
-                <div class="name">jason</div>
-                <div class="id">@jason</div>
+                <div class="name">{{ tweetUser.name }}</div>
+                <div class="id">{{ tweetUser.account }}</div>
               </a>
             </div>
             <div class="tweet-replay-container">
               <div class="tweet-push-content">
                 <p>
-                  Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis
-                  ullamco cillum dolor. Voluptate exercitation incididunt
-                  aliquip deserunt reprehenderit elit laborum.
+                  {{ tweet.description }}
                 </p>
               </div>
               <div class="tweet-push-time">
-                <p>上午 10:05・2020年6月10日</p>
+                <p>{{ tweet.createdAt }}</p>
               </div>
               <div class="tweet-status">
                 <div class="re-tweet">
-                  <span>34</span>
+                  <span>{{ tweet.Replies.length }}</span>
                   <span>回覆</span>
                 </div>
                 <div class="like">
-                  <span>100</span>
+                  <span>{{ tweet.Likes.length }}</span>
                   <span>喜歡次數</span>
                 </div>
               </div>
@@ -61,24 +67,31 @@
           </div>
         </div>
         <div class="tweets-list">
-          <div class="tweets-card">
-            <div class="tweets-avatar">
-              <img src="../../public/img/UserAvatar.svg" alt="avatar" />
-            </div>
+          <div class="tweets-card" v-for="reply in replies" :key="reply.id">
+            <a href="">
+              <img
+                :src="reply.User.avatar"
+                alt="avatar"
+                class="tweets-avatar"
+              />
+            </a>
             <div class="tweets-content">
               <a href="" class="tweets tweets-title">
-                <div class="tweets-reply-name">jason</div>
-                <div class="tweets-reply-id id">@jason・</div>
+                <div class="tweets-reply-name">{{ reply.User.name }}</div>
+                <div class="tweets-reply-id id">{{ reply.User.account }}</div>
                 <div class="tweets-reply-time">3hr</div>
               </a>
               <div class="">
                 <span>回覆</span>
-                <span> <a href="" class="tweets-post-user">@122334 </a></span>
+                <span>
+                  <a href="" class="tweets-post-user">{{
+                    tweetUser.account
+                  }}</a></span
+                >
               </div>
               <div class="tweet tweets-text">
                 <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
+                  {{ reply.comment }}
                 </p>
               </div>
             </div>
@@ -93,11 +106,44 @@
 <script>
 import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
+import TweetsAPI from "./../apis/tweets";
+import { Toast } from "./../utils/helpers";
 
 export default {
   components: {
     RecommendUsers,
     NavBar,
+  },
+  data() {
+    return {
+      tweet: [],
+      replies: [],
+      tweetUser: [],
+    };
+  },
+  created() {
+    const tweet_id = this.$route.params;
+    this.fetchTweet(tweet_id);
+  },
+  beforeRouteUpdate(to, next) {
+    const tweet_id = to.params;
+    this.fetchTweet(tweet_id);
+    next();
+  },
+  methods: {
+    async fetchTweet(tweet_id) {
+      try {
+        const { data } = await TweetsAPI.tweet.get(tweet_id);
+        this.tweet = data;
+        this.replies = data.Replies;
+        this.tweetUser = data.User;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法獲取推文,請稍後再試",
+        });
+      }
+    },
   },
 };
 </script>
@@ -144,7 +190,6 @@ a {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: palegreen;
   margin-right: 10px;
 }
 .tweet-title {
