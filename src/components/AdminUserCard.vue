@@ -81,10 +81,12 @@ a {
   color: #000000;
 }
 .user-cards {
-  margin: 60px 30px;
+  margin: 30px 30px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-gap: 1.5rem;
+  height: 700px;
+  overflow-y: auto;
 }
 .user-card {
   margin-left: 16px;
@@ -93,12 +95,13 @@ a {
   background: #f6f7f8;
   border-top-left-radius: 10rem;
   border-top-right-radius: 10rem;
+
 }
 .user-pic {
   height: 140px;
   width: 100%;
   position: relative;
-  border-top-left-radius: 50%;
+  border-top-left-radius: 10rem;
   border-top-right-radius: 10rem;
 }
 .user-avatar img {
@@ -127,7 +130,7 @@ a {
   height: 15px;
 }
 .user-activity {
-  padding: 0.8rem 0;
+  padding: 0.5rem 0;
 }
 .user-follow {
   font-size: 12px;

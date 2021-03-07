@@ -77,7 +77,7 @@ export default {
       }
     },
   },
-  mixins: [fromNowFilter, emptyImageFilter]
+  mixins: [fromNowFilter, emptyImageFilter],
 };
 </script>
 
@@ -87,7 +87,8 @@ a {
   color: #000000;
 }
 .tweet-card {
-  border-bottom: 1px solid #e6ecf0;
+  height: 750px;
+  overflow-y: auto;
 }
 .tweet-list {
   margin: 60px 30px;
@@ -95,6 +96,7 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1.5rem;
+  border-bottom: 1px solid #e6ecf0;
 }
 .tweet-avatar {
   width: 50px;
@@ -102,7 +104,7 @@ a {
   border-radius: 50%;
   margin-left: 10px;
 }
-.tweet-content{
+.tweet-content {
   padding-left: 120px;
 }
 .tweet-title {
@@ -113,14 +115,14 @@ a {
   margin-right: 10px;
 }
 .tweets-name {
-  margin-right: 5px;
+  margin-right: 10px;
 }
 .tweet-id,
 .tweet-time {
   color: #657786;
   font-weight: 300;
 }
-.tweet-text{
+.tweet-text {
   font-weight: 300;
 }
 .dot {
