@@ -73,8 +73,8 @@
         <label for="password-check"></label>
         <input
           id="password-check"
-          v-model="passwordCheck"
-          name="passwordCheck"
+          v-model="checkPassword"
+          name="checkPassword"
           type="password"
           placeholder=""
           autocomplete="new-password"
@@ -109,7 +109,7 @@ export default {
       name: "",
       email: "",
       password: "",
-      passwordCheck: "",
+      checkPassword: "",
       isProcessing: false,
     };
   },
@@ -143,19 +143,19 @@ export default {
         });
         return;
       }
-      if (!this.passwordCheck) {
+      if (!this.checkPassword) {
         Toast.fire({
           icon: "warning",
           title: "請填寫密碼確認",
         });
         return;
       }
-      if (this.password !== this.passwordCheck) {
+      if (this.password !== this.checkPassword) {
         Toast.fire({
           icon: "warning",
           title: "密碼確認不一致，請再次填寫",
         });
-        this.passwordCheck = "";
+        this.checkPassword = "";
         return;
       }
       try {
@@ -170,7 +170,7 @@ export default {
           name: this.name,
           email: this.email,
           password: this.password,
-          passwordCheck: this.passwordCheck,
+          checkPassword: this.checkPassword,
         };
         this.isProcessing = true;
         const { data } = await signUpAPI.signUp({ formData });
@@ -181,7 +181,7 @@ export default {
           icon: "success",
           title: "註冊成功",
         });
-        this.$router.push({ name: "regist" });
+        this.$router.push({ name: "login" });
       } catch (e) {
         Toast.fire({
           icon: "error",

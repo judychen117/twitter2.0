@@ -12,7 +12,7 @@
         <label for="account"></label>
         <input
           id="account"
-          v-model="account"
+          v-model="email"
           name="account"
           type="text"
           placeholder=""
@@ -49,22 +49,57 @@
   </div>
 </template>
 <script>
+import adminAuthorizationAPI from "./../apis/adminAuthorization";
+import { Toast } from "./../utils/helpers";
+
 export default {
   data() {
     return {
       email: "",
       password: "",
+      isProcessing: false,
     };
   },
   methods: {
-    handleSubmit() {
-      const data = JSON.stringify({
-        email: this.email,
-        password: this.password,
-      });
+    async handleSubmit() {
+      try {
+        if (!this.email || !this.password) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填入email與password",
+          });
+          return;
+        }
+        //避免做出多次請求
+        this.isProcessing = true;
 
-      // TODO: 向後端驗證使用者登入資訊是否合法
-      console.log("data", data);
+        const response = await adminAuthorizationAPI.signIn({
+          email: this.email,
+          password: this.password,
+        });
+        console.log("response", response);
+        const { data } = response;
+
+        // 只要不成功就無法進下一個頁面以避免空值
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        // 把token存在application的localstorage
+        localStorage.setItem("token", data.token);
+
+        // 修改 currentUser 資料
+        // this.$store.commit("setCurrentUser", data.user);
+
+        this.$router.push("/admin_tweets");
+      } catch (e) {
+        this.password = "";
+        Toast.fire({
+          icon: "warning",
+          title: "請確認您輸入了正確的帳號密碼",
+        });
+        this.isProcessing = false;
+        console.log(e);
+      }
     },
   },
 };
