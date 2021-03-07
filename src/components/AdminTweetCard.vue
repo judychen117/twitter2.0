@@ -1,23 +1,23 @@
 <template>
-  <div class="tweets-card">
-    <div class="tweets-list" v-for="tweet in tweets" :key="tweet.UserId">
+  <div class="tweet-card">
+    <div class="tweet-list" v-for="tweet in tweets" :key="tweet.UserId">
       <div class="tweet">
-        <a href="" class="tweets-avatar">
-          <img :src="tweet.User.avator" alt="avatar" />
+        <a href="" class="tweet-avatar">
+          <img :src="tweet.User.avator | emptyPicture" alt="avatar" />
         </a>
-        <div class="tweets-content">
-          <a href="" class="tweet tweets-title">
-            <div class="tweets-name">{{ tweet.User.name }}</div>
-            <div class="tweets-id">{{ tweet.User.account }}</div>
+        <div class="tweet-content">
+          <a href="" class="tweet-title">
+            <div class="tweet-name">{{ tweet.User.name }}</div>
+            <div class="tweet-id">{{ tweet.User.account }}</div>
             <span class="dot"></span>
-            <div class="tweets-time">{{tweet.createdAt | fromNow}}</div>
+            <div class="tweet-time">{{ tweet.createdAt | fromNow }}</div>
           </a>
-          <div class="tweet tweets-text">
+          <div class="tweet-text">
             <p class="card-text">
               {{ tweet.description }}
             </p>
           </div>
-          <div class="tweet tweets-delete">
+          <div class="tweet-delete">
             <a href="#">
               <img
                 src="../../public/img/cancel.svg"
@@ -35,7 +35,7 @@
 <script>
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
-import {fromNowFilter} from './../utils/mixins'
+import { emptyImageFilter, fromNowFilter } from "./../utils/mixins";
 
 export default {
   data() {
@@ -77,7 +77,7 @@ export default {
       }
     },
   },
-  mixins: [fromNowFilter]
+  mixins: [fromNowFilter, emptyImageFilter],
 };
 </script>
 
@@ -86,36 +86,43 @@ a {
   text-decoration: none; /* 拿掉底線 */
   color: #000000;
 }
-.tweets-card {
-  border-bottom: 1px solid #E6ECF0;
+.tweet-card {
+  height: 750px;
+  overflow-y: auto;
 }
-.tweets-list {
+.tweet-list {
   margin: 60px 30px;
   padding: 30px 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1.5rem;
+  border-bottom: 1px solid #e6ecf0;
 }
-.tweets-avatar {
+.tweet-avatar {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: palegreen;
-  margin-right: 10px;
+  margin-left: 10px;
 }
-.tweets-title {
+.tweet-content {
+  padding-left: 120px;
+}
+.tweet-title {
   display: flex;
   margin: 4px 0 4px 0;
 }
-.tweets-title > h5 {
+.tweet-title > h5 {
   margin-right: 10px;
 }
 .tweets-name {
-  margin-right: 5px;
+  margin-right: 10px;
 }
-.tweets-id,
-.tweets-time {
+.tweet-id,
+.tweet-time {
   color: #657786;
+  font-weight: 300;
+}
+.tweet-text {
   font-weight: 300;
 }
 .dot {
