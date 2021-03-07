@@ -1,12 +1,13 @@
 import moment from 'moment'
 
 export const fromNowFilter = {
-    filters: {
-        fromNow(dateTime) {
-            return dateTime ? moment(dateTime).fromNow() : '-'
-        }
+  filters: {
+    fromNow(datetime) {
+      return datetime ? moment(datetime).fromNow() : '-'
     }
+  }
 }
+
 
 export const emptyImageFilter = {
     filters: {

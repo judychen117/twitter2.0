@@ -1,28 +1,48 @@
 <template>
   <div class="tweets-card">
-    <a href="" class="tweets-avatar">
-      <img src="../../public/img/UserAvatar.svg" alt="avatar" />
+    <a href="">
+      <img :src="tweet.User.avatar" alt="avatar" class="tweets-avatar" />
     </a>
     <div class="tweets-content">
       <a href="" class="tweet tweets-title">
-        <div class="tweets-name">jason</div>
-        <div class="tweets-id">@jason・</div>
-        <div class="tweets-time">3hr</div>
+        <div class="tweets-name">{{ tweet.User.name }}</div>
+        <div class="tweets-id">{{ tweet.User.account }}・</div>
+        <div class="tweets-time">{{ tweet.createdAt | fromNow }}</div>
       </a>
-      <div class="tweet tweets-text">
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-      </div>
+      <router-link
+        :to="{ name: 'tweet-reply', params: { tweet_id: tweet.id } }"
+      >
+        <div class="tweet tweets-text">
+          <p class="card-text">
+            {{ tweet.description }}
+          </p>
+        </div>
+      </router-link>
       <div class="tweet tweets-footer">
         <a href="#" class="tweets-comment">
           <img src="../../public/img/commentIcon.svg" alt="" class="icon" />
-          <span>33</span>
+          <span>{{ tweet.Replies.length }}</span>
         </a>
-        <a href="#" class="tweets-like">
+        <a
+          href="#"
+          class="tweets-like"
+          @click.stop.prevent="addLiked(tweet.id)"
+        >
           <img src="../../public/img/likeIcon.svg" alt="" class="icon" />
-          <span>11</span>
+          <span>{{ tweet.Likes.length }}</span>
+        </a>
+        <a
+          href="#"
+          class="tweets-like"
+          @click.stop.prevent="deleteLiked(tweet.id)"
+        >
+          <img
+            src="../../public/img/likeIcon.svg"
+            alt=""
+            class="icon"
+            style="background: red"
+          />
+          <span>{{ tweet.Likes.length }}</span>
         </a>
       </div>
     </div>
@@ -30,7 +50,52 @@
 </template>
 
 <script>
-export default {};
+import { fromNowFilter } from "./../utils/mixins";
+import userAPI from "./../apis/user";
+import { Toast } from "./../utils/helpers";
+
+export default {
+  mixins: [fromNowFilter],
+  props: {
+    initialTweet: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      tweet: this.initialTweet,
+    };
+  },
+  methods: {
+    async addLiked(tweetId) {
+      try {
+        const { data } = await userAPI.addLiked(tweetId);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法加入喜歡,請稍後再試",
+        });
+      }
+    },
+    async deleteLiked(tweetId) {
+      try {
+        const { data } = await userAPI.deleteLiked(tweetId);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法移除喜歡,請稍後再試",
+        });
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
