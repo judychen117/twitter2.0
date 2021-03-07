@@ -6,61 +6,38 @@
       </div>
       <div class="recommend-followers">
         <ul class="recommend-followers-list">
-          <li class="recommend-followers-item">
+          <li
+            class="recommend-followers-item"
+            v-for="recommendUser in recommendUsers"
+            :key="recommendUser.id"
+          >
             <a href="" class="recommend-followers-title">
               <img
-                src="../../public/img/UserAvatar.svg"
+                :src="recommendUser.avatar"
                 alt="avatar"
                 class="tweets-avatar"
               />
               <div>
-                <p class="recommend-followers-name">jason</p>
-                <p class="recommend-followers-id">＠jason</p>
+                <p class="recommend-followers-name">{{ recommendUser.name }}</p>
+                <p class="recommend-followers-id">
+                  {{ recommendUser.account }}
+                </p>
               </div>
             </a>
-            <button class="followers-item-button">正在跟隨</button>
-          </li>
-          <li class="recommend-followers-item">
-            <a href="" class="recommend-followers-title">
-              <img
-                src="../../public/img/UserAvatar.svg"
-                alt="avatar"
-                class="tweets-avatar"
-              />
-              <div>
-                <p class="recommend-followers-name">jason</p>
-                <p class="recommend-followers-id">＠jason</p>
-              </div>
-            </a>
-            <button class="followers-item-button">跟隨</button>
-          </li>
-          <li class="recommend-followers-item">
-            <a href="" class="recommend-followers-title">
-              <img
-                src="../../public/img/UserAvatar.svg"
-                alt="avatar"
-                class="tweets-avatar"
-              />
-              <div>
-                <p class="recommend-followers-name">jason</p>
-                <p class="recommend-followers-id">＠jason</p>
-              </div>
-            </a>
-            <button class="followers-item-button">跟隨</button>
-          </li>
-          <li class="recommend-followers-item">
-            <a href="" class="recommend-followers-title">
-              <img
-                src="../../public/img/UserAvatar.svg"
-                alt="avatar"
-                class="tweets-avatar"
-              />
-              <div>
-                <p class="recommend-followers-name">jason</p>
-                <p class="recommend-followers-id">＠jason</p>
-              </div>
-            </a>
-            <button class="followers-item-button">跟隨</button>
+            <button
+              class="followers-item-button"
+              v-if="recommendUser.isFollowed"
+              @click.stop.prevent="deleteFollowing(recommendUser.id)"
+            >
+              正在跟隨
+            </button>
+            <button
+              v-else
+              class="followers-item-button"
+              @click.stop.prevent="addFollowing(recommendUser.id)"
+            >
+              跟隨
+            </button>
           </li>
         </ul>
       </div>
@@ -72,11 +49,89 @@
 </template>
 
 <script>
-export default {};
+import userAPI from "./../apis/user";
+import { Toast } from "./../utils/helpers";
+
+export default {
+  data() {
+    return {
+      recommendUsers: [],
+    };
+  },
+  created() {
+    this.fetcgRecomendUsers();
+  },
+  methods: {
+    async fetcgRecomendUsers() {
+      try {
+        const { data } = await userAPI.users.get();
+        this.recommendUsers = data.users;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法獲取推薦名單,請稍後再試",
+        });
+      }
+    },
+    async deleteFollowing(followingId) {
+      try {
+        const { data } = await userAPI.deleteFollowing({ followingId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.recommendUsers = this.recommendUsers.map((recommendUser) => {
+          if (recommendUser.id !== followingId) {
+            return recommendUser;
+          } else {
+            return {
+              ...recommendUser,
+              followerCount: recommendUser.followerCount - 1,
+              isFollowed: false,
+            };
+          }
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法取消追隨,請稍後再試",
+        });
+      }
+    },
+    async addFollowing(id) {
+      try {
+        const { data } = await userAPI.addFollowing({
+          id,
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.recommendUsers = this.recommendUsers.map((recommendUser) => {
+          if (recommendUser.id !== id) {
+            return recommendUser;
+          } else {
+            return {
+              ...recommendUser,
+              followerCount: recommendUser.followerCount + 1,
+              isFollowed: true,
+            };
+          }
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法追隨,請稍後再試",
+        });
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
 /* Recommend Bar */
+.recommend-bar {
+  height: 517px;
+}
 .recommend {
   border-radius: 10px;
   width: 350px;

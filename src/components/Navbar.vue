@@ -1,15 +1,15 @@
 <template>
   <div class="nav-bar">
     <div class="mt-3">
-      <a href="#" class="nav-logo">
+      <router-link :to="{ name: 'tweets-main' }" class="nav-logo">
         <img src="../../public/img/alphaCampIcon.svg" alt="" />
-      </a>
+      </router-link>
       <ul class="nav-list">
         <li class="nav-item nav-home">
-          <a href="#">
+          <router-link to="/tweets">
             <i class="nav-icon fas fa-home"></i>
             <p>首頁</p>
-          </a>
+          </router-link>
         </li>
         <li class="nav-item nav-profile">
           <a href="#">
