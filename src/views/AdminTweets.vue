@@ -7,10 +7,7 @@
           <p>推文清單</p>
         </div>
         <div class="divider"></div>
-        <div class="tweets-list">
-          <AdminTweetCard />
-          <AdminTweetCard />
-        </div>
+        <AdminTweetCard />
       </div>
     </div>
   </div>
@@ -22,10 +19,12 @@ import AdminNavBar from "./../components/AdminNavbar";
 import AdminTweetCard from "./../components/AdminTweetCard";
 
 export default {
+  data() {},
   components: {
     AdminNavBar,
     AdminTweetCard,
   },
+  methods: {},
 };
 </script>
 
@@ -51,14 +50,6 @@ a {
 }
 .tweets-title {
   padding: 1rem 1rem;
-}
-.tweets-post {
-  height: auto;
-  display: flex;
-  position: relative;
-}
-.tweets-list {
-  height: 100%;
 }
 .divider {
   width: 100%;

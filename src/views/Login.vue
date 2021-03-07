@@ -47,9 +47,9 @@
       </button>
 
       <div class="text-right mb-3 mt-4">
-        <a href="/signup">註冊Alphitter </a>
+        <router-link to="/signup">註冊Alphitter </router-link>
         <span class="dot"></span>
-        <a href="/admin-login"> 後台登入</a>
+        <router-link to="/admin-login"> 後台登入</router-link>
       </div>
     </form>
   </div>
