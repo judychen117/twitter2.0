@@ -3,7 +3,7 @@
     <div class="tweet-list" v-for="tweet in tweets" :key="tweet.UserId">
       <div class="tweet">
         <a href="" class="tweet-avatar">
-          <img :src="tweet.User.avator | emptyPicture" alt="avatar" />
+          <img :src="tweet.User.avatar | emptyPicture" alt="avatar" />
         </a>
         <div class="tweet-content">
           <a href="" class="tweet-title">
@@ -91,21 +91,24 @@ a {
   overflow-y: auto;
 }
 .tweet-list {
-  margin: 60px 30px;
   padding: 30px 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 1.5rem;
   border-bottom: 1px solid #e6ecf0;
 }
-.tweet-avatar {
+.tweet {
+  height: 50px;
+  position: relative;
+}
+.tweet-avatar img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-left: 10px;
+  display: inline-block;
+  position: absolute;
+  left: 1rem;
 }
 .tweet-content {
-  padding-left: 120px;
+  padding-left: 100px;
 }
 .tweet-title {
   display: flex;
@@ -119,6 +122,7 @@ a {
 }
 .tweet-id,
 .tweet-time {
+  padding: 0 rem;
   color: #657786;
   font-weight: 300;
 }
@@ -128,11 +132,10 @@ a {
 .dot {
   background-color: #657786;
   border-radius: 50%;
-  height: 0.5rem;
-  width: 0.5rem;
+  height: 5px;
+  width: 5px;
   position: relative;
   top: 8px;
-  margin: 0 0.5rem;
 }
 .icon {
   position: absolute;
@@ -140,5 +143,10 @@ a {
   height: 15px;
   top: 1rem;
   right: 1rem;
+}
+.tweet-delete{
+  position: relative;
+  bottom: 4.5rem;
+  right: 0.5rem;
 }
 </style>

@@ -19,12 +19,10 @@ import AdminNavBar from "./../components/AdminNavbar";
 import AdminTweetCard from "./../components/AdminTweetCard";
 
 export default {
-  data() {},
   components: {
     AdminNavBar,
     AdminTweetCard,
   },
-  methods: {},
 };
 </script>
 
