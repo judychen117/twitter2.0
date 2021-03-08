@@ -1,0 +1,167 @@
+<template>
+  <div class="follower-card">
+    <div class="arrow-left">
+      <img src="../../public/img/Vector.svg" alt="" />
+    </div>
+    <p class="name">{{ user.name }}</p>
+    <p class="tweets">{{ user.Tweets.length }} 推文</p>
+    <div class="divider"></div>
+    <div class="follower-list" v-for="follower in followers" :key="follower.id">
+      <div class="user">
+        <a href="" class="user-avatar">
+          <img :src="follower.avatar | emptyPicture" alt="avatar" />
+        </a>
+        <div class="user-content">
+          <div class="user-name">{{ follower.name }}</div>
+          <div class="user-id">{{ follower.account }}</div>
+          <div class="user-text">
+            <p class="card-text">{{ follower.introduction }}</p>
+          </div>
+          <div class="user-button">
+            <button
+              type="button"
+              class="followers-item-button"
+              v-if="user.Followers.id === follower.id"
+            >
+              <!-- @click.prevent.stop="disFollow(follow.id)" -->
+              正在跟隨
+            </button>
+            <button type="button" class="followers-item-button" v-else>
+              <!-- @click.prevent.stop="Follow(follow.id)" -->
+              跟隨
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import followAPI from "./../apis/follow";
+import { Toast } from "./../utils/helpers";
+import { emptyImageFilter } from "./../utils/mixins";
+
+export default {
+  data() {
+    return {
+      followers: [],
+    };
+  },
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
+  created() {
+    const { id } = this.$route.params;
+    this.fetchFollowers(id);
+  },
+  methods: {
+    async fetchFollowers(id) {
+      try {
+        const response = await followAPI.getFollower({ id });
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        this.followers = response.data;
+      } catch (e) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得Followers，請稍後再試",
+        });
+        console.log(e);
+      }
+    },
+    mixins: [emptyImageFilter],
+  },
+};
+</script>
+<style scoped>
+.arrow-left {
+  display: inline-block;
+  padding-left: 2rem;
+}
+.name {
+  font-size: 19px;
+  font-weight: 500;
+  padding: 0.5rem 0 0 1rem;
+  display: inline-block;
+}
+.tweets {
+  font-size: 13px;
+  font-weight: 100;
+  padding-left: 2rem;
+  font-color: #657786;
+  padding: 0 0 0.5rem 4rem;
+}
+a {
+  text-decoration: none; /* 拿掉底線 */
+  color: #000000;
+}
+.title {
+  padding: 1rem 1rem;
+}
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #e6ecf0;
+}
+.follower-card {
+  height: 750px;
+  overflow-y: auto;
+}
+.follower-list {
+  height: 8rem;
+  padding-top: 1.5rem;
+  border-bottom: 1px solid #e6ecf0;
+  position: relatve;
+}
+.followers-item-button {
+  font-size: 15px;
+  width: auto;
+  height: auto;
+  border-radius: 62px;
+  background: #ff6600;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid transparent;
+  outline: none;
+  color: #ffffff;
+}
+.user-content {
+  padding-left: 100px;
+}
+.user-button {
+  position: absolute;
+  top: 0;
+  right: 2rem;
+}
+.user {
+  height: 50px;
+  position: relative;
+}
+.user-avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 10px;
+  display: inline-block;
+  position: absolute;
+  left: 1rem;
+  top: 0.5rem;
+}
+.user-name {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.user-id {
+  font-size: 1rem;
+  font-weight: 100;
+  color: #657786;
+}
+.user-text {
+  font-size: 1rem;
+  font-weight: 300;
+}
+</style>

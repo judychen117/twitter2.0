@@ -2,9 +2,9 @@
   <div class="user-cards">
     <div class="user-card" v-for="user in users" :key="user.id">
       <div class="user-pic">
-        <img :src="user.cover | emptyCover" alt="cover" />
+        <img :src="user.cover | emptyCover" class="user-cover" alt="cover" />
         <a href="" class="user-avatar">
-          <img :src="user.avator | emptyImage" alt="avatar" />
+          <img :src="user.avatar | emptyImage" alt="avatar" />
         </a>
       </div>
       <div class="user-content">
@@ -57,8 +57,8 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        this.users = response.data;
-        this.users.filter((user) => user.role !== "admin");
+        this.users = response.data.filter((user) => user.email !== "root@example.com");
+        // this.users.filter((user) => user.email !== "root@example.com");
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -93,16 +93,17 @@ a {
   height: 314px;
   width: 245px;
   background: #f6f7f8;
-  border-top-left-radius: 10rem;
-  border-top-right-radius: 10rem;
-
+  border-radius: 1rem;
 }
 .user-pic {
   height: 140px;
   width: 100%;
   position: relative;
-  border-top-left-radius: 10rem;
-  border-top-right-radius: 10rem;
+  border-radius: 1rem;
+}
+.user-pic .user-cover{
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 .user-avatar img {
   width: 100px;
@@ -122,7 +123,7 @@ a {
 }
 .user-id {
   color: #657786;
-  font-weight: 100;
+  font-weight: 300;
 }
 .icon {
   margin: 0 10px;

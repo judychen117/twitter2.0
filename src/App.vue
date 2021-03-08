@@ -15,7 +15,8 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;500&display=swap');
+
 #twitter-forum,
 .bg-white {
   height: 100%;

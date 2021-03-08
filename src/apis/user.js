@@ -10,8 +10,8 @@ export default {
     }
   },
   user: {
-    get(userId) {
-      return apiHelper.get(`/users/${userId}`, {
+    get({ id }) {
+      return apiHelper.get(`/users/${id}`, {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
     }
@@ -36,4 +36,19 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` }
     })
   },
+  getTweet({ id }) {
+    return apiHelper.get(`/users/${id}/tweets`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`
+      }
+    })
+  },
+  getLike({ id }) {
+    return apiHelper.get(`/users/${id}/likes`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`
+      }
+    })
+  },
+
 }
