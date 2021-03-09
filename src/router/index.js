@@ -7,7 +7,7 @@ import store from './../store'
 Vue.use(Router)
 
 const router = new Router({
-  linkExactActiveClass: 'active',
+  linkExactActiveClass: 'nav-active',
   routes: [
     {
       path: '/',

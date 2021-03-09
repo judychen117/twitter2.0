@@ -6,16 +6,17 @@
       </router-link>
       <ul class="nav-list">
         <li class="nav-item nav-home">
-          <router-link to="/tweets">
+          <router-link :to="{ name: 'tweets-main' }">
             <i class="nav-icon fas fa-home"></i>
             <p>首頁</p>
           </router-link>
         </li>
         <li class="nav-item nav-profile">
-          <a href="#">
+          <!-- TODO:要把ＩＤ換成currentUserId -->
+          <router-link to="/users/1/tweet">
             <i class="nav-icon fas fa-user-alt"></i>
-            <p>個人資料</p></a
-          >
+            <p>個人資料</p>
+          </router-link>
         </li>
         <li class="nav-item nav-setting">
           <a href="#">
