@@ -27,6 +27,7 @@
           <img src="../../public/img/commentIcon.svg" alt="" class="icon" />
           <span>{{ tweet.Replies.length }}</span>
         </a>
+        <!-- TODO:等vueX做好可以用user.id比對這則貼文裡面的liked使用者id -->
         <a
           href="#"
           class="tweets-like"
@@ -122,6 +123,10 @@ a {
   border-bottom: 1px solid #e6ecf0;
   display: flex;
   padding: 15px;
+  width: 100%;
+}
+.tweets-content {
+  width: 100%;
 }
 .tweets-avatar {
   width: 50px;
@@ -138,7 +143,11 @@ a {
   margin-right: 10px;
 }
 .tweet {
+  width: 400px;
   padding: 5px;
+}
+.card-text {
+  word-wrap: break-word;
 }
 .tweets-like {
   margin-left: 80px;

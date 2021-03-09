@@ -47,9 +47,9 @@
       </button>
 
       <div class="text-right mb-3 mt-4">
-        <router-link to="/signup">註冊Alphitter </router-link>
+        <router-link :to="{ name: 'regist' }">註冊Alphitter </router-link>
         <span class="dot"></span>
-        <router-link to="/admin-login"> 後台登入</router-link>
+        <router-link :to="{ name: 'admin-login' }"> 後台登入</router-link>
       </div>
     </form>
   </div>
@@ -94,7 +94,7 @@ export default {
         localStorage.setItem("token", data.token);
 
         // 修改 currentUser 資料
-        this.$store.commit('setCurrentUser', data.user)
+        this.$store.commit("setCurrentUser", data.user);
 
         this.$router.push("/tweets");
       } catch (e) {

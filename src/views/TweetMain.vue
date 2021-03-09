@@ -7,6 +7,7 @@
       v-show="showModal === 'post'"
       @close-post-modal="closePostModal"
     />
+    <!-- TODO:資料傳遞問題 -->
     <ReplyModal
       v-show="showModal === 'reply'"
       @close-post-modal="closePostModal"
@@ -26,7 +27,7 @@
                 class="tweets-avatar"
               />
             </a>
-            <form class="tweets-form">
+            <form class="tweets-form" @submit.stop.prevent="handleSubmit">
               <div class="tweets-text">
                 <label for="text"></label>
                 <textarea
@@ -111,6 +112,20 @@ export default {
     },
     async handleSubmit() {
       try {
+        if (this.text.replace(/\s*/g, "") === "") {
+          Toast.fire({
+            icon: "error",
+            title: "推文內容不能空白,請輸入內容",
+          });
+          return;
+        }
+        if (this.text.length >= 140) {
+          Toast.fire({
+            icon: "error",
+            title: "超過字數限制,最多不可超過140字,請重新輸入",
+          });
+          return;
+        }
         const description = this.text;
         const { data } = await TweetsAPI.tweets.post({ description });
         if (data.status !== "success") {
@@ -121,7 +136,7 @@ export default {
       } catch (error) {
         Toast.fire({
           icon: "error",
-          title: "暫時無法新增推文,請稍後再試",
+          title: "新增推文錯誤,請稍後再試",
         });
       }
     },
@@ -184,6 +199,7 @@ a {
 }
 .tweets-list {
   height: 100%;
+  width: 100%;
 }
 
 .tweets-form {

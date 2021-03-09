@@ -6,7 +6,7 @@
       </router-link>
       <ul class="nav-list">
         <li class="nav-item nav-home">
-          <router-link to="/tweets">
+          <router-link :to="{ name: 'tweets-main' }">
             <i class="nav-icon fas fa-home"></i>
             <p>首頁</p>
           </router-link>

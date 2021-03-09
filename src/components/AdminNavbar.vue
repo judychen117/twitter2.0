@@ -6,15 +6,15 @@
       </a>
       <ul class="nav-list">
         <li class="nav-item nav-home">
-          <a href="#">
+          <router-link :to="{ name: 'admin-tweets' }">
             <i class="nav-icon fas fa-home"></i>
             <p>推文清單</p>
-          </a>
+          </router-link>
         </li>
         <li class="nav-item nav-profile">
-          <a href="#">
+          <router-link :to="{ name: 'admin-users' }">
             <i class="nav-icon fas fa-user-alt"></i>
-            <p>使用者列表</p></a
+            <p>使用者列表</p></router-link
           >
         </li>
       </ul>

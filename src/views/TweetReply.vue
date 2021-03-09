@@ -235,6 +235,7 @@ a {
 }
 .tweet-push-content {
   margin-top: 15px;
+  word-wrap: break-word;
 }
 .tweets-post-user {
   color: #ff6600;
