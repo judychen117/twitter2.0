@@ -61,7 +61,6 @@ import { Toast } from "./../utils/helpers";
 export default {
   components: {},
   mixins: [fromNowFilter],
-
   props: {
     initialTweet: {
       type: Object,
@@ -102,6 +101,7 @@ export default {
       }
     },
     replyPost(tweet) {
+      console.log("count", 1);
       this.showModal = "reply";
       this.$emit("show-reply-modal", this.showModal);
       this.$emit("reply-tweet-id", tweet);

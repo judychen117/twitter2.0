@@ -7,7 +7,7 @@
     >
       X
     </div>
-    <!-- <div class="tweets-card">
+    <div class="tweets-card">
       <a href="">
         <img src="" alt="avatar" class="tweets-avatar" />
       </a>
@@ -62,7 +62,7 @@
           </div>
         </form>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -111,14 +111,6 @@ export default {
   created() {
     this.tweet = this.initialModalTweet;
   },
-  // watch: {
-  //   tweet: {
-  //     handler: function () {
-  //       console.log("true");
-  //     },
-  //     deep: true,
-  //   },
-  // },
   methods: {
     async handleSubmit() {
       try {
