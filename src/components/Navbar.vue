@@ -12,16 +12,17 @@
           </router-link>
         </li>
         <li class="nav-item nav-profile">
-          <!-- TODO:要把ＩＤ換成currentUserId -->
-          <router-link to="/users/1/tweet">
+          <router-link
+            :to="{ name: 'user-profile', params: { id: currentUser.id } }"
+          >
             <i class="nav-icon fas fa-user-alt"></i>
             <p>個人資料</p>
           </router-link>
         </li>
         <li class="nav-item nav-setting">
-          <a href="#">
+          <router-link to="/setting">
             <i class="nav-icon fas fa-cog"></i>
-            <p>設定</p></a
+            <p>設定</p></router-link
           >
         </li>
         <li>
@@ -33,7 +34,11 @@
           </button>
         </li>
       </ul>
-      <router-link :to="{name:'login'}" class="nav-item nav-sign-out" @click="logout">
+      <router-link
+        :to="{ name: 'login' }"
+        class="nav-item nav-sign-out"
+        @click="logout"
+      >
         <i class="nav-icon fas fa-sign-out-alt"></i>
         <p>登出</p>
       </router-link>
@@ -42,21 +47,25 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       showModal: "post",
     };
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   methods: {
     addPost() {
       this.showModal = "post";
       this.$emit("show-post-modal", this.showModal);
     },
-    logout () {
-      this.$store.commit('revokeAuthentication')
-      this.$router.push('/signin')
-    }
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/signin");
+    },
   },
 };
 </script>

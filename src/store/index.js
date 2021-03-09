@@ -9,7 +9,8 @@ export default new Vuex.Store({
     currentUser: {
       id: -1,
       name: '',
-      email: ''
+      email: '',
+      role: ''
     },
     isAuthenticated: false,
     token: ''
@@ -36,7 +37,7 @@ export default new Vuex.Store({
     async fetchCurrentUser({ commit }) {
       try {
         const { data } = await usersAPI.users.get()
-        const { id, name, email } = data
+        const { id, name, email, role } = data
         const { statusText } = await usersAPI.users.get()
 
         if (statusText !== 'OK') {
@@ -46,7 +47,8 @@ export default new Vuex.Store({
         commit('setCurrentUser', {
           id,
           name,
-          email
+          email,
+          role
         })
         return true  // add this line
       } catch (error) {
