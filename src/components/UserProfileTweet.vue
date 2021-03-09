@@ -2,11 +2,11 @@
   <div class="tweet-card">
     <div class="nav">
       <div class="top-right">
-        <div class="editorMode" v-if="id === info.id">
-          <button class="btn btn-primary">im myself</button>
+        <div class="editorMode" v-if="currentUser.id === info.id">
+          <button class="btn btn-primary">編輯個人檔案</button>
         </div>
         <div class="nonEditorMode" v-else>
-          <button class="btn btn-primary">im not myself</button>
+          <button class="btn btn-primary">nope</button>
         </div>
       </div>
       <div class="nav-tab nav-active">
@@ -57,6 +57,7 @@
 import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
 import { fromNowFilter, emptyImageFilter } from "./../utils/mixins";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -70,6 +71,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   created() {
     const { id } = this.$route.params;

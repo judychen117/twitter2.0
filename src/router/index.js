@@ -82,6 +82,7 @@ const router = new Router({
   ]
 }) 
 
+
 router.beforeEach(async (to, from, next) => {
   const tokenInLocalStorage = localStorage.getItem('token')
   const tokenInStore = store.state.token
