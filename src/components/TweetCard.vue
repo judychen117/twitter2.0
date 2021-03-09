@@ -19,7 +19,11 @@
         </div>
       </router-link>
       <div class="tweet tweets-footer">
-        <a href="#" class="tweets-comment">
+        <a
+          href="#"
+          class="tweets-comment"
+          @click.stop.prevent="replyPost(tweet)"
+        >
           <img src="../../public/img/commentIcon.svg" alt="" class="icon" />
           <span>{{ tweet.Replies.length }}</span>
         </a>
@@ -55,7 +59,9 @@ import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
 
 export default {
+  components: {},
   mixins: [fromNowFilter],
+
   props: {
     initialTweet: {
       type: Object,
@@ -65,6 +71,7 @@ export default {
   data() {
     return {
       tweet: this.initialTweet,
+      showModal: "",
     };
   },
   methods: {
@@ -93,6 +100,14 @@ export default {
           title: "暫時無法移除喜歡,請稍後再試",
         });
       }
+    },
+    replyPost(tweet) {
+      this.showModal = "reply";
+      this.$emit("show-reply-modal", this.showModal);
+      this.$emit("reply-tweet-id", tweet);
+    },
+    closePostModal(showModal) {
+      this.showModal = showModal;
     },
   },
 };
@@ -139,5 +154,16 @@ a {
   margin-right: 10px;
   width: 15;
   height: 15px;
+}
+
+#fade {
+  /* position: relative; */
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+  opacity: 0.5;
 }
 </style>
