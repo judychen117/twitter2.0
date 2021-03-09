@@ -144,4 +144,5 @@ export default {
 .user-follow span {
   font-weight: 500;
 }
+
 </style>

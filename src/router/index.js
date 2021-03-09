@@ -91,16 +91,17 @@ router.beforeEach(async (to, from, next) => {
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
+  const pathsWithoutAuthentication = ['sign-up', 'sign-in']
 
   // 如果 token 無效則轉址到登入頁
-  if (!isAuthenticated && to.name !== 'sign-in') {
-    next('/signin')
+  if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
+    next('/login')
     return
   }
 
   // 如果 token 有效則轉址到餐廳首頁
-  if (isAuthenticated && to.name === 'sign-in') {
-    next('/restaurants')
+  if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
+    next('/tweets')
     return
   }
 

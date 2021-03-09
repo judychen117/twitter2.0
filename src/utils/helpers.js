@@ -1,9 +1,9 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-// const baseURL = 'https://twitterkiller-backend.herokuapp.com/api'
+const baseURL = 'https://twitterkiller-backend.herokuapp.com/api'
 
-const baseURL = 'https://twitterkiller-backend-wei.herokuapp.com/api'
+// const baseURL = 'https://twitterkiller-backend-wei.herokuapp.com/api'
 
 export const apiHelper = axios.create({
     baseURL

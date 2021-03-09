@@ -1,6 +1,14 @@
 <template>
   <div class="tweet-card">
     <div class="nav">
+      <div class="top-right">
+        <div class="editorMode" v-if="id === info.id">
+          <button class="btn btn-primary">im myself</button>
+        </div>
+        <div class="nonEditorMode" v-else>
+          <button class="btn btn-primary">im not myself</button>
+        </div>
+      </div>
       <div class="nav-tab nav-active">
         <a href="">推文</a>
       </div>
@@ -40,14 +48,6 @@
             <img src="../../public/img/likeIcon.svg" alt="likes" class="icon" />
             <span>{{ tweet.Likes.length }}</span>
           </a>
-        </div>
-        <div class="top-right">
-          <div class="editorMode" v-if="id === info.id">
-            <h1>im myself</h1>
-          </div>
-          <div class="nonEditorMode" v-else >
-            <h1>im not myself</h1>
-          </div>
         </div>
       </div>
     </div>
@@ -97,6 +97,14 @@ export default {
 };
 </script>
 <style scoped>
+.tweet-card{
+  position: relative;
+}
+.top-right{
+  position: absolute;
+  top: -11rem;
+  right: 1rem;
+}
 a {
   text-decoration: none; /* 拿掉底線 */
 }
