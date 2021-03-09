@@ -13,7 +13,7 @@
     />
     <div class="tweets-container">
       <div class="tweets-header">
-        <router-link to="/tweets">首頁</router-link>
+        <a href="">首頁</a>
       </div>
       <div class="tweets">
         <div class="tweets-post-card">
@@ -25,7 +25,7 @@
                 class="tweets-avatar"
               />
             </a>
-            <form class="tweets-form" @submit.stop.prevent="handleSubmit">
+            <form class="tweets-form">
               <div class="tweets-text">
                 <label for="text"></label>
                 <textarea
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+// const dummyData = {};
 import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
 import TweetCard from "./../components/TweetCard";
@@ -67,6 +68,7 @@ import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import PostModal from "./../components/UserPostmodal";
 import ReplyModal from "./../components/UserReplymodal";
+
 
 export default {
   components: {
@@ -145,8 +147,7 @@ a {
   height: 100%;
   display: flex;
   justify-content: center;
-  margin: 0;
-  padding: 0;
+  /* padding: 3rem 0;   */
 }
 
 .tweets-container {
@@ -163,13 +164,12 @@ a {
   font-size: 18px;
   border-bottom: 1px solid #e6ecf0;
 }
-
 .tweets-post-card {
   margin: 15px;
 }
 
 .tweets-post {
-  height: 100%;
+  height: auto;
   display: flex;
   position: relative;
 }
@@ -181,9 +181,7 @@ a {
   margin-right: 10px;
 }
 .tweets-list {
-  /* 暫時先設定固定高度 */
-  height: 500px;
-  overflow: scroll;
+  height: 100%;
 }
 
 .tweets-form {

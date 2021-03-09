@@ -94,7 +94,7 @@ export default {
         localStorage.setItem("token", data.token);
 
         // 修改 currentUser 資料
-        // this.$store.commit("setCurrentUser", data.user);
+        this.$store.commit('setCurrentUser', data.user)
 
         this.$router.push("/tweets");
       } catch (e) {

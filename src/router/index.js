@@ -39,6 +39,26 @@ const router = new Router({
       component: () => import('./../views/TweetMain.vue')
     },
     {
+      path: '/users/:id/followers',
+      name: 'user-follower',
+      component: () => import('./../views/UserFollower.vue')
+    },
+    {
+      path: '/users/:id/followings',
+      name: 'user-following',
+      component: () => import('./../views/UserFollowing.vue')
+    },
+    {
+      path: '/users/:id/tweet',
+      name: 'user-profile',
+      component: () => import('./../views/UserProfileTweets.vue')
+    },
+    {
+      path: '/users/:id/like',
+      name: 'user-profile',
+      component: () => import('./../views/UserProfileLikes.vue')
+    },
+    {
       path: '/admin',
       name: 'admin-login',
       component: () => import('./../views/AdminLogin.vue')
