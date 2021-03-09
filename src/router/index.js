@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import NotFound from '../views/NotFound.vue'
 import Regist from '../views/Regist.vue'
+import store from './../store'
 
 Vue.use(Router)
 
@@ -80,5 +81,31 @@ const router = new Router({
     }
   ]
 })
+
+router.beforeEach(async (to, from, next) => {
+  const tokenInLocalStorage = localStorage.getItem('token')
+  const tokenInStore = store.state.token
+  let isAuthenticated = store.state.isAuthenticated
+
+  // 比較 localStorage 和 store 中的 token 是否一樣
+  if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+    isAuthenticated = await store.dispatch('fetchCurrentUser')
+  }
+
+  // 如果 token 無效則轉址到登入頁
+  if (!isAuthenticated && to.name !== 'sign-in') {
+    next('/signin')
+    return
+  }
+
+  // 如果 token 有效則轉址到餐廳首頁
+  if (isAuthenticated && to.name === 'sign-in') {
+    next('/restaurants')
+    return
+  }
+
+  next()
+})
+
 
 export default router

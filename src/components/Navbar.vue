@@ -32,10 +32,10 @@
           </button>
         </li>
       </ul>
-      <a href="" class="nav-item nav-sign-out">
+      <router-link :to="{name:'login'}" class="nav-item nav-sign-out" @click="logout">
         <i class="nav-icon fas fa-sign-out-alt"></i>
         <p>登出</p>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
@@ -52,6 +52,10 @@ export default {
       this.showModal = "post";
       this.$emit("show-post-modal", this.showModal);
     },
+    logout () {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    }
   },
 };
 </script>
