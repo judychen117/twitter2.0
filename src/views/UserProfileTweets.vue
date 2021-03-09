@@ -70,8 +70,14 @@ a {
   width: 600px;
   height: 800px;
   overflow: scroll;
+  overflow-x: hidden;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
   margin-right: 30px;
 }
+::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
 </style>

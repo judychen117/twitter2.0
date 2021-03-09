@@ -1,6 +1,14 @@
 <template>
   <div class="tweet-card">
     <div class="nav">
+      <div class="top-right">
+        <div class="editorMode" v-if="id === info.id">
+          <button class="btn btn-primary">im myself</button>
+        </div>
+        <div class="nonEditorMode" v-else>
+          <button class="btn btn-primary">im not myself</button>
+        </div>
+      </div>
       <div class="nav-tab">
         <a href="">推文</a>
       </div>
@@ -13,18 +21,18 @@
     </div>
     <div class="tweet-list" v-for="tweet in users" :key="tweet.id">
       <a href="" class="tweet-avatar">
-        <img :src="info.avatar" alt="avatar" />
+        <img :src="tweet.Tweet.User.avatar" alt="avatar" />
       </a>
       <div class="tweet-content">
         <a href="" class="tweet-title">
-          <p class="tweet-name">{{ info.name }}</p>
-          <p class="tweet-id">{{ info.account }}</p>
+          <p class="tweet-name">{{ tweet.Tweet.User.name }}</p>
+          <p class="tweet-id">{{ tweet.Tweet.User.account }}</p>
           <span class="dot"></span>
-          <p class="tweet-time">{{ tweet.createdAt }}</p>
+          <p class="tweet-time">{{ tweet.Tweet.createdAt | fromNow }}</p>
         </a>
         <div class="tweet-text">
           <p>
-            {{ tweet.description }}
+            {{ tweet.Tweet.description }}
           </p>
         </div>
         <div class="tweet-activity">
@@ -34,11 +42,11 @@
               alt="comments"
               class="icon"
             />
-            <span>{{ tweet.Replies.length }}</span>
+            <span>{{ tweet.Tweet.Replies.length }}</span>
           </a>
           <a href="#" class="tweet-like">
             <img src="../../public/img/likeIcon.svg" alt="likes" class="icon" />
-            <span>{{ tweet.Likes.length }}</span>
+            <span>{{ tweet.Tweet.Likes.length }}</span>
           </a>
         </div>
       </div>
@@ -48,7 +56,7 @@
 <script>
 import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
-import {  fromNowFilter } from "./../utils/mixins";
+import { fromNowFilter , emptyImageFilter } from "./../utils/mixins";
 
 export default {
   data() {
@@ -84,10 +92,18 @@ export default {
       }
     },
   },
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
 };
 </script>
 <style scoped>
+.tweet-card{
+  position: relative;
+}
+.top-right{
+  position: absolute;
+  top: -11rem;
+  right: 1rem;
+}
 a {
   text-decoration: none; /* 拿掉底線 */
 }
@@ -153,16 +169,16 @@ a {
   top: 8px;
   margin: 0 0.5rem;
 }
-.tweet-activity span{
+.tweet-activity span {
   color: #657786;
 }
-.tweet-comment img{
+.tweet-comment img {
   padding-right: 1rem;
 }
 .tweet-comment {
   padding-right: 1.5rem;
 }
-.tweet-like img{
-    padding-right: 1rem;
+.tweet-like img {
+  padding-right: 1rem;
 }
 </style>

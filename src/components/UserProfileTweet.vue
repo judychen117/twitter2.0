@@ -28,7 +28,7 @@
           <p class="tweet-name">{{ info.name }}</p>
           <p class="tweet-id">{{ info.account }}</p>
           <span class="dot"></span>
-          <p class="tweet-time">{{ tweet.createdAt }}</p>
+          <p class="tweet-time">{{ tweet.createdAt | fromNow }}</p>
         </a>
         <div class="tweet-text">
           <p>
@@ -56,7 +56,7 @@
 <script>
 import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
-import { fromNowFilter } from "./../utils/mixins";
+import { fromNowFilter, emptyImageFilter } from "./../utils/mixins";
 
 export default {
   data() {
@@ -93,14 +93,14 @@ export default {
       }
     },
   },
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
 };
 </script>
 <style scoped>
-.tweet-card{
+.tweet-card {
   position: relative;
 }
-.top-right{
+.top-right {
   position: absolute;
   top: -11rem;
   right: 1rem;

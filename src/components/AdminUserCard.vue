@@ -102,12 +102,16 @@ a {
   border-radius: 1rem;
 }
 .user-pic .user-cover{
+  height: 140px;
+  width: 245px;
+  object-fit: cover;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
 .user-avatar img {
   width: 100px;
   height: 100px;
+  object-fit: cover;
   border-radius: 50%;
   border: 5px solid #fff;
   position: absolute;

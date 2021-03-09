@@ -33,30 +33,35 @@
           </button>
         </li>
       </ul>
-      <router-link :to="{name:'login'}" class="nav-item nav-sign-out" @click="logout">
-        <i class="nav-icon fas fa-sign-out-alt"></i>
-        <p>登出</p>
+      <router-link :to="{ name: 'login' }" class="nav-item nav-sign-out">
+        <i class="nav-icon fas fa-sign-out-alt" @click="logout"></i>
+        <p @click="logout">登出</p>
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
       showModal: "post",
     };
   },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
   methods: {
     addPost() {
       this.showModal = "post";
       this.$emit("show-post-modal", this.showModal);
     },
-    logout () {
-      this.$store.commit('revokeAuthentication')
-      this.$router.push('/signin')
-    }
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/login");
+    },
   },
 };
 </script>

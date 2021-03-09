@@ -70,6 +70,7 @@ import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import PostModal from "./../components/UserPostmodal";
 import ReplyModal from "./../components/UserReplymodal";
+import store from './../store'
 
 export default {
   components: {
@@ -89,6 +90,7 @@ export default {
     };
   },
   created() {
+    console.log(store.state);
     this.fetchTweets();
   },
   // watch: {

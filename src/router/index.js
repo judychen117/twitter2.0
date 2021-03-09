@@ -51,12 +51,12 @@ const router = new Router({
     },
     {
       path: '/users/:id/tweet',
-      name: 'user-profile',
+      name: 'user-profile-tweet',
       component: () => import('./../views/UserProfileTweets.vue')
     },
     {
       path: '/users/:id/like',
-      name: 'user-profile',
+      name: 'user-profile-like',
       component: () => import('./../views/UserProfileLikes.vue')
     },
     {
@@ -80,7 +80,7 @@ const router = new Router({
       component: NotFound
     }
   ]
-})
+}) 
 
 router.beforeEach(async (to, from, next) => {
   const tokenInLocalStorage = localStorage.getItem('token')
@@ -91,7 +91,7 @@ router.beforeEach(async (to, from, next) => {
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
-  const pathsWithoutAuthentication = ['sign-up', 'sign-in']
+  const pathsWithoutAuthentication = ['regist', 'login']
 
   // 如果 token 無效則轉址到登入頁
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
@@ -99,7 +99,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // 如果 token 有效則轉址到餐廳首頁
+  // 如果 token 有效則轉址到tweet首頁
   if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
     next('/tweets')
     return

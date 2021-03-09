@@ -117,7 +117,7 @@ a {
 .tweet-title > h5 {
   margin-right: 10px;
 }
-.tweets-name {
+.tweet-name {
   margin-right: 10px;
 }
 .tweet-id,
@@ -136,6 +136,7 @@ a {
   width: 5px;
   position: relative;
   top: 8px;
+  margin: 0  0.5rem;
 }
 .icon {
   position: absolute;
