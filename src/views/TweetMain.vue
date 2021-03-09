@@ -69,7 +69,6 @@ import { Toast } from "./../utils/helpers";
 import PostModal from "./../components/UserPostmodal";
 import ReplyModal from "./../components/UserReplymodal";
 
-
 export default {
   components: {
     RecommendUsers,
@@ -90,11 +89,13 @@ export default {
   created() {
     this.fetchTweets();
   },
-  watch: {
-    tweets: function () {
-      this.fetchTweets();
-    },
-  },
+  // watch: {
+  //   tweets: function () {
+  //     console.log("test", 1);
+
+  //     this.fetchTweets();
+  //   },
+  // },
   methods: {
     async fetchTweets() {
       try {
