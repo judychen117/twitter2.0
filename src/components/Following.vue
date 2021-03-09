@@ -5,6 +5,7 @@
     </div>
     <p class="name">{{ user.name }}</p>
     <p class="tweets">{{ user.Tweets.length }} 推文</p>
+    <FollowNavTab :id="user.id" />
     <div class="divider"></div>
     <div
       class="following-list"
@@ -25,14 +26,10 @@
             <button
               type="button"
               class="followings-item-button"
-              v-if="user.Followings.id === following.id"
+              v-if="following.isFollowed"
+              @click.stop.prevent="deleteFollowing(following.id)"
             >
-              <!-- @click.prevent.stop="disFollow(follow.id)" -->
               正在跟隨
-            </button>
-            <button type="button" class="followers-item-button" v-else>
-              <!-- @click.prevent.stop="Follow(follow.id)" -->
-              跟隨
             </button>
           </div>
         </div>
@@ -42,10 +39,15 @@
 </template>
 <script>
 import followAPI from "./../apis/follow";
+import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
 import { emptyImageFilter } from "./../utils/mixins";
+import FollowNavTab from "./../components/FollowNavTab.vue";
 
 export default {
+  components: {
+    FollowNavTab,
+  },
   data() {
     return {
       followings: [],
@@ -75,6 +77,22 @@ export default {
           title: "無法取得Followings，請稍後再試",
         });
         console.log(e);
+      }
+    },
+    async deleteFollowing(followingId) {
+      try {
+        const { data } = await userAPI.deleteFollowing({ followingId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        //重新render畫面
+        const { id } = this.$route.params;
+        this.fetchFollowings(id);
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法取消追隨,請稍後再試",
+        });
       }
     },
     mixins: [emptyImageFilter],
@@ -113,7 +131,7 @@ export default {
   border-bottom: 1px solid #e6ecf0;
   position: relatve;
 }
-.followers-item-button {
+.followings-item-button {
   font-size: 15px;
   width: auto;
   height: auto;

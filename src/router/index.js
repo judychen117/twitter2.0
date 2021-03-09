@@ -6,7 +6,7 @@ import Regist from '../views/Regist.vue'
 Vue.use(Router)
 
 const router = new Router({
-  linkExactActiveClass: 'active',
+  linkExactActiveClass: 'nav-active',
   routes: [
     {
       path: '/',

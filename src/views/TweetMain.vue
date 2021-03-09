@@ -2,6 +2,7 @@
   <div class="main-tweets" id="main">
     <NavBar @show-post-modal="showModalBox" />
     <div id="fade" v-if="showModal !== 'none'"></div>
+    <!-- TODO:要思考怎麼更新畫面 -->
     <PostModal
       v-show="showModal === 'post'"
       @close-post-modal="closePostModal"

@@ -5,6 +5,7 @@
     </div>
     <p class="name">{{ user.name }}</p>
     <p class="tweets">{{ user.Tweets.length }} 推文</p>
+    <FollowNavTab :id="user.id" />
     <div class="divider"></div>
     <div class="follower-list" v-for="follower in followers" :key="follower.id">
       <div class="user">
@@ -21,13 +22,17 @@
             <button
               type="button"
               class="followers-item-button"
-              v-if="user.Followers.id === follower.id"
+              v-if="follower.isFollowed"
+              @click.stop.prevent="deleteFollowing(follower.id)"
             >
-              <!-- @click.prevent.stop="disFollow(follow.id)" -->
               正在跟隨
             </button>
-            <button type="button" class="followers-item-button" v-else>
-              <!-- @click.prevent.stop="Follow(follow.id)" -->
+            <button
+              type="button"
+              class="followers-item-button"
+              v-else
+              @click.stop.prevent="addFollowing(follower.id)"
+            >
               跟隨
             </button>
           </div>
@@ -38,10 +43,15 @@
 </template>
 <script>
 import followAPI from "./../apis/follow";
+import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
 import { emptyImageFilter } from "./../utils/mixins";
+import FollowNavTab from "./../components/FollowNavTab.vue";
 
 export default {
+  components: {
+    FollowNavTab,
+  },
   data() {
     return {
       followers: [],
@@ -71,6 +81,56 @@ export default {
           title: "無法取得Followers，請稍後再試",
         });
         console.log(e);
+      }
+    },
+    async deleteFollowing(followingId) {
+      try {
+        const { data } = await userAPI.deleteFollowing({ followingId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.followers = this.followers.map((follower) => {
+          if (follower.id !== followingId) {
+            return follower;
+          } else {
+            return {
+              ...follower,
+              followerCount: follower.followerCount - 1,
+              isFollowed: false,
+            };
+          }
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法取消追隨,請稍後再試",
+        });
+      }
+    },
+    async addFollowing(id) {
+      try {
+        const { data } = await userAPI.addFollowing({
+          id,
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.followers = this.followers.map((follower) => {
+          if (follower.id !== id) {
+            return follower;
+          } else {
+            return {
+              ...follower,
+              followerCount: follower.followerCount + 1,
+              isFollowed: true,
+            };
+          }
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法追隨,請稍後再試",
+        });
       }
     },
     mixins: [emptyImageFilter],
