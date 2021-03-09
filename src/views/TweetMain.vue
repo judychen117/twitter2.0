@@ -1,6 +1,16 @@
 <template>
-  <div class="main-tweets">
-    <NavBar />
+  <div class="main-tweets" id="main">
+    <NavBar @show-post-modal="showModalBox" />
+    <div id="fade" v-if="showModal !== 'none'"></div>
+    <PostModal
+      v-show="showModal === 'post'"
+      @close-post-modal="closePostModal"
+    />
+    <ReplyModal
+      v-show="showModal === 'reply'"
+      @close-post-modal="closePostModal"
+      :initial-Modal-tweet="replyModalTweet"
+    />
     <div class="tweets-container">
       <div class="tweets-header">
         <router-link to="/tweets">首頁</router-link>
@@ -23,8 +33,8 @@
                   rows="3"
                   name="text"
                   v-model="text"
+                  placeholder="有什麼新鮮事？"
                 >
-                有什麼新鮮事？
                 </textarea>
               </div>
               <div class="tweets-submit">
@@ -39,6 +49,8 @@
             v-for="tweet in tweets"
             :key="tweet.id"
             :initial-tweet="tweet"
+            @show-reply-modal="showModalBox"
+            @reply-tweet-id="showReplyModal"
           />
         </div>
       </div>
@@ -53,21 +65,33 @@ import NavBar from "./../components/Navbar";
 import TweetCard from "./../components/TweetCard";
 import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
+import PostModal from "./../components/UserPostmodal";
+import ReplyModal from "./../components/UserReplymodal";
 
 export default {
   components: {
     RecommendUsers,
     NavBar,
     TweetCard,
+    PostModal,
+    ReplyModal,
   },
   data() {
     return {
       tweets: [],
       text: "",
+      // post,reply,none
+      showModal: "none",
+      replyModalTweet: {},
     };
   },
   created() {
     this.fetchTweets();
+  },
+  watch: {
+    tweets: function () {
+      this.fetchTweets();
+    },
   },
   methods: {
     async fetchTweets() {
@@ -96,6 +120,15 @@ export default {
           title: "暫時無法新增推文,請稍後再試",
         });
       }
+    },
+    showModalBox(showModal) {
+      this.showModal = showModal;
+    },
+    closePostModal(showModal) {
+      this.showModal = showModal;
+    },
+    showReplyModal(tweet) {
+      this.replyModalTweet = tweet;
     },
   },
 };
@@ -185,5 +218,26 @@ textarea {
   border: 1px solid transparent;
   outline: none;
   color: #ffffff;
+}
+
+/* modal */
+.modal-box {
+  width: 600px;
+  height: 300px;
+  position: fixed;
+  top: 5%;
+  background-color: white;
+  z-index: 2;
+  border-radius: 20px;
+}
+#fade {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+  opacity: 0.5;
 }
 </style>

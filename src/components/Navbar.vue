@@ -24,7 +24,12 @@
           >
         </li>
         <li>
-          <button class="nav-teweet-button button">推文</button>
+          <button
+            class="nav-teweet-button button"
+            @click.stop.prevent="addPost"
+          >
+            推文
+          </button>
         </li>
       </ul>
       <a href="" class="nav-item nav-sign-out">
@@ -34,6 +39,22 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      showModal: "post",
+    };
+  },
+  methods: {
+    addPost() {
+      this.showModal = "post";
+      this.$emit("show-post-modal", this.showModal);
+    },
+  },
+};
+</script>
 
 <style scoped>
 .nav-bar {
