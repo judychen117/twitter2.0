@@ -42,19 +42,19 @@ export default new Vuex.Store({
 
         if (statusText !== 'OK') {
           throw new Error(statusText)
-        }
 
+        }
+        const { id, name, email } = data
         commit('setCurrentUser', {
           id,
           name,
           email,
           role
         })
-        return true  // add this line
+        return true 
       } catch (error) {
         console.error('can not fetch user information')
-        commit('revokeAuthentication')
-        return false  // add this line
+        return false  
       }
     }
   },

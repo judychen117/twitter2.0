@@ -51,12 +51,12 @@ const router = new Router({
     },
     {
       path: '/users/:id/tweet',
-      name: 'user-profile',
+      name: 'user-profile-tweet',
       component: () => import('./../views/UserProfileTweets.vue')
     },
     {
       path: '/users/:id/like',
-      name: 'user-profile',
+      name: 'user-profile-like',
       component: () => import('./../views/UserProfileLikes.vue')
     },
     {
@@ -80,7 +80,8 @@ const router = new Router({
       component: NotFound
     }
   ]
-})
+}) 
+
 
 // router.beforeEach(async (to, from, next) => {
 //   const tokenInLocalStorage = localStorage.getItem('token')
@@ -93,6 +94,7 @@ const router = new Router({
 //   }
 //   const pathsWithoutAuthentication = ['sign-up', 'sign-in']
 
+
 //   // 如果 token 無效則轉址到登入頁
 //   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
 //     next('/login')
@@ -104,6 +106,7 @@ const router = new Router({
 //     next('/tweets')
 //     return
 //   }
+
 
 //   next()
 // })
