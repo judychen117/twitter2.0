@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import NotFound from '../views/NotFound.vue'
 import Regist from '../views/Regist.vue'
-// import store from './../store'
+import store from './../store'
 
 Vue.use(Router)
 
@@ -90,7 +90,7 @@ router.beforeEach((to, from, next) => {
   store.dispatch('fetchCurrentUser')
   next()
 })
-}) 
+
 
 
 // router.beforeEach(async (to, from, next) => {
