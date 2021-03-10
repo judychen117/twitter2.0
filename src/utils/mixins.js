@@ -20,6 +20,5 @@ export const emptyImageFilter = {
         emptyCover(src){
             return src || 'https://via.placeholder.com/245x140/C4C4C4/C4C4C4'
         }
-
     }
 }

@@ -1,12 +1,22 @@
 <template>
   <div class="tweets-card">
-    <a href="">
+    <router-link
+      :to="{ name: 'user-profile-tweet', params: { id: tweet.User.id } }"
+    >
       <img :src="tweet.User.avatar" alt="avatar" class="tweets-avatar" />
-    </a>
+    </router-link>
     <div class="tweets-content">
       <a href="" class="tweet tweets-title">
-        <div class="tweets-name">{{ tweet.User.name }}</div>
-        <div class="tweets-id">{{ tweet.User.account }}・</div>
+        <router-link
+          :to="{ name: 'user-profile-tweet', params: { id: tweet.User.id } }"
+        >
+          <div class="tweets-name">{{ tweet.User.name }}</div>
+        </router-link>
+        <router-link
+          :to="{ name: 'user-profile-tweet', params: { id: tweet.User.id } }"
+        >
+          <div class="tweets-id">{{ tweet.User.account }}・</div>
+        </router-link>
         <div class="tweets-time">{{ tweet.createdAt | fromNow }}</div>
       </a>
       <router-link

@@ -55,6 +55,11 @@ const router = new Router({
       component: () => import('./../views/UserProfileTweets.vue')
     },
     {
+      path: '/users/:id/reply',
+      name: 'user-profile-reply',
+      component: () => import('./../views/UserProfileReplies.vue')
+    },
+    {
       path: '/users/:id/like',
       name: 'user-profile-like',
       component: () => import('./../views/UserProfileLikes.vue')
@@ -80,34 +85,10 @@ const router = new Router({
       component: NotFound
     }
   ]
-}) 
-
-
-router.beforeEach(async (to, from, next) => {
-  const tokenInLocalStorage = localStorage.getItem('token')
-  const tokenInStore = store.state.token
-  let isAuthenticated = store.state.isAuthenticated
-
-  // 比較 localStorage 和 store 中的 token 是否一樣
-  if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
-    isAuthenticated = await store.dispatch('fetchCurrentUser')
-  }
-  const pathsWithoutAuthentication = ['regist', 'login']
-
-  // 如果 token 無效則轉址到登入頁
-  if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
-    next('/login')
-    return
-  }
-
-  // 如果 token 有效則轉址到tweet首頁
-  if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
-    next('/tweets')
-    return
-  }
-
+})
+router.beforeEach((to, from, next) => {
+  store.dispatch('fetchCurrentUser')
   next()
 })
-
 
 export default router

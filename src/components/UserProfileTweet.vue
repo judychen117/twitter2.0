@@ -3,20 +3,36 @@
     <div class="nav">
       <div class="top-right">
         <div class="editorMode" v-if="currentUser.id === info.id">
-          <button class="btn btn-primary">編輯個人檔案</button>
+          <button class="edit-button">編輯個人檔案</button>
         </div>
         <div class="nonEditorMode" v-else>
-          <button class="btn btn-primary">nope</button>
+          <div class="email">
+            <img src="./../../public/img/email.svg" alt="email" />
+          </div>
+          <div class="bell">
+            <img src="./../../public/img/bell.svg" alt="bell" />
+          </div>
+          <div class="user-button">
+            <button type="button" class="followers-item-button">
+              正在跟隨
+            </button>
+          </div>
         </div>
       </div>
-      <div class="nav-tab nav-active">
-        <a href="">推文</a>
-      </div>
-      <div class="nav-tab">
-        <a href="">推文與回覆</a>
-      </div>
-      <div class="nav-tab">
-        <a href="">喜歡的內容</a>
+      <div class="nav-tabs">
+        <div class="nav-tab nav-active">
+          <a href="">推文</a>
+        </div>
+        <div class="nav-tab">
+          <a href="">推文與回覆</a>
+        </div>
+        <div class="nav-tab">
+          <router-link
+            :to="{ name: 'user-profile-like', params: { id: info.id } }"
+          >
+            <a href="">喜歡的內容</a>
+          </router-link>
+        </div>
       </div>
     </div>
     <div class="tweet-list" v-for="tweet in users" :key="tweet.id">
@@ -112,8 +128,64 @@ export default {
 a {
   text-decoration: none; /* 拿掉底線 */
 }
+.edit-button {
+  width: 180px;
+  height: 45px;
+  border-radius: 210px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ff6600;
+  outline: none;
+  color: #ff6600;
+  margin-top: 10px;
+}
+.followers-item-button {
+  font-size: 15px;
+  width: auto;
+  height: auto;
+  border-radius: 62px;
+  background: #ff6600;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid transparent;
+  outline: none;
+  color: #ffffff;
+}
+.nonEditorMode {
+  display: flex;
+}
+.email {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 2px solid #ff6600;
+  margin-right: 1rem;
+}
+.email img {
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+}
+.bell {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 2px solid #ff6600;
+  margin-right: 1rem;
+}
+.bell img {
+  padding-top: 0.4rem;
+  padding-left: 0.4rem;
+}
 .nav {
   height: 3rem;
+  background-color: #fff;
+}
+.nav-tabs {
+  display: flex;
+  justify-content: right;
+  align-content: center;
+  width: 600px;
+  border-bottom: 1px solid #e6ecf0;
 }
 .nav-tab {
   width: 130px;
@@ -134,10 +206,11 @@ a {
 }
 .tweet-list {
   padding: 1rem 0;
-  width: 510px;
+  width: 600px;
   border-bottom: 1px solid #e6ecf0;
   display: flex;
 }
+
 .tweet-name {
   font-weight: 500;
 }
@@ -145,10 +218,10 @@ a {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  margin-left: 20px;
+  margin-left: 25px;
 }
 .tweet-content {
-  padding-left: 2rem;
+  padding-left: 1.5rem;
 }
 .tweet-title {
   display: flex;

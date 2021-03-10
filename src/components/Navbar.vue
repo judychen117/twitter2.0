@@ -12,17 +12,16 @@
           </router-link>
         </li>
         <li class="nav-item nav-profile">
-          <!-- TODO:要把ＩＤ換成currentUserId -->
-          <router-link to="/users/1/tweet">
+          <router-link :to="{ name: 'user-profile-tweet', params: { id: currentUser.id } }">
             <i class="nav-icon fas fa-user-alt"></i>
             <p>個人資料</p>
           </router-link>
         </li>
         <li class="nav-item nav-setting">
-          <a href="#">
+          <router-link :to="{ name: 'setting' }">
             <i class="nav-icon fas fa-cog"></i>
-            <p>設定</p></a
-          >
+            <p>設定</p>
+          </router-link>
         </li>
         <li>
           <button

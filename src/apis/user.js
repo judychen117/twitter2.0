@@ -43,6 +43,13 @@ export default {
       }
     })
   },
+  getReply({ id }) {
+    return apiHelper.get(`/users/${id}/replied_tweets`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`
+      }
+    })
+  },
   getLike({ id }) {
     return apiHelper.get(`/users/${id}/likes`, {
       headers: {
