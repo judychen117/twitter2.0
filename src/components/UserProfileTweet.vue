@@ -13,24 +13,54 @@
             <img src="./../../public/img/bell.svg" alt="bell" />
           </div>
           <div class="user-button">
-            <button type="button" class="followers-item-button">
+            <!-- TODO:如何更新畫面 -->
+            <button
+              type="button"
+              class="followers-item-button"
+              v-if="isFollowing"
+              @click.stop.prevent="deleteFollowing(info.id)"
+            >
               正在跟隨
+            </button>
+            <button
+              type="button"
+              class="followers-item-button"
+              v-else
+              @click.stop.prevent="addFollowing(info.id)"
+            >
+              跟隨
             </button>
           </div>
         </div>
       </div>
       <div class="nav-tabs">
         <div class="nav-tab nav-active">
-          <a href="">推文</a>
+          <router-link
+            :to="{
+              name: 'user-profile-tweet',
+              params: {
+                id: info.id,
+              },
+            }"
+            >推文</router-link
+          >
         </div>
         <div class="nav-tab">
-          <a href="">推文與回覆</a>
+          <router-link
+            :to="{
+              name: 'user-profile-reply',
+              params: {
+                id: info.id,
+              },
+            }"
+            >推文與回覆</router-link
+          >
         </div>
         <div class="nav-tab">
           <router-link
             :to="{ name: 'user-profile-like', params: { id: info.id } }"
           >
-            <a href="">喜歡的內容</a>
+            喜歡的內容
           </router-link>
         </div>
       </div>
@@ -80,6 +110,7 @@ export default {
     return {
       users: [],
       id: -1,
+      isFollowing: false,
     };
   },
   props: {
@@ -107,11 +138,47 @@ export default {
       } catch (e) {
         Toast.fire({
           icon: "error",
-          title: "無法取得Followers，請稍後再試",
+          title: "無法取得使用者頁面，請稍後再試",
         });
         console.log(e);
       }
     },
+    async deleteFollowing(infoID) {
+      try {
+        const { data } = await userAPI.deleteFollowing({ infoID });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法取消追隨,請稍後再試",
+        });
+      }
+    },
+    async addFollowing(id) {
+      try {
+        const { data } = await userAPI.addFollowing({
+          id,
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法追隨,請稍後再試",
+        });
+      }
+    },
+    // checkFollowingId() {
+    //   this.info.Followings.forEach((Following) => {
+    //     if (Following.id === this.currentUser.id) {
+    //       this.isFollowing = true;
+    //       return;
+    //     }
+    //   });
+    // },
   },
   mixins: [fromNowFilter, emptyImageFilter],
 };

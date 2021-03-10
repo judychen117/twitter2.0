@@ -1,8 +1,11 @@
 <template>
   <div class="following-card">
-    <div class="arrow-left">
+    <router-link
+      :to="{ name: 'user-profile-tweet', params: { id: user.id } }"
+      class="arrow-left"
+    >
       <img src="../../public/img/Vector.svg" alt="vector" />
-    </div>
+    </router-link>
     <p class="name">{{ user.name }}</p>
     <p class="tweets">{{ user.Tweets.length }} 推文</p>
     <FollowNavTab :id="user.id" />
@@ -31,6 +34,14 @@
             >
               正在跟隨
             </button>
+            <button
+              type="button"
+              class="followings-item-button"
+              v-else
+              @click.stop.prevent="addFollowing(follower.id)"
+            >
+              跟隨
+            </button>
           </div>
         </div>
       </div>
@@ -45,6 +56,7 @@ import { emptyImageFilter } from "./../utils/mixins";
 import FollowNavTab from "./../components/FollowNavTab.vue";
 
 export default {
+  mixins: [emptyImageFilter],
   components: {
     FollowNavTab,
   },
@@ -95,7 +107,32 @@ export default {
         });
       }
     },
-    mixins: [emptyImageFilter],
+    async addFollowing(id) {
+      try {
+        const { data } = await userAPI.addFollowing({
+          id,
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.followers = this.followers.map((follower) => {
+          if (follower.id !== id) {
+            return follower;
+          } else {
+            return {
+              ...follower,
+              followerCount: follower.followerCount + 1,
+              isFollowed: true,
+            };
+          }
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法追隨,請稍後再試",
+        });
+      }
+    },
   },
 };
 </script>
