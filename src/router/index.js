@@ -91,5 +91,33 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+// router.beforeEach(async (to, from, next) => {
+//   const tokenInLocalStorage = localStorage.getItem('token')
+//   const tokenInStore = store.state.token
+//   let isAuthenticated = store.state.isAuthenticated
+
+//   // 比較 localStorage 和 store 中的 token 是否一樣
+//   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+//     isAuthenticated = await store.dispatch('fetchCurrentUser')
+//   }
+//   const pathsWithoutAuthentication = ['login', 'regist']
+
+
+//   // 如果 token 無效則轉址到登入頁
+//   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
+//     next('/login')
+//     return
+//   }
+
+//   // 如果 token 有效則轉址到餐廳首頁
+//   if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
+//     next('/tweets')
+//     return
+//   }
+
+
+//   next()
+// })
+
 
 export default router
