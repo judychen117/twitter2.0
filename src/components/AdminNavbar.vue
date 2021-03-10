@@ -1,9 +1,9 @@
 <template>
   <div class="nav-bar">
     <div class="mt-3">
-      <a href="#" class="nav-logo">
+      <router-link to="/admin_tweets" class="nav-logo">
         <img src="../../public/img/alphaCampIcon.svg" alt="" />
-      </a>
+      </router-link>
       <ul class="nav-list">
         <li class="nav-item nav-home">
           <router-link :to="{ name: 'admin-tweets' }">
