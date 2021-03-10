@@ -125,7 +125,6 @@ export default {
       this.showModal = "reply";
       this.$emit("show-reply-modal", this.showModal);
       this.$emit("reply-tweet-id", tweet);
-      console.log("tweet");
     },
     closePostModal(showModal) {
       this.showModal = showModal;
