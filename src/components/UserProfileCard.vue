@@ -3,7 +3,9 @@
     <div>
       <div class="top-bar">
         <div class="arrow-left">
-          <img src="../../public/img/Vector.svg" alt="vector" />
+          <router-link :to="{ name: 'tweets-main' }">
+            <img src="../../public/img/Vector.svg" alt="vector" />
+          </router-link>
         </div>
         <p class="name">{{ user.name }}</p>
         <p class="tweets">{{ user.Tweets.length }} 推文</p>
@@ -144,5 +146,4 @@ export default {
 .user-follow span {
   font-weight: 500;
 }
-
 </style>

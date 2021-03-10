@@ -18,52 +18,52 @@
             </button>
           </div>
         </div>
-        <div class="nav-tabs">
-          <div class="nav-tab">
-            <a href="">推文</a>
-          </div>
-          <div class="nav-tab">
-            <a href="">推文與回覆</a>
-          </div>
-          <div class="nav-tab nav-active">
+      </div>
+      <div class="nav-tabs">
+        <div class="nav-tab">
+          <a href="">推文</a>
+        </div>
+        <div class="nav-tab nav-active">
+          <a href="">推文與回覆</a>
+        </div>
+        <div class="nav-tab">
+          <router-link
+            :to="{ name: 'user-profile-like', params: { id: info.id } }"
+          >
             <a href="">喜歡的內容</a>
-          </div>
+          </router-link>
         </div>
       </div>
-      <div class="tweet-list" v-for="tweet in users" :key="tweet.id">
-        <a href="" class="tweet-avatar">
-          <img :src="tweet.Tweet.User.avatar" alt="avatar" />
+    </div>
+    <div class="tweet-list" v-for="tweet in tweets" :key="tweet.TweetId">
+      <a href="" class="tweet-avatar">
+        <img :src="tweet.Tweet.User.avatar" alt="avatar" />
+      </a>
+      <div class="tweet-content">
+        <a href="" class="tweet-title">
+          <p class="tweet-name">{{ tweet.Tweet.User.name }}</p>
+          <p class="tweet-id">{{ tweet.Tweet.User.account }}</p>
+          <span class="dot"></span>
+          <p class="tweet-time">{{ tweet.createdAt | fromNow }}</p>
         </a>
-        <div class="tweet-content">
-          <a href="" class="tweet-title">
-            <p class="tweet-name">{{ tweet.Tweet.User.name }}</p>
-            <p class="tweet-id">{{ tweet.Tweet.User.account }}</p>
-            <span class="dot"></span>
-            <p class="tweet-time">{{ tweet.Tweet.createdAt | fromNow }}</p>
+        <div class="tweet-text">
+          <p>
+            {{ tweet.Tweet.description }}
+          </p>
+        </div>
+        <div class="tweet-activity">
+          <a href="#" class="tweet-comment">
+            <img
+              src="../../public/img/commentIcon.svg"
+              alt="comments"
+              class="icon"
+            />
+            <span>{{ tweet.Tweet.Replies.length }}</span>
           </a>
-          <div class="tweet-text">
-            <p>
-              {{ tweet.Tweet.description }}
-            </p>
-          </div>
-          <div class="tweet-activity">
-            <a href="#" class="tweet-comment">
-              <img
-                src="../../public/img/commentIcon.svg"
-                alt="comments"
-                class="icon"
-              />
-              <span>{{ tweet.Tweet.Replies.length }}</span>
-            </a>
-            <a href="#" class="tweet-like">
-              <img
-                src="../../public/img/likeIcon.svg"
-                alt="likes"
-                class="icon"
-              />
-              <span>{{ tweet.Tweet.Likes.length }}</span>
-            </a>
-          </div>
+          <a href="#" class="tweet-like">
+            <img src="../../public/img/likeIcon.svg" alt="likes" class="icon" />
+            <span>{{ tweet.Tweet.Likes.length }}</span>
+          </a>
         </div>
       </div>
     </div>
@@ -78,7 +78,8 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      users: [],
+      tweets: [],
+      id: -1,
     };
   },
   props: {
@@ -97,12 +98,13 @@ export default {
   methods: {
     async fetchUsers(id) {
       try {
-        const response = await userAPI.getLike({ id });
-        console.log(response);
+        const response = await userAPI.getReply({ id });
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        this.users = response.data;
+        this.tweets = response.data;
+        // this.tweets.filter((tweet) => tweet.Tweet.User);
+        console.log(response);
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -112,7 +114,6 @@ export default {
       }
     },
   },
-
   mixins: [fromNowFilter, emptyImageFilter],
 };
 </script>
@@ -124,9 +125,6 @@ export default {
   position: absolute;
   top: -11rem;
   right: 1rem;
-}
-.nonEditorMode{
-  margin-left: 25rem;
 }
 a {
   text-decoration: none; /* 拿掉底線 */
@@ -189,7 +187,6 @@ a {
   align-content: center;
   width: 600px;
   border-bottom: 1px solid #e6ecf0;
-  margin-top: 8.5rem;
 }
 .nav-tab {
   width: 130px;

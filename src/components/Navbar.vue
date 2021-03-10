@@ -12,18 +12,18 @@
           </router-link>
         </li>
         <li class="nav-item nav-profile">
-          <router-link
-            :to="{ name: 'user-profile', params: { id: currentUser.id } }"
-          >
+          <router-link :to="{ name: 'user-profile-tweet', params: { id: currentUser.id } }">
+
             <i class="nav-icon fas fa-user-alt"></i>
             <p>個人資料</p>
           </router-link>
         </li>
         <li class="nav-item nav-setting">
-          <router-link to="/setting">
+          <router-link :to="{ name: 'setting' }">
             <i class="nav-icon fas fa-cog"></i>
-            <p>設定</p></router-link
-          >
+            <p>設定</p>
+          </router-link>
+
         </li>
         <li>
           <button

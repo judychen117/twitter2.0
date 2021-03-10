@@ -11,19 +11,22 @@
             v-for="recommendUser in recommendUsers"
             :key="recommendUser.id"
           >
-            <a href="" class="recommend-followers-title">
+            <router-link
+              :to="{ name: 'user-profile-tweet', params: { id: recommendUser.id } }"
+              class="recommend-followers-title"
+            >
               <img
-                :src="recommendUser.avatar"
+                :src="recommendUser.avatar | emptyPicture"
                 alt="avatar"
                 class="tweets-avatar"
               />
-              <div>
-                <p class="recommend-followers-name">{{ recommendUser.name }}</p>
-                <p class="recommend-followers-id">
-                  {{ recommendUser.account }}
-                </p>
-              </div>
-            </a>
+            <div>
+              <p class="recommend-followers-name">{{ recommendUser.name }}</p>
+              <p class="recommend-followers-id">
+                {{ recommendUser.account }}
+              </p>
+            </div>
+            </router-link>
             <button
               class="followers-item-button"
               v-if="recommendUser.isFollowed"
@@ -51,6 +54,7 @@
 <script>
 import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
+import { emptyImageFilter } from "./../utils/mixins";
 
 export default {
   data() {
@@ -124,6 +128,7 @@ export default {
       }
     },
   },
+  mixins: [emptyImageFilter],
 };
 </script>
 

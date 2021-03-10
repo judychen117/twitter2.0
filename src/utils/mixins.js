@@ -8,8 +8,8 @@ export const fromNowFilter = {
   }
 }
 
-
 export const emptyImageFilter = {
+
   filters: {
     emptyPicture(src) {
       return src || 'https://via.placeholder.com/50x50/C4C4C4/C4C4C4'

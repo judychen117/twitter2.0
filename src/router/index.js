@@ -55,6 +55,11 @@ const router = new Router({
       component: () => import('./../views/UserProfileTweets.vue')
     },
     {
+      path: '/users/:id/reply',
+      name: 'user-profile-reply',
+      component: () => import('./../views/UserProfileReplies.vue')
+    },
+    {
       path: '/users/:id/like',
       name: 'user-profile-like',
       component: () => import('./../views/UserProfileLikes.vue')
@@ -80,6 +85,11 @@ const router = new Router({
       component: NotFound
     }
   ]
+})
+router.beforeEach((to, from, next) => {
+  store.dispatch('fetchCurrentUser')
+  next()
+})
 }) 
 
 
@@ -110,6 +120,5 @@ const router = new Router({
 
 //   next()
 // })
-
 
 export default router
