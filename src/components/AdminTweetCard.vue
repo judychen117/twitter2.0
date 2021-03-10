@@ -1,6 +1,6 @@
 <template>
   <div class="tweet-card">
-    <div class="tweet-list" v-for="tweet in tweets" :key="tweet.UserId">
+    <div class="tweet-list" v-for="tweet in tweets" :key="tweet.id">
       <div class="tweet">
         <a href="" class="tweet-avatar">
           <img :src="tweet.User.avatar | emptyPicture" alt="avatar" />
@@ -14,11 +14,11 @@
           </a>
           <div class="tweet-text">
             <p class="card-text">
-              {{ tweet.description }}
+              {{ tweet.description | filterWordCount }}
             </p>
           </div>
           <div class="tweet-delete">
-            <a href="#">
+            <a href="#" @click.stop.prevent="deleteTweets(tweet.id)">
               <img
                 src="../../public/img/cancel.svg"
                 alt="deleteIcon"
@@ -35,7 +35,11 @@
 <script>
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
-import { emptyImageFilter, fromNowFilter } from "./../utils/mixins";
+import {
+  emptyImageFilter,
+  fromNowFilter,
+  filterWordCount,
+} from "./../utils/mixins";
 
 export default {
   data() {
@@ -62,13 +66,14 @@ export default {
         console.log(e);
       }
     },
-    async deleteRestaurant(tweetId) {
+    async deleteTweets(id) {
       try {
-        const { data } = await adminAPI.tweets.deleteTweet({ tweetId });
+        const { data } = await adminAPI.tweets.deleteTweets({ id });
+        console.log(id);
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.tweets = this.tweets.filter((tweet) => tweet.id !== tweetId);
+        this.tweets = this.tweets.filter((tweet) => tweet.id !== id);
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -77,7 +82,7 @@ export default {
       }
     },
   },
-  mixins: [fromNowFilter, emptyImageFilter],
+  mixins: [fromNowFilter, emptyImageFilter, filterWordCount],
 };
 </script>
 
@@ -145,7 +150,7 @@ a {
   top: 1rem;
   right: 1rem;
 }
-.tweet-delete{
+.tweet-delete {
   position: relative;
   bottom: 4.5rem;
   right: 0.5rem;

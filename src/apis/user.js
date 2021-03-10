@@ -50,5 +50,20 @@ export default {
       }
     })
   },
-
+  userEdit: {
+    editSetting({ id, formData }) {
+      return apiHelper.put(`/users/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`
+        }
+      })
+    },
+    getSetting(id) {
+      return apiHelper.get(`/users/${id}/edit`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`
+        }
+      })
+    }
+  }
 }

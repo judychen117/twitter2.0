@@ -2,7 +2,6 @@
   <div class="main-tweets" id="main">
     <NavBar @show-post-modal="showModalBox" />
     <div id="fade" v-if="showModal !== 'none'"></div>
-    <!-- TODO:要思考怎麼更新畫面 -->
     <PostModal
       v-show="showModal === 'post'"
       @close-post-modal="closePostModal"
@@ -93,11 +92,14 @@ export default {
     console.log(store.state);
     this.fetchTweets();
   },
+  // },
   // watch: {
-  //   tweets: function () {
-  //     console.log("test", 1);
-
-  //     this.fetchTweets();
+  //   replyModalTweet(newValue) {
+  //     console.log("new", newValue);
+  //     this.replyModalTweet = {
+  //       ...this.replyModalTweet,
+  //       ...newValue,
+  //     };
   //   },
   // },
   methods: {
@@ -147,6 +149,7 @@ export default {
     },
     closePostModal(showModal) {
       this.showModal = showModal;
+      this.fetchTweets();
     },
     showReplyModal(tweet) {
       this.replyModalTweet = tweet;
@@ -200,8 +203,9 @@ a {
   margin-right: 10px;
 }
 .tweets-list {
-  height: 100%;
+  height: 74vh;
   width: 100%;
+  overflow: scroll;
 }
 
 .tweets-form {

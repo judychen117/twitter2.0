@@ -76,7 +76,7 @@ export default {
   props: {
     initialModalTweet: {
       type: Object,
-      required: false,
+      required: true,
       default: () => ({
         id: "1",
         UserId: "1",
@@ -103,18 +103,27 @@ export default {
   },
   data() {
     return {
-      tweet: {},
+      tweet: this.initialModalTweet,
       text: "",
       showModal: "none",
     };
   },
-  created() {
-    this.tweet = this.initialModalTweet;
+  // created() {
+  //   this.tweet = this.initialModalTweet;
+  // },
+  watch: {
+    initialModalTweet(newValue) {
+      console.log("new", newValue);
+      this.tweet = {
+        ...this.tweet,
+        ...newValue,
+      };
+    },
   },
   methods: {
     async handleSubmit() {
       try {
-        this.showModal = false;
+        // this.showModal = false;
         const description = this.text;
         const { data } = await TweetsAPI.tweets.post({ description });
         if (data.status !== "success") {

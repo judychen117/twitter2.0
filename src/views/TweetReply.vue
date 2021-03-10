@@ -55,7 +55,24 @@
                     class="icon"
                   />
                 </a>
-                <a href="" class="like-icon">
+                <a
+                  href=""
+                  class="like-icon"
+                  v-if="likeStatus"
+                  @click.stop.prevent="deleteLiked(tweet.id)"
+                >
+                  <img
+                    src="../../public/img/icon_like_fill.svg"
+                    alt=""
+                    class="icon"
+                  />
+                </a>
+                <a
+                  href=""
+                  class="like-icon"
+                  @click.stop.prevent="addLiked(tweet.id)"
+                  v-else
+                >
                   <img
                     src="../../public/img/likeIcon.svg"
                     alt=""
@@ -108,6 +125,8 @@ import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
 import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
+import userAPI from "./../apis/user";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -119,6 +138,7 @@ export default {
       tweet: [],
       replies: [],
       tweetUser: [],
+      likeStatus: false,
     };
   },
   created() {
@@ -130,6 +150,9 @@ export default {
     this.fetchTweet(tweet_id);
     next();
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   methods: {
     async fetchTweet(tweet_id) {
       try {
@@ -137,12 +160,50 @@ export default {
         this.tweet = data;
         this.replies = data.Replies;
         this.tweetUser = data.User;
+        this.checkLikeId(this.tweet);
       } catch (error) {
         Toast.fire({
           icon: "error",
           title: "暫時無法獲取推文,請稍後再試",
         });
       }
+    },
+    async addLiked(tweetId) {
+      try {
+        const { data } = await userAPI.addLiked(tweetId);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.likeStatus = true;
+        // TODO:Like數如何即時更新
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法加入喜歡,請稍後再試",
+        });
+      }
+    },
+    async deleteLiked(tweetId) {
+      try {
+        const { data } = await userAPI.deleteLiked(tweetId);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.likeStatus = false;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法移除喜歡,請稍後再試",
+        });
+      }
+    },
+    checkLikeId(tweet) {
+      tweet.Likes.forEach((like) => {
+        if (like.UserId === this.currentUser.id) {
+          this.likeStatus = true;
+          return;
+        }
+      });
     },
   },
 };

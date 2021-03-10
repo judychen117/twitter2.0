@@ -57,21 +57,18 @@
             class="form-control"
             placeholder="密碼"
             autocomplete="new-password"
-            required
           />
         </div>
-
         <div class="form-label-group mb-3">
           <label for="password-check"></label>
           <input
             id="password-check"
-            v-model="passwordCheck"
-            name="passwordCheck"
+            v-model="checkPassword"
+            name="checkPassword"
             type="password"
             class="form-control"
             placeholder="密碼確認"
             autocomplete="new-password"
-            required
           />
         </div>
         <div class="buttonStyle">
@@ -79,23 +76,86 @@
             class="btn btn-lg btn-primary btn-block mb-3 mt-4"
             type="submit"
           >
-            註冊
+            儲存
           </button>
         </div>
       </form>
     </div>
-
-    <RecommendUsers />
   </div>
 </template>
 
 <script>
-import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
+import { mapState } from "vuex";
+import { Toast } from "./../utils/helpers";
+import userAPI from "./../apis/user";
+
 export default {
   components: {
-    RecommendUsers,
     NavBar,
+  },
+  data() {
+    return {
+      account: "",
+      name: "",
+      email: "",
+      checkPassword: "",
+      password: "",
+      id: "",
+    };
+  },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
+  created() {
+    this.fetchCurrentUser();
+  },
+  methods: {
+    async fetchCurrentUser() {
+      try {
+        // const { name, email, account, id } = this.currentUser;
+        // this.account = account;
+        // this.name = name;
+        // this.email = email;
+        // this.id = id;
+        const { data } = await userAPI.userEdit.getSetting(this.currentUser.id);
+        console.log(data);
+        const { name, email, account, id } = data;
+        this.account = account;
+        this.name = name;
+        this.email = email;
+        this.id = id;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "獲取資料失敗,請稍後再試",
+        });
+      }
+    },
+    async handleSubmit(e) {
+      try {
+        const form = e.target;
+        const formData = new FormData(form);
+        const { data } = await userAPI.userEdit.editSetting({
+          id: this.id,
+          formData,
+        });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.fetchCurrentUser();
+        Toast.fire({
+          icon: "success",
+          title: "儲存成功",
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法修改資料,請稍後再試",
+        });
+      }
+    },
   },
 };
 </script>
@@ -110,7 +170,7 @@ export default {
   /* flex-wrap: wrap; */
   padding: 3rem 0;
 }
-.setting-form{
+.setting-form {
   width: 600px;
   height: 100%;
   margin-right: 30px;

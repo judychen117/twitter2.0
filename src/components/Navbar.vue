@@ -12,16 +12,17 @@
           </router-link>
         </li>
         <li class="nav-item nav-profile">
-          <!-- TODO:要把ＩＤ換成currentUserId -->
-          <router-link to="/users/1/tweet">
+          <router-link
+            :to="{ name: 'user-profile', params: { id: currentUser.id } }"
+          >
             <i class="nav-icon fas fa-user-alt"></i>
             <p>個人資料</p>
           </router-link>
         </li>
         <li class="nav-item nav-setting">
-          <a href="#">
+          <router-link to="/setting">
             <i class="nav-icon fas fa-cog"></i>
-            <p>設定</p></a
+            <p>設定</p></router-link
           >
         </li>
         <li>
@@ -36,6 +37,7 @@
       <router-link :to="{ name: 'login' }" class="nav-item nav-sign-out">
         <i class="nav-icon fas fa-sign-out-alt" @click="logout"></i>
         <p @click="logout">登出</p>
+
       </router-link>
     </div>
   </div>
@@ -61,6 +63,7 @@ export default {
     logout() {
       this.$store.commit("revokeAuthentication");
       this.$router.push("/login");
+
     },
   },
 };

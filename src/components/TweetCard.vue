@@ -27,26 +27,22 @@
           <img src="../../public/img/commentIcon.svg" alt="" class="icon" />
           <span>{{ tweet.Replies.length }}</span>
         </a>
-        <!-- TODO:等vueX做好可以用user.id比對這則貼文裡面的liked使用者id -->
-        <a
-          href="#"
-          class="tweets-like"
-          @click.stop.prevent="addLiked(tweet.id)"
-        >
-          <img src="../../public/img/likeIcon.svg" alt="" class="icon" />
-          <span>{{ tweet.Likes.length }}</span>
-        </a>
         <a
           href="#"
           class="tweets-like"
           @click.stop.prevent="deleteLiked(tweet.id)"
+          v-if="likeStatus"
         >
-          <img
-            src="../../public/img/likeIcon.svg"
-            alt=""
-            class="icon"
-            style="background: red"
-          />
+          <img src="../../public/img/icon_like_fill.svg" alt="" class="icon" />
+          <span style="color: #e0245e">{{ tweet.Likes.length }}</span>
+        </a>
+        <a
+          href="#"
+          class="tweets-like"
+          @click.stop.prevent="addLiked(tweet.id)"
+          v-else
+        >
+          <img src="../../public/img/likeIcon.svg" alt="" class="icon" />
           <span>{{ tweet.Likes.length }}</span>
         </a>
       </div>
@@ -58,6 +54,7 @@
 import { fromNowFilter } from "./../utils/mixins";
 import userAPI from "./../apis/user";
 import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 
 export default {
   components: {},
@@ -72,7 +69,17 @@ export default {
     return {
       tweet: this.initialTweet,
       showModal: "",
+      likeStatus: false,
     };
+  },
+  created() {
+    this.checkLikeId(this.tweet);
+  },
+  updated() {
+    console.log("update");
+  },
+  computed: {
+    ...mapState(["currentUser"]),
   },
   methods: {
     async addLiked(tweetId) {
@@ -81,6 +88,8 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        this.likeStatus = true;
+        // TODO:Like數如何即時更新
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -94,6 +103,7 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        this.likeStatus = false;
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -102,13 +112,20 @@ export default {
       }
     },
     replyPost(tweet) {
-      console.log("count", 1);
       this.showModal = "reply";
       this.$emit("show-reply-modal", this.showModal);
       this.$emit("reply-tweet-id", tweet);
     },
     closePostModal(showModal) {
       this.showModal = showModal;
+    },
+    checkLikeId(tweet) {
+      tweet.Likes.forEach((like) => {
+        if (like.UserId === this.currentUser.id) {
+          this.likeStatus = true;
+          return;
+        }
+      });
     },
   },
 };

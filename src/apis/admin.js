@@ -7,8 +7,8 @@ export default {
         getTweets() {
             return apiHelper.get('/admin/tweets', { headers: { Authorization: `Bearer ${getToken()}` } })
         },
-        deleteTweets({ tweetId }) {
-            return apiHelper.delete(`/api/admin/tweets/${tweetId}`, { headers: { Authorization: `Bearer ${getToken()}` } })
+        deleteTweets({ id }) {
+            return apiHelper.delete(`/admin/tweets/${id}`, { headers: { Authorization: `Bearer ${getToken()}` } })
         }
     },
     users: {
