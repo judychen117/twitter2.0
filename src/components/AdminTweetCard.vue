@@ -18,6 +18,7 @@
             </p>
           </div>
           <div class="tweet-delete">
+            <!-- TODO:修改連結 -->
             <a href="#" @click.stop.prevent="deleteTweets(tweet.id)">
               <img
                 src="../../public/img/cancel.svg"
@@ -141,7 +142,7 @@ a {
   width: 5px;
   position: relative;
   top: 8px;
-  margin: 0  0.5rem;
+  margin: 0 0.5rem;
 }
 .icon {
   position: absolute;

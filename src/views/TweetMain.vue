@@ -7,11 +7,11 @@
       @close-post-modal="closePostModal"
     />
     <!-- TODO:資料傳遞問題 -->
-    <ReplyModal
+    <!-- <ReplyModal
       v-show="showModal === 'reply'"
       @close-post-modal="closePostModal"
       :initial-Modal-tweet="replyModalTweet"
-    />
+    /> -->
     <div class="tweets-container">
       <div class="tweets-header">
         <a href="">首頁</a>
@@ -68,8 +68,8 @@ import TweetCard from "./../components/TweetCard";
 import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import PostModal from "./../components/UserPostmodal";
-import ReplyModal from "./../components/UserReplymodal";
-import store from './../store'
+// import ReplyModal from "./../components/UserReplymodal";
+import store from "./../store";
 
 export default {
   components: {
@@ -77,7 +77,7 @@ export default {
     NavBar,
     TweetCard,
     PostModal,
-    ReplyModal,
+    // ReplyModal,
   },
   data() {
     return {
@@ -92,16 +92,6 @@ export default {
     console.log(store.state);
     this.fetchTweets();
   },
-  // },
-  // watch: {
-  //   replyModalTweet(newValue) {
-  //     console.log("new", newValue);
-  //     this.replyModalTweet = {
-  //       ...this.replyModalTweet,
-  //       ...newValue,
-  //     };
-  //   },
-  // },
   methods: {
     async fetchTweets() {
       try {
