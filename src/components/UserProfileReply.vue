@@ -35,7 +35,7 @@
                     <label for="name"></label>
                     <input
                       id="name"
-                      v-model="name"
+                      v-model="info.name"
                       name="name"
                       type="name"
                       placeholder=""
@@ -51,7 +51,7 @@
                     <label for="introduction"></label>
                     <input
                       id="introduction"
-                      v-model="introduction"
+                      v-model="info.introduction"
                       name="intro"
                       type="introduction"
                       placeholder=""
@@ -190,6 +190,7 @@ export default {
       try {
         const form = e.target;
         const formData = new FormData(form);
+        this.id = this.info.id;
         const { data } = await userAPI.userEdit.editSetting({
           id: this.id,
           formData,
@@ -198,11 +199,11 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.fetchCurrentUser();
         Toast.fire({
           icon: "success",
           title: "儲存成功",
         });
+        this.editProfile();
       } catch (error) {
         Toast.fire({
           icon: "error",

@@ -220,21 +220,21 @@ export default {
     async handleSubmit(e) {
       try {
         const form = e.target;
-        console.log(e.target);
         const formData = new FormData(form);
-        console.log(this.id)
+        this.id = this.info.id;
         const { data } = await userAPI.userEdit.editSetting({
           id: this.id,
-          formData
+          formData,
         });
+
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.fetchCurrentUser();
         Toast.fire({
           icon: "success",
           title: "儲存成功",
         });
+        this.editProfile();
       } catch (error) {
         Toast.fire({
           icon: "error",
