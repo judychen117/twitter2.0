@@ -88,10 +88,6 @@ export default {
         const { data } = response;
         console.log("response", data.user);
 
-        // 只要不成功就無法進下一個頁面以避免空值
-        if (data.status !== "success") {
-          throw new Error(data.message);
-        }
         // 把token存在application的localstorage
         localStorage.setItem("token", data.token);
 
