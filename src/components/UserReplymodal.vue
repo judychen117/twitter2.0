@@ -9,7 +9,7 @@
     </div>
     <div class="tweets-card">
       <a href="">
-        <img src="" alt="avatar" class="tweets-avatar" />
+        <img :src="tweet.User.avatar" alt="avatar" class="tweets-avatar" />
       </a>
       <div class="tweets-content">
         <a href="" class="tweet tweets-title">
@@ -107,16 +107,15 @@ export default {
       showModal: "none",
     };
   },
-  // created() {
-  //   this.tweet = this.initialModalTweet;
-  // },
   watch: {
-    initialModalTweet(newValue) {
-      console.log("new", newValue);
-      this.tweet = {
-        ...this.tweet,
-        ...newValue,
-      };
+    initialModalTweet: {
+      handler(newValue) {
+        console.log("new", newValue);
+        this.tweet = {
+          ...this.tweet,
+          ...newValue,
+        };
+      },
     },
   },
   methods: {
@@ -151,6 +150,7 @@ export default {
   height: 55px;
   font-size: 18px;
   border-bottom: 1px solid #e6ecf0;
+  color: #ff6600;
 }
 a {
   text-decoration: none; /* 拿掉底線 */
@@ -174,6 +174,9 @@ a {
 }
 .tweets-title > h5 {
   margin-right: 10px;
+}
+.tweets-post-user {
+  color: #ff6600;
 }
 .tweet {
   padding: 5px;

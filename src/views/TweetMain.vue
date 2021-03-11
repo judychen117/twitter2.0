@@ -2,15 +2,15 @@
   <div class="main-tweets" id="main">
     <NavBar @show-post-modal="showModalBox" />
     <div id="fade" v-if="showModal !== 'none'"></div>
-    <PostModal
+    <UserPostmodal
       v-show="showModal === 'post'"
       @close-post-modal="closePostModal"
     />
     <!-- TODO:資料傳遞問題 -->
-    <ReplyModal
+    <UserReplymodal
       v-show="showModal === 'reply'"
       @close-post-modal="closePostModal"
-      :initial-Modal-tweet="replyModalTweet"
+      :initial-modal-tweet="replyModalTweet"
     />
     <div class="tweets-container">
       <div class="tweets-header">
@@ -66,8 +66,8 @@ import NavBar from "./../components/Navbar";
 import TweetCard from "./../components/TweetCard";
 import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
-import PostModal from "./../components/UserPostmodal";
-import ReplyModal from "./../components/UserReplymodal";
+import UserPostmodal from "./../components/UserPostmodal";
+import UserReplymodal from "./../components/UserReplymodal";
 import store from "./../store";
 
 export default {
@@ -75,8 +75,8 @@ export default {
     RecommendUsers,
     NavBar,
     TweetCard,
-    PostModal,
-    ReplyModal,
+    UserPostmodal,
+    UserReplymodal,
   },
   data() {
     return {
@@ -233,8 +233,9 @@ textarea {
 
 /* modal */
 .modal-box {
+  /* display: flex;
+  flex-direction: column; */
   width: 600px;
-  height: 300px;
   position: fixed;
   top: 5%;
   background-color: white;
