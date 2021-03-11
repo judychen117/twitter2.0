@@ -94,17 +94,17 @@
         </div>
       </div>
       <div class="nav-tabs">
-        <div class="nav-tab nav-active">
-          <router-link
-            :to="{
-              name: 'user-profile-tweet',
-              params: {
-                id: info.id,
-              },
-            }"
-            >推文</router-link
-          >
-        </div>
+        <router-link
+          :to="{
+            name: 'user-profile-tweet',
+            params: {
+              id: info.id,
+            },
+          }"
+        >
+          <div class="nav-tab nav-active">推文</div>
+        </router-link>
+
         <div class="nav-tab">
           <router-link
             :to="{ name: 'user-profile-reply', params: { id: info.id } }"
@@ -167,7 +167,6 @@ export default {
       users: [],
       isEditing: false,
       id: -1,
-      name: "",
       isFollowing: false,
     };
   },
@@ -192,9 +191,7 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data;
-        this.name = response.data.users.name;
-        this.id = response.data.users.id;
-        console.log(response);
+        console.log(id);
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -215,9 +212,10 @@ export default {
         const form = e.target;
         console.log(e.target);
         const formData = new FormData(form);
+        console.log(this.id)
         const { data } = await userAPI.userEdit.editSetting({
           id: this.id,
-          formData,
+          formData
         });
 
         if (data.status !== "success") {
@@ -445,7 +443,7 @@ button:focus {
   color: #657786;
 }
 .nav-active {
-  border-bottom: 3px solid #ff6600;
+  border-bottom: 2px solid #ff6600;
 }
 .nav-active a {
   color: #ff6600;

@@ -19,11 +19,9 @@
           </a>
         </div>
         <div class="user-content">
-          <a href="#">
-            <div class="user-name">{{ info.name }}</div>
-            <div class="user-id">{{ info.account }}</div>
-            <div class="user-introduction">{{ info.introduction }}</div>
-          </a>
+          <div class="user-name">{{ info.name }}</div>
+          <div class="user-id">{{ info.account }}</div>
+          <div class="user-introduction">{{ info.introduction }}</div>
           <div class="user-follow">
             <router-link
               :to="{
@@ -33,7 +31,9 @@
                 },
               }"
             >
-              <span>{{ info.Followings.length }}個</span>跟隨中
+              <div class="following-space">
+                <span>{{ info.Followings.length }}個</span>跟隨中
+              </div>
             </router-link>
             <router-link
               :to="{
@@ -165,5 +165,8 @@ export default {
 }
 .user-follow span {
   font-weight: 500;
+}
+.following-space {
+  padding-right: 1rem;
 }
 </style>

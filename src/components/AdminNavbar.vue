@@ -20,12 +20,22 @@
       </ul>
       <a href="" class="nav-item nav-sign-out">
         <i class="nav-icon fas fa-sign-out-alt"></i>
-        <p>登出</p>
+        <p @click="logout">登出</p>
       </a>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/admin");
+    },
+  },
+};
+</script>
 <style scoped>
 .nav-bar {
   margin-right: 40px;
