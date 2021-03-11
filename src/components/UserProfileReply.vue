@@ -37,7 +37,7 @@
     </div>
     <div class="tweet-list" v-for="tweet in tweets" :key="tweet.TweetId">
       <a href="" class="tweet-avatar">
-        <img :src="tweet.Tweet.User.avatar" alt="avatar" />
+        <img :src="tweet.Tweet.User.avatar | emptyPicture" alt="avatar" />
       </a>
       <div class="tweet-content">
         <a href="" class="tweet-title">
@@ -103,7 +103,9 @@ export default {
           throw new Error(response.statusText);
         }
         this.tweets = response.data;
-        // this.tweets.filter((tweet) => tweet.Tweet.User);
+        this.tweets = this.tweets.filter(function (el) {
+          return el != null;
+        });
         console.log(response);
       } catch (e) {
         Toast.fire({
