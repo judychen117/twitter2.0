@@ -76,7 +76,6 @@ export default {
   props: {
     initialModalTweet: {
       type: Object,
-      required: true,
       default: () => ({
         id: "1",
         UserId: "1",

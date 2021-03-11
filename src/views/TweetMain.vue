@@ -7,11 +7,11 @@
       @close-post-modal="closePostModal"
     />
     <!-- TODO:資料傳遞問題 -->
-    <!-- <ReplyModal
+    <ReplyModal
       v-show="showModal === 'reply'"
       @close-post-modal="closePostModal"
       :initial-Modal-tweet="replyModalTweet"
-    /> -->
+    />
     <div class="tweets-container">
       <div class="tweets-header">
         <a href="">首頁</a>
@@ -61,14 +61,13 @@
 </template>
 
 <script>
-// const dummyData = {};
 import RecommendUsers from "./../components/RecommendUsers";
 import NavBar from "./../components/Navbar";
 import TweetCard from "./../components/TweetCard";
 import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import PostModal from "./../components/UserPostmodal";
-// import ReplyModal from "./../components/UserReplymodal";
+import ReplyModal from "./../components/UserReplymodal";
 import store from "./../store";
 
 export default {
@@ -77,7 +76,7 @@ export default {
     NavBar,
     TweetCard,
     PostModal,
-    // ReplyModal,
+    ReplyModal,
   },
   data() {
     return {
