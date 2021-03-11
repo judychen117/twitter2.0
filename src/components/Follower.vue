@@ -1,8 +1,11 @@
 <template>
   <div class="follower-card">
-    <div class="arrow-left">
+    <router-link
+      :to="{ name: 'user-profile-tweet', params: { id: user.id } }"
+      class="arrow-left"
+    >
       <img src="../../public/img/Vector.svg" alt="" />
-    </div>
+    </router-link>
     <p class="name">{{ user.name }}</p>
     <p class="tweets">{{ user.Tweets.length }} 推文</p>
     <FollowNavTab :id="user.id" />
