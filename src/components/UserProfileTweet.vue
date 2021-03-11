@@ -167,9 +167,7 @@ export default {
       users: [],
       isEditing: false,
       id: -1,
-
       name: "",
-
       isFollowing: false,
     };
   },
