@@ -7,30 +7,44 @@
             <img src="../../public/img/Vector.svg" alt="vector" />
           </router-link>
         </div>
-        <p class="name">{{ user.name }}</p>
-        <p class="tweets">{{ user.Tweets.length }} 推文</p>
+        <p class="name">{{ info.name }}</p>
+        <p class="tweets">{{ info.Tweets.length }} 推文</p>
       </div>
       <div class="divider"></div>
       <div class="user-card">
         <div class="user-pic">
-          <img :src="user.cover" class="user-cover" alt="cover" />
-          <a href="" class="user-avatar">
-            <img :src="user.avatar | emptyImage" alt="avatar" />
+          <img :src="info.cover" class="user-cover" alt="cover" />
+          <a href="#" class="user-avatar">
+            <img :src="info.avatar | emptyImage" alt="avatar" />
           </a>
         </div>
         <div class="user-content">
-          <a href="">
-            <div class="user-name">{{ user.name }}</div>
-            <div class="user-id">{{ user.account }}</div>
-            <div class="user-introduction">{{ user.introduction }}</div>
+          <a href="#">
+            <div class="user-name">{{ info.name }}</div>
+            <div class="user-id">{{ info.account }}</div>
+            <div class="user-introduction">{{ info.introduction }}</div>
           </a>
           <div class="user-follow">
-            <p>
-              <span>{{ user.Followings.length }}個</span>跟隨中
-            </p>
-            <p>
-              <span>{{ user.Followers.length }}個位</span>跟隨者
-            </p>
+            <router-link
+              :to="{
+                name: 'user-following',
+                params: {
+                  id: info.id,
+                },
+              }"
+            >
+              <span>{{ info.Followings.length }}個</span>跟隨中
+            </router-link>
+            <router-link
+              :to="{
+                name: 'user-follower',
+                params: {
+                  id: info.id,
+                },
+              }"
+            >
+              <span>{{ info.Followers.length }}位</span>跟隨者
+            </router-link>
           </div>
         </div>
       </div>
@@ -38,37 +52,43 @@
   </div>
 </template>
 <script>
-import userAPI from "./../apis/user";
-import { Toast } from "./../utils/helpers";
+// import userAPI from "./../apis/user";
+// import { Toast } from "./../utils/helpers";
 
 export default {
-  data() {
-    return {
-      user: [],
-    };
-  },
-  created() {
-    const { id } = this.$route.params;
-    this.fetchUsers(id);
-  },
-  methods: {
-    async fetchUsers(id) {
-      try {
-        const response = await userAPI.user.get({ id });
-        console.log(response);
-        if (response.statusText !== "OK") {
-          throw new Error(response.statusText);
-        }
-        this.user = response.data;
-      } catch (e) {
-        Toast.fire({
-          icon: "error",
-          title: "無法取得Users，請稍後再試",
-        });
-        console.log(e);
-      }
+  props: {
+    info: {
+      type: Object,
+      required: true,
     },
   },
+  data() {
+    return {
+      user: this.info,
+    };
+  },
+  // created() {
+  //   const { id } = this.$route.params;
+  //   this.fetchUsers(id);
+  // },
+  // methods: {
+  //   async fetchUsers(id) {
+  //     try {
+  //       const response = await userAPI.user.get({ id });
+  //       console.log(response);
+  //       if (response.statusText !== "OK") {
+  //         throw new Error(response.statusText);
+  //       }
+  //       this.user = response.data;
+  //     } catch (e) {
+  //       Toast.fire({
+  //         icon: "error",
+  //         title: "無法取得Users，請稍後再試",
+  //       });
+  //       console.log(e);
+  //     }
+  //   },
+  // },
 };
 </script>
 <style scoped>

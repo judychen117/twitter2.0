@@ -47,10 +47,10 @@ export default new Vuex.Store({
           email,
           role
         })
-        return true 
+        return true
       } catch (error) {
         console.error('can not fetch user information')
-        return false  
+        return false
       }
     }
   },

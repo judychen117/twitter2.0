@@ -39,11 +39,11 @@
               </div>
               <div class="tweet-status">
                 <div class="re-tweet">
-                  <span>{{ tweet.Replies.length }}</span>
+                  <span>{{ RepliesLength }}</span>
                   <span>回覆</span>
                 </div>
                 <div class="like">
-                  <span>{{ tweet.Likes.length }}</span>
+                  <span>{{ likesLength }}</span>
                   <span>喜歡次數</span>
                 </div>
               </div>
@@ -139,6 +139,8 @@ export default {
       replies: [],
       tweetUser: [],
       likeStatus: false,
+      likesLength: "",
+      RepliesLength: "",
     };
   },
   created() {
@@ -160,6 +162,8 @@ export default {
         this.tweet = data;
         this.replies = data.Replies;
         this.tweetUser = data.User;
+        this.likesLength = data.Likes.length;
+        this.RepliesLength = data.Replies.length;
         this.checkLikeId(this.tweet);
       } catch (error) {
         Toast.fire({

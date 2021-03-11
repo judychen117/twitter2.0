@@ -2,7 +2,7 @@
   <div class="follower-page">
     <NavBar />
     <div class="follower-container">
-      <UserProfileCard />
+      <UserProfileCard :info="info" />
       <UserProfileTweet :info="info" />
     </div>
     <RecommendUsers />
@@ -32,6 +32,11 @@ export default {
   created() {
     const { id } = this.$route.params;
     this.fetchUsers(id);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params;
+    this.fetchUsers(id);
+    next();
   },
   methods: {
     async fetchUsers(id) {
@@ -79,5 +84,4 @@ a {
   width: 0; /* Remove scrollbar space */
   background: transparent; /* Optional: just make scrollbar invisible */
 }
-
 </style>
