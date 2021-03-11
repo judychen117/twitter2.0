@@ -162,49 +162,55 @@ import { fromNowFilter, emptyImageFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
 
 export default {
-  data() {
-    return {
-      users: [],
-      isEditing: false,
-      id: -1,
-
-      name: "",
-
-      isFollowing: false,
-    };
-  },
   props: {
     info: {
       type: Object,
       required: true,
     },
   },
+  data() {
+    return {
+      users: [],
+      isEditing: false,
+      id: -1,
+      name: "",
+      isFollowing: false,
+    };
+  },
   computed: {
     ...mapState(["currentUser", "isAuthenticated"]),
   },
+  watch: {
+    info(newValue) {
+      this.users = {
+        ...this.user,
+        ...newValue.Tweets,
+      };
+    },
+  },
   created() {
-    const { id } = this.$route.params;
-    this.fetchUsers(id);
+    // this.users = this.info.Tweets;
+    // const { id } = this.$route.params;
+    // this.fetchUsers(id);
   },
   methods: {
-    async fetchUsers(id) {
-      try {
-        const response = await userAPI.getTweet({ id });
-        if (response.statusText !== "OK") {
-          throw new Error(response.statusText);
-        }
-        this.users = response.data;
-        this.name = response.data.users.name;
-        this.id = response.data.users.id;
-        console.log(response);
-      } catch (e) {
-        Toast.fire({
-          icon: "error",
-          title: "無法取得使用者頁面，請稍後再試",
-        });
-        console.log(e);
-      }
-    },
+    // async fetchUsers(id) {
+    //   try {
+    //     const response = await userAPI.getTweet({ id });
+    //     if (response.statusText !== "OK") {
+    //       throw new Error(response.statusText);
+    //     }
+    //     this.users = response.data;
+    //     this.name = response.data.users.name;
+    //     this.id = response.data.users.id;
+    //     console.log(response);
+    //   } catch (e) {
+    //     Toast.fire({
+    //       icon: "error",
+    //       title: "無法取得使用者頁面，請稍後再試",
+    //     });
+    //   }
+    // },
     editProfile() {
       if (this.isEditing === true) {
         this.isEditing = false;
@@ -221,7 +227,6 @@ export default {
           id: this.id,
           formData,
         });
-
         if (data.status !== "success") {
           throw new Error(data.message);
         }

@@ -53,7 +53,7 @@
           v-else
         >
           <img src="../../public/img/likeIcon.svg" alt="" class="icon" />
-          <span>{{ tweet.Likes.length }}</span>
+          <span>{{ likesLength }}</span>
         </a>
       </div>
     </div>
@@ -80,14 +80,13 @@ export default {
       tweet: this.initialTweet,
       showModal: "",
       likeStatus: false,
+      likesLength: this.initialTweet.Likes.length,
     };
   },
   created() {
     this.checkLikeId(this.tweet);
   },
-  updated() {
-    console.log("update");
-  },
+  updated() {},
   computed: {
     ...mapState(["currentUser"]),
   },
@@ -98,6 +97,7 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        this.likesLength = this.likesLength + 1;
         this.likeStatus = true;
         // TODO:Like數如何即時更新
       } catch (error) {
@@ -113,6 +113,7 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        this.likesLength = this.likesLength - 1;
         this.likeStatus = false;
       } catch (error) {
         Toast.fire({
