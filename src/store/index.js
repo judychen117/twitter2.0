@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
-// import usersAPI from "./../apis/user";
 
 Vue.use(Vuex)
 

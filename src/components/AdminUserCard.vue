@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="user-content">
-        <a href="" >
+        <a href="">
           <div class="user-name">{{ user.name }}</div>
           <div class="user-id">{{ user.account }}</div>
         </a>
@@ -19,19 +19,19 @@
               alt="comments"
               class="icon"
             />
-            <span>{{ user.Tweets.length }}</span>
+            <span>{{ user.TweetsCount }}</span>
           </a>
           <a href="#" class="tweets-like">
             <img src="../../public/img/likeIcon.svg" alt="likes" class="icon" />
-            <span>{{ user.Likes.length }}</span>
+            <span>{{ user.LikesCount }}</span>
           </a>
         </div>
         <div class="user-follow">
           <p>
-            <span class="following">{{ user.Followings.length }}個</span>跟隨中
+            <span class="following">{{ user.FollowingCount }}個</span>跟隨中
           </p>
           <p>
-            <span class="follower">{{ user.Followers.length }}個位</span>跟隨者
+            <span class="follower">{{ user.FollowerCount }}個位</span>跟隨者
           </p>
         </div>
       </div>
@@ -57,7 +57,9 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        this.users = response.data.filter((user) => user.email !== "root@example.com");
+        this.users = response.data.filter(
+          (user) => user.email !== "root@example.com"
+        );
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -100,7 +102,7 @@ a {
   position: relative;
   border-radius: 1rem;
 }
-.user-pic .user-cover{
+.user-pic .user-cover {
   height: 140px;
   width: 245px;
   object-fit: cover;
@@ -121,7 +123,7 @@ a {
   display: absolute;
   text-align: center;
 }
-.user-name{
+.user-name {
   padding-top: 2rem;
 }
 .user-id {

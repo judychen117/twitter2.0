@@ -2,7 +2,7 @@
   <div class="follower-page">
     <NavBar />
     <div class="follower-container">
-      <UserProfileCard />
+      <UserProfileCard :info="info" />
       <UserProfileLike :info="info" />
     </div>
     <RecommendUsers />

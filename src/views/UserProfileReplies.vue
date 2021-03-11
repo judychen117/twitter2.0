@@ -2,7 +2,7 @@
   <div class="follower-page">
     <NavBar />
     <div class="follower-container">
-      <UserProfileCard />
+      <UserProfileCard :info="info" />
       <UserProfileReply :info="info" />
     </div>
     <RecommendUsers />
@@ -79,5 +79,4 @@ a {
   width: 0; /* Remove scrollbar space */
   background: transparent; /* Optional: just make scrollbar invisible */
 }
-
 </style>

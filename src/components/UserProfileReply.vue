@@ -97,7 +97,7 @@
         </div>
       </div>
     </div>
-    <div class="tweet-list" v-for="tweet in users" :key="tweet.TweetId">
+    <div class="tweet-list" v-for="tweet in users" :key="tweet.id">
       <a href="" class="tweet-avatar">
         <img :src="tweet.Tweet.User.avatar | emptyPicture" alt="avatar" />
       </a>

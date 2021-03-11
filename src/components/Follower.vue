@@ -155,7 +155,7 @@ export default {
   font-size: 13px;
   font-weight: 100;
   padding-left: 2rem;
-  font-color: #657786;
+  color: #657786;
   padding: 0 0 0.5rem 4rem;
 }
 a {
