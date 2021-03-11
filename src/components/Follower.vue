@@ -74,6 +74,7 @@ export default {
     async fetchFollowers(id) {
       try {
         const response = await followAPI.getFollower({ id });
+        console.log(response);
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }

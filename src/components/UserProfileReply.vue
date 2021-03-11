@@ -167,11 +167,9 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data;
-        this.name = response.data.users.name;
-        this.id = response.data.users.id;
-        this.tweets = this.tweets.filter(function (el) {
-          return el != null;
-        });
+        // this.tweets = this.tweets.filter(function (el) {
+        //   return el != null;
+        // });
         console.log(response);
       } catch (e) {
         Toast.fire({

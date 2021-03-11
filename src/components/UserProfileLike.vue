@@ -172,8 +172,6 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data;
-        this.name = response.data.users.name;
-        this.id = response.data.users.id;
       } catch (e) {
         Toast.fire({
           icon: "error",
