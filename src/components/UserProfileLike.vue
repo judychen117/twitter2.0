@@ -3,7 +3,67 @@
     <div class="nav">
       <div class="top-right">
         <div class="editorMode" v-if="currentUser.id === info.id">
-          <button class="edit-button">編輯個人檔案</button>
+          <button class="edit-button" @click="editProfile">編輯個人檔案</button>
+          <div v-if="isEditing" class="editing">
+            <form @submit.stop.prevent="handleSubmit">
+              <div class="popup">
+                <div class="popup-title">
+                  <img
+                    src="./../../public/img/cancel.svg"
+                    class="close"
+                    alt="close"
+                    @click="editProfile"
+                  />
+                  <p>編輯個人資料</p>
+                </div>
+                <div class="popup-pic">
+                  <div class="popup-cover">
+                    <img :src="info.cover" alt="cover" />
+                  </div>
+                  <div class="popup-avatar">
+                    <img :src="info.avatar" alt="avatar" />
+                  </div>
+                  <div class="button">
+                    <button class="followers-item-button" type="submit">
+                      儲存
+                    </button>
+                  </div>
+                </div>
+                <div class="popup-info">
+                  <div class="popup-name">
+                    <p>名稱</p>
+                    <label for="name"></label>
+                    <input
+                      id="name"
+                      v-model="info.name"
+                      name="name"
+                      type="name"
+                      placeholder=""
+                      autocomplete=""
+                      required
+                    />
+                    <div class="seperation"></div>
+                  </div>
+                </div>
+                <div class="popup-info">
+                  <div class="popup-intro">
+                    <p>自我介紹</p>
+                    <label for="introduction"></label>
+                    <input
+                      id="introduction"
+                      v-model="info.introduction"
+                      name="intro"
+                      type="introduction"
+                      placeholder=""
+                      autocomplete=""
+                      required
+                    />
+                    <div class="seperation"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
         <div class="nonEditorMode" v-else>
           <div class="email">
@@ -20,49 +80,55 @@
         </div>
         <div class="nav-tabs">
           <div class="nav-tab">
-            <a href="">推文</a>
+            <router-link
+              :to="{ name: 'user-profile-tweet', params: { id: info.id } }"
+              >推文</router-link
+            >
           </div>
           <div class="nav-tab">
-            <a href="">推文與回覆</a>
+            <router-link
+              :to="{ name: 'user-profile-reply', params: { id: info.id } }"
+              >推文與回覆</router-link
+            >
           </div>
-          <div class="nav-tab nav-active">
-            <a href="">喜歡的內容</a>
-          </div>
+          <div class="nav-tab nav-active">喜歡的內容</div>
         </div>
       </div>
-      <div class="tweet-list" v-for="tweet in users" :key="tweet.id">
-        <a href="" class="tweet-avatar">
-          <img :src="tweet.Tweet.User.avatar" alt="avatar" />
-        </a>
-        <div class="tweet-content">
-          <a href="" class="tweet-title">
-            <p class="tweet-name">{{ tweet.Tweet.User.name }}</p>
-            <p class="tweet-id">{{ tweet.Tweet.User.account }}</p>
-            <span class="dot"></span>
-            <p class="tweet-time">{{ tweet.Tweet.createdAt | fromNow }}</p>
+      <div class="content">
+        <div class="tweet-list" v-for="tweet in users" :key="tweet.id">
+          <a href="" class="tweet-avatar">
+            <img :src="tweet.Tweet.User.avatar" alt="avatar" />
           </a>
-          <div class="tweet-text">
-            <p>
-              {{ tweet.Tweet.description }}
-            </p>
-          </div>
-          <div class="tweet-activity">
-            <a href="#" class="tweet-comment">
-              <img
-                src="../../public/img/commentIcon.svg"
-                alt="comments"
-                class="icon"
-              />
-              <span>{{ tweet.Tweet.Replies.length }}</span>
+          <div class="tweet-content">
+            <a href="" class="tweet-title">
+              <p class="tweet-name">{{ tweet.Tweet.User.name }}</p>
+              <p class="tweet-id">{{ tweet.Tweet.User.account }}</p>
+              <span class="dot"></span>
+              <p class="tweet-time">{{ tweet.Tweet.createdAt | fromNow }}</p>
             </a>
-            <a href="#" class="tweet-like">
-              <img
-                src="../../public/img/likeIcon.svg"
-                alt="likes"
-                class="icon"
-              />
-              <span>{{ tweet.Tweet.Likes.length }}</span>
-            </a>
+            <div class="tweet-text">
+              <p>
+                {{ tweet.Tweet.description }}
+              </p>
+            </div>
+            <div class="tweet-activity">
+              <a href="#" class="tweet-comment">
+                <img
+                  src="../../public/img/commentIcon.svg"
+                  alt="comments"
+                  class="icon"
+                />
+                <span>{{ tweet.Tweet.Replies.length }}</span>
+              </a>
+              <a href="#" class="tweet-like">
+                <img
+                  src="../../public/img/likeIcon.svg"
+                  alt="likes"
+                  class="icon"
+                />
+                <span>{{ tweet.Tweet.Likes.length }}</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -79,6 +145,9 @@ export default {
   data() {
     return {
       users: [],
+      isEditing: false,
+      id: -1,
+      name: "",
     };
   },
   props: {
@@ -103,12 +172,45 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data;
+        this.name = response.data.users.name;
+        this.id = response.data.users.id;
       } catch (e) {
         Toast.fire({
           icon: "error",
           title: "無法取得Followers，請稍後再試",
         });
         console.log(e);
+      }
+    },
+    editProfile() {
+      if (this.isEditing === true) {
+        this.isEditing = false;
+      } else {
+        this.isEditing = true;
+      }
+    },
+    async handleSubmit(e) {
+      try {
+        const form = e.target;
+        const formData = new FormData(form);
+        const { data } = await userAPI.userEdit.editSetting({
+          id: this.id,
+          formData,
+        });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.fetchCurrentUser();
+        Toast.fire({
+          icon: "success",
+          title: "儲存成功",
+        });
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法修改資料,請稍後再試",
+        });
       }
     },
   },
@@ -124,9 +226,6 @@ export default {
   position: absolute;
   top: -11rem;
   right: 1rem;
-}
-.nonEditorMode{
-  margin-left: 25rem;
 }
 a {
   text-decoration: none; /* 拿掉底線 */
@@ -154,8 +253,99 @@ a {
   outline: none;
   color: #ffffff;
 }
+.editorMode {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+}
 .nonEditorMode {
   display: flex;
+}
+.editing {
+  z-index: 100;
+  position: absolute;
+  top: -200px;
+  left: -10px;
+  height: 645px;
+  width: 520px;
+  background-color: #fff;
+  position: relative;
+}
+.popup-title {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+}
+.close {
+  height: 15px;
+  width: 15px;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+.button {
+  position: absolute;
+  top: -2.5rem;
+  right: 1rem;
+}
+.popup-pic {
+  position: absolute;
+  top: 3rem;
+}
+.popup-cover img {
+  height: 200px;
+  width: 520px;
+  object-fit: cover;
+}
+.popup-avatar img {
+  height: 120px;
+  width: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  position: relative;
+  top: -4rem;
+  left: 1rem;
+}
+
+.popup-info {
+  position: relative;
+  top: 20rem;
+  left: 2rem;
+  background-color: #e5e5e5;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  width: 460px;
+}
+.popup-info p {
+  padding-top: 0.6rem;
+  padding-left: 0.6rem;
+  color: rgba(101, 119, 134, 1);
+}
+.popup-info .popup-intro input {
+  height: 100px;
+}
+input {
+  background-color: #e5e5e5;
+  border: none;
+  border-style: none;
+  height: 2rem;
+  padding-left: 1rem;
+  border-radius: 1rem;
+  width: 300px;
+}
+textarea:focus,
+input:focus,
+button:focus {
+  outline: none;
+}
+.seperation {
+  height: 2px;
+  background-color: rgba(101, 119, 134, 1);
+  margin-left: 12px;
+  margin-right: 12px;
+  border-radius: 1rem;
 }
 .email {
   height: 40px;
@@ -182,6 +372,7 @@ a {
 .nav {
   height: 3rem;
   background-color: #fff;
+  margin-bottom: 3rem;
 }
 .nav-tabs {
   display: flex;
@@ -190,6 +381,7 @@ a {
   width: 600px;
   border-bottom: 1px solid #e6ecf0;
   margin-top: 8.5rem;
+  padding-top: 2rem;
 }
 .nav-tab {
   width: 130px;
@@ -208,13 +400,15 @@ a {
 .nav-active a {
   color: #ff6600;
 }
+.content {
+  margin-top: 3rem;
+}
 .tweet-list {
   padding: 1rem 0;
   width: 600px;
   border-bottom: 1px solid #e6ecf0;
   display: flex;
 }
-
 .tweet-name {
   font-weight: 500;
 }

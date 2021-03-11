@@ -58,7 +58,6 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data.filter((user) => user.email !== "root@example.com");
-        // this.users.filter((user) => user.email !== "root@example.com");
       } catch (e) {
         Toast.fire({
           icon: "error",
