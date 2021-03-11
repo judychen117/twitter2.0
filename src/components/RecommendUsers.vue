@@ -12,7 +12,10 @@
             :key="recommendUser.id"
           >
             <router-link
-              :to="{ name: 'user-profile-tweet', params: { id: recommendUser.id } }"
+              :to="{
+                name: 'user-profile-tweet',
+                params: { id: recommendUser.id },
+              }"
               class="recommend-followers-title"
             >
               <img
@@ -20,12 +23,12 @@
                 alt="avatar"
                 class="tweets-avatar"
               />
-            <div>
-              <p class="recommend-followers-name">{{ recommendUser.name }}</p>
-              <p class="recommend-followers-id">
-                {{ recommendUser.account }}
-              </p>
-            </div>
+              <div>
+                <p class="recommend-followers-name">{{ recommendUser.name }}</p>
+                <p class="recommend-followers-id">
+                  {{ recommendUser.account }}
+                </p>
+              </div>
             </router-link>
             <button
               class="followers-item-button"
