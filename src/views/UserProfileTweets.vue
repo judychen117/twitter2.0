@@ -42,7 +42,7 @@ export default {
     async fetchUsers(id) {
       try {
         const response = await userAPI.user.get({ id });
-        console.log(response);
+        console.log("s", response.data);
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
