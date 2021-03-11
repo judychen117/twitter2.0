@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import usersAPI from "./../apis/user";
+import createPersistedState from 'vuex-persistedstate'
+// import usersAPI from "./../apis/user";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [createPersistedState({
+    storage: window.sessionStorage,
+  })],
   state: {
     currentUser: {
       id: -1,
@@ -12,7 +16,7 @@ export default new Vuex.Store({
       email: '',
       role: ''
     },
-    isAuthenticated: false,
+    isAuthenticated: true,
     token: ''
   },
   mutations: {
@@ -23,6 +27,10 @@ export default new Vuex.Store({
       }
       // 將使用者驗證用的 token 儲存在 state 中
       state.token = localStorage.getItem('token')
+      localStorage.setItem('id', state.currentUser.id)
+      localStorage.setItem('name', state.currentUser.name)
+      localStorage.setItem('email', state.currentUser.email)
+      localStorage.setItem('role', state.currentUser.role)
       state.isAuthenticated = true
     },
     revokeAuthentication(state) {
@@ -31,16 +39,19 @@ export default new Vuex.Store({
       // 登出時一併將 state 內的 token 移除
       state.token = ''
       localStorage.removeItem('token')
+      localStorage.removeItem('id')
+      localStorage.removeItem('name')
+      localStorage.removeItem('email')
+      localStorage.removeItem('role')
     }
   },
   actions: {
-    async fetchCurrentUser({ commit }) {
+    fetchCurrentUser({ commit }) {
       try {
-        const { data } = await usersAPI.users.get()
-        if (data.status !== 'OK') {
-          throw new Error(data.message)
-        }
-        const { id, name, email, role } = data
+        const id = localStorage.getItem(id);
+        const name = localStorage.getItem(name);
+        const email = localStorage.getItem(email);
+        const role = localStorage.getItem(role);
         commit('setCurrentUser', {
           id,
           name,

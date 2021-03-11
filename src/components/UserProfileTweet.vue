@@ -320,8 +320,9 @@ a {
   position: absolute;
   top: -200px;
   left: -10px;
-  height: 645px;
+  height: 570px;
   width: 520px;
+  border-radius: 1rem;
   background-color: #fff;
   position: relative;
 }
