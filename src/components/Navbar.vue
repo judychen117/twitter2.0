@@ -2,7 +2,7 @@
   <div class="nav-bar">
     <div class="mt-3">
       <router-link :to="{ name: 'tweets-main' }" class="nav-logo">
-        <img src="../../public/img/alphaCampIcon.svg" alt="" />
+        <img src="../../public/img/alphaCampIcon.svg" alt="logo"  class="logo">
       </router-link>
       <ul class="nav-list">
         <li class="nav-item nav-home">
@@ -82,6 +82,9 @@ export default {
   top: 0px;
   left: 0px;
 }
+.logo{
+  margin-top: 20px;
+}
 .nav-list {
   margin-top: 100px;
 }
@@ -116,5 +119,6 @@ export default {
   position: absolute;
   bottom: 0px;
   left: 0px;
+  margin-bottom: 10px;
 }
 </style>

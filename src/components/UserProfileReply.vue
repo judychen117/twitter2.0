@@ -18,10 +18,30 @@
                 </div>
                 <div class="popup-pic">
                   <div class="popup-cover">
+                    <label for="cover"></label>
                     <img :src="info.cover" alt="cover" />
+                    <input
+                      id="cover"
+                      type="file"
+                      name="cover"
+                      accept="image/*"
+                      class="form-control-file"
+                      style="width: 20px; height: 20px"
+                      @change="handleFileChangeCover"
+                    />
                   </div>
                   <div class="popup-avatar">
+                    <label for="avatar"></label>
                     <img :src="info.avatar" alt="avatar" />
+                    <input
+                      id="avatar"
+                      type="file"
+                      name="avatar"
+                      accept="image/*"
+                      class="form-control-file"
+                      style="width: 20px; height: 20px"
+                      @change="handleFileChangeAvatar"
+                    />
                   </div>
                   <div class="button">
                     <button class="followers-item-button" type="submit">
@@ -170,7 +190,6 @@ export default {
         // this.tweets = this.tweets.filter(function (el) {
         //   return el != null;
         // });
-        console.log(response);
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -192,10 +211,9 @@ export default {
         const formData = new FormData(form);
         this.id = this.info.id;
         const { data } = await userAPI.userEdit.editSetting({
-          id: this.users.id,
+          id: this.id,
           formData,
         });
-
         if (data.status !== "success") {
           throw new Error(data.message);
         }
@@ -211,11 +229,39 @@ export default {
         });
       }
     },
+    handleFileChangeAvatar(e) {
+      const { files } = e.target;
+      if (files.length === 0) {
+        return;
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.info.avatar = imageURL;
+      }
+    },
+    handleFileChangeCover(e) {
+      const { files } = e.target;
+      if (files.length === 0) {
+        return;
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.info.cover = imageURL;
+      }
+    },
   },
   mixins: [fromNowFilter, emptyImageFilter],
 };
 </script>
 <style scoped>
+.popup-cover input {
+  position: relative;
+  bottom: 7rem;
+  left: 15rem;
+}
+.popup-avatar input {
+  position: relative;
+  bottom: 9.5rem;
+  left: 4rem;
+}
 .tweet-card {
   position: relative;
 }
@@ -297,7 +343,7 @@ a {
   border-radius: 50%;
   border: 5px solid #fff;
   position: relative;
-  top: -4rem;
+  top: -5rem;
   left: 1rem;
 }
 
@@ -444,5 +490,8 @@ button:focus {
 }
 .tweet-like img {
   padding-right: 1rem;
+}
+input {
+  width: 200px;
 }
 </style>

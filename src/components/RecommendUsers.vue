@@ -47,9 +47,7 @@
           </li>
         </ul>
       </div>
-      <div class="recommend-fotter">
-        <a href="">顯示更多</a>
-      </div>
+      <div class="recommend-fotter">顯示更多</div>
     </div>
   </div>
 </template>
@@ -72,7 +70,8 @@ export default {
     async fetcgRecomendUsers() {
       try {
         const { data } = await userAPI.users.get();
-        this.recommendUsers = data.users;
+        this.recommendUsers = data;
+        console.log(this.recommendUsers)
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -150,7 +149,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  padding: 13px;
   border-bottom: 1px solid #e6ecf0;
 }
 .recommend-followers-title {
@@ -192,5 +191,8 @@ export default {
 }
 .recommend-fotter > a {
   color: #ff6600;
+}
+ul li:nth-child(n+10) {
+    display:none;
 }
 </style>
