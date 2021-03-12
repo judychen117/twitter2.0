@@ -10,7 +10,7 @@
         />
       </div>
       <div class="tweets-card">
-          <img :src="tweet.User.avatar" alt="avatar" class="tweets-avatar" />
+        <img :src="tweet.User.avatar" alt="avatar" class="tweets-avatar" />
         <div class="tweets-content">
           <a href="" class="tweets-title">
             <div class="tweets-name">{{ tweet.User.name }}</div>
@@ -43,11 +43,18 @@
             alt="divider"
             class="tweets-divider"
           />
-          <img
-            src="../../public/img/UserAvatar.svg"
-            alt="avatar"
-            class="tweets-avatar-myself"
-          />
+          <router-link
+            :to="{
+              name: 'user-profile-tweet',
+              params: { id: currentUser.id },
+            }"
+          >
+            <img
+              :src="currentUser.avatar"
+              alt="avatar"
+              class="tweets-avatar-myself tweets-avatar"
+            />
+          </router-link>
           <form class="tweets-form" @submit.stop.prevent="handleSubmit">
             <div class="tweets-text">
               <label for="text"></label>
@@ -74,6 +81,7 @@
 import { fromNowFilter } from "./../utils/mixins";
 import { Toast } from "./../utils/helpers";
 import TweetsAPI from "./../apis/tweets";
+import { mapState } from "vuex";
 
 export default {
   mixins: [fromNowFilter],
@@ -122,6 +130,9 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   methods: {
     async handleSubmit() {
       try {
@@ -150,9 +161,9 @@ export default {
 .popup {
   position: relative;
 }
-.header{
+.header {
   height: 60px;
-    border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
 }
 .close {
   height: 15px;
@@ -230,14 +241,13 @@ a {
   margin-top: 1rem;
   position: relative;
   top: 1.5rem;
-
 }
 .tweets-divider {
   position: absolute;
   top: -2.8rem;
   left: 2.5rem;
 }
-.tweets-form{
+.tweets-form {
   position: absolute;
   top: 1rem;
   left: 5.5rem;
@@ -255,9 +265,9 @@ input:focus,
 button:focus {
   outline: none;
 }
-.tweets-submit{
+.tweets-submit {
   position: absolute;
-  bottom:-3rem;
+  bottom: -3rem;
   right: -1rem;
 }
 /* modal */

@@ -18,13 +18,18 @@
       <div class="tweets">
         <div class="tweets-post-card">
           <div class="tweets-post">
-            <a href="">
+            <router-link
+              :to="{
+                name: 'user-profile-tweet',
+                params: { id: currentUser.id },
+              }"
+            >
               <img
-                src="../../public/img/UserAvatar.svg"
+                :src="currentUser.avatar"
                 alt="avatar"
                 class="tweets-avatar"
               />
-            </a>
+            </router-link>
             <form class="tweets-form" @submit.stop.prevent="handleSubmit">
               <div class="tweets-text">
                 <label for="text"></label>
@@ -68,6 +73,7 @@ import { Toast } from "./../utils/helpers";
 import UserPostmodal from "./../components/UserPostmodal";
 import UserReplymodal from "./../components/UserReplymodal";
 import store from "./../store";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -88,6 +94,9 @@ export default {
   created() {
     console.log(store.state);
     this.fetchTweets();
+  },
+  computed: {
+    ...mapState(["currentUser"]),
   },
   methods: {
     async fetchTweets() {

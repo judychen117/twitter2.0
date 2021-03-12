@@ -22,13 +22,18 @@
         <div class="tweets-post-card">
           <div class="tweets-post">
             <div class="tweet-title">
-              <a href="">
+              <router-link
+                :to="{
+                  name: 'user-profile-tweet',
+                  params: { id: currentUser.id },
+                }"
+              >
                 <img
-                  :src="tweetUser.avatar"
+                  :src="currentUser.avatar"
                   alt="avatar"
                   class="tweets-avatar"
                 />
-              </a>
+              </router-link>
               <a class="tweets-name">
                 <div class="name">{{ tweetUser.name }}</div>
                 <div class="id">{{ tweetUser.account }}</div>
