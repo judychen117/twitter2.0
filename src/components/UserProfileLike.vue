@@ -191,6 +191,8 @@ export default {
       try {
         const form = e.target;
         const formData = new FormData(form);
+        this.id = this.info.id;
+
         const { data } = await userAPI.userEdit.editSetting({
           id: this.id,
           formData,
@@ -199,11 +201,11 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.fetchCurrentUser();
         Toast.fire({
           icon: "success",
           title: "儲存成功",
         });
+        this.editProfile();
       } catch (error) {
         Toast.fire({
           icon: "error",
