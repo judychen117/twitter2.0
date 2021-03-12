@@ -1,66 +1,70 @@
 <template>
   <div class="modal-box">
-    <div
-      class="tweets-header"
-      @click.stop.prevent="closeModal"
-      style="cursor: pointer"
-    >
-      X
-    </div>
-    <div class="tweets-card">
-      <a href="">
-        <img :src="tweet.User.avatar" alt="avatar" class="tweets-avatar" />
-      </a>
-      <div class="tweets-content">
-        <a href="" class="tweet tweets-title">
-          <div class="tweets-name">{{ tweet.User.name }}</div>
-          <div class="tweets-id">{{ tweet.User.account }}・</div>
-          <div class="tweets-time">{{ tweet.createdAt | fromNow }}</div>
-        </a>
-        <router-link
-          :to="{ name: 'tweet-reply', params: { tweet_id: tweet.id } }"
-        >
-          <div class="tweet tweets-text">
-            <p class="card-text">
-              {{ tweet.description }}
-            </p>
-          </div>
-        </router-link>
-        <div class="">
-          <span>回覆給</span>
-          <span>
-            <a href="" class="tweets-post-user">{{
-              tweet.User.account
-            }}</a></span
+    <div class="popup">
+      <div class="header">
+        <img
+          src="./../../public/img/cancel.svg"
+          class="close"
+          alt="close"
+          @click.stop.prevent="closeModal"
+        />
+      </div>
+      <div class="tweets-card">
+          <img :src="tweet.User.avatar" alt="avatar" class="tweets-avatar" />
+        <div class="tweets-content">
+          <a href="" class="tweets-title">
+            <div class="tweets-name">{{ tweet.User.name }}</div>
+            <div class="tweets-id">{{ tweet.User.account }}・</div>
+            <div class="tweets-time">{{ tweet.createdAt | fromNow }}</div>
+          </a>
+          <router-link
+            :to="{ name: 'tweet-reply', params: { tweet_id: tweet.id } }"
           >
+            <div class="tweet tweets-text">
+              <p class="card-text">
+                {{ tweet.description }}
+              </p>
+            </div>
+          </router-link>
+          <div class="reply-info">
+            <span>回覆給</span>
+            <span>
+              <a href="" class="tweets-post-user">{{
+                tweet.User.account
+              }}</a></span
+            >
+          </div>
         </div>
       </div>
-    </div>
-    <div class="tweets-post-card">
-      <div class="tweets-post">
-        <a href="">
+      <div class="tweets-post-card">
+        <div class="tweets-post">
+          <img
+            src="../../public/img/divider.svg"
+            alt="divider"
+            class="tweets-divider"
+          />
           <img
             src="../../public/img/UserAvatar.svg"
             alt="avatar"
-            class="tweets-avatar"
+            class="tweets-avatar-myself"
           />
-        </a>
-        <form class="tweets-form" @submit.stop.prevent="handleSubmit">
-          <div class="tweets-text">
-            <label for="text"></label>
-            <textarea
-              class="form-control"
-              rows="3"
-              name="text"
-              v-model="text"
-              placeholder="推你的回覆"
-            >
-            </textarea>
-          </div>
-          <div class="tweets-submit">
-            <button type="submit" class="tweets-button">回覆</button>
-          </div>
-        </form>
+          <form class="tweets-form" @submit.stop.prevent="handleSubmit">
+            <div class="tweets-text">
+              <label for="text"></label>
+              <textarea
+                class="form-control"
+                rows="3"
+                name="text"
+                v-model="text"
+                placeholder="推你的回覆"
+              >
+              </textarea>
+            </div>
+            <div class="tweets-submit">
+              <button type="submit" class="tweets-button">回覆</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -144,22 +148,27 @@ export default {
 </script>
 
 <style scoped>
-.tweets-header {
-  line-height: 55px;
-  padding-left: 15px;
-  height: 55px;
-  font-size: 18px;
-  border-bottom: 1px solid #e6ecf0;
-  color: #ff6600;
+.popup {
+  position: relative;
+}
+.header{
+  height: 60px;
+    border-bottom: 1px solid #E6ECF0;
+}
+.close {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
 }
 a {
   text-decoration: none; /* 拿掉底線 */
   color: #000000;
 }
 .tweets-card {
-  border-bottom: 1px solid #e6ecf0;
   display: flex;
-  padding: 15px;
+  padding-left: 15px;
 }
 .tweets-avatar {
   width: 50px;
@@ -178,9 +187,6 @@ a {
 .tweets-post-user {
   color: #ff6600;
 }
-.tweet {
-  padding: 5px;
-}
 .tweets-like {
   margin-left: 80px;
 }
@@ -196,10 +202,69 @@ a {
   width: 15;
   height: 15px;
 }
+.reply-info {
+  font-size: 13px;
+  color: #657786;
+}
+.tweets-post-user {
+  padding-left: 10px;
+  color: #ff6600;
+}
+.tweets-avatar {
+  margin-top: 2rem;
+}
+.tweets-content {
+  padding-top: 2rem;
+  padding-left: 8px;
+}
+.tweets-post-card {
+  margin-top: 2rem;
+  display: flex;
+  border: transparent;
+}
+.tweets-post {
+  border: transparent;
+  position: relative;
+}
+.tweets-avatar-myself {
+  margin-left: 1rem;
+  margin-top: 1rem;
+  position: relative;
+  top: 1.5rem;
+
+}
+.tweets-divider {
+  position: absolute;
+  top: -2.8rem;
+  left: 2.5rem;
+}
+.tweets-form{
+  position: absolute;
+  top: 1rem;
+  left: 5.5rem;
+}
+textarea {
+  display: inline-block;
+  border: none;
+  width: 480px;
+}
+textarea:focus {
+  outline: none;
+}
+textarea:focus,
+input:focus,
+button:focus {
+  outline: none;
+}
+.tweets-submit{
+  position: absolute;
+  bottom:-3rem;
+  right: -1rem;
+}
 /* modal */
 .modal-box {
   width: 600px;
-  height: 300px;
+  height: 360px;
   position: fixed;
   top: 5%;
   background-color: red;
