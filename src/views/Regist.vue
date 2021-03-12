@@ -92,7 +92,7 @@
       </button>
 
       <div class="text-center mb-3">
-        <p>取消</p>
+        <router-link to="/login">取消</router-link>
       </div>
     </form>
   </div>
