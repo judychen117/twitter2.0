@@ -136,6 +136,13 @@ export default {
   methods: {
     async handleSubmit() {
       try {
+        if (this.text.replace(/\s*/g, "") === "") {
+          Toast.fire({
+            icon: "error",
+            title: "推文內容不能空白,請輸入內容",
+          });
+          return;
+        }
         const description = this.text;
         const { data } = await TweetsAPI.tweets.post({ description });
         if (data.status !== "success") {
