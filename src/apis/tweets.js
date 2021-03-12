@@ -19,6 +19,11 @@ export default {
       return apiHelper.get(`/tweets/${tweet_id}`, {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
+    },
+    replyTweet({ tweet_id, comment }) {
+      return apiHelper.post(`/tweets/${tweet_id}/replies`, { comment }, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
     }
   }
 }

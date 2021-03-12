@@ -170,6 +170,7 @@ export default {
     this.fetchTweet(tweet_id);
     next();
   },
+
   computed: {
     ...mapState(["currentUser"]),
   },

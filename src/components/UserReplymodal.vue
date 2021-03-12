@@ -143,8 +143,12 @@ export default {
           });
           return;
         }
-        const description = this.text;
-        const { data } = await TweetsAPI.tweets.post({ description });
+        const comment = this.text;
+        console.log("comment", comment);
+        const { data } = await TweetsAPI.tweet.replyTweet({
+          tweet_id: this.tweet.id,
+          comment,
+        });
         if (data.status !== "success") {
           throw new Error(data.message);
         }
