@@ -43,7 +43,7 @@
       </button>
 
       <div class="text-right mb-3 mt-4">
-        <a href="/admin-login"> 前台登入</a>
+        <router-link to="/login"> 前台登入</router-link>
       </div>
     </form>
   </div>

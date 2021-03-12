@@ -224,6 +224,9 @@ export default {
     replyPost() {
       this.showModal = "reply";
     },
+    closePostModal(showModal) {
+      this.showModal = showModal;
+    },
   },
 };
 </script>
