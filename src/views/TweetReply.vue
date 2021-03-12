@@ -1,6 +1,12 @@
 <template>
   <div class="main-tweets">
     <NavBar />
+    <div id="fade" v-if="showModal !== 'none'"></div>
+    <UserReplymodal
+      v-show="showModal === 'reply'"
+      @close-post-modal="closePostModal"
+      :initial-modal-tweet="tweet"
+    />
     <div class="tweets-container">
       <div class="tweets-header">
         <a href="">
@@ -48,7 +54,11 @@
                 </div>
               </div>
               <div class="tweet-status-icon">
-                <a href="" class="re-tweet-icon">
+                <a
+                  href=""
+                  class="re-tweet-icon"
+                  @click.stop.prevent="replyPost(tweet)"
+                >
                   <img
                     src="../../public/img/commentIcon.svg"
                     alt=""
@@ -127,11 +137,13 @@ import TweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../apis/user";
 import { mapState } from "vuex";
+import UserReplymodal from "./../components/UserReplymodal";
 
 export default {
   components: {
     RecommendUsers,
     NavBar,
+    UserReplymodal,
   },
   data() {
     return {
@@ -141,6 +153,7 @@ export default {
       likeStatus: false,
       likesLength: "",
       RepliesLength: "",
+      showModal: "none",
     };
   },
   created() {
@@ -208,6 +221,9 @@ export default {
           return;
         }
       });
+    },
+    replyPost() {
+      this.showModal = "reply";
     },
   },
 };
@@ -327,5 +343,25 @@ a {
 .icon {
   width: 30px;
   height: 30px;
+}
+.modal-box {
+  /* display: flex;
+  flex-direction: column; */
+  width: 600px;
+  position: fixed;
+  top: 5%;
+  background-color: white;
+  z-index: 2;
+  border-radius: 20px;
+}
+#fade {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+  opacity: 0.5;
 }
 </style>
