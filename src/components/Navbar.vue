@@ -73,7 +73,6 @@ export default {
   width: 235px;
   height: 100%;
   position: relative;
-  /* border: 2px solid red; */
 }
 .nav-logo {
   width: 30px;
@@ -89,14 +88,12 @@ export default {
   margin-top: 100px;
 }
 .nav-item {
-  /* border: 2px solid wheat; */
   font-size: 18px;
 }
 .nav-item > a {
   width: 235px;
   height: 60px;
   display: flex;
-  /* border: 2px solid red; */
   align-items: center;
 }
 .nav-icon {

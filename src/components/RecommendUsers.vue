@@ -192,7 +192,7 @@ export default {
 .recommend-fotter > a {
   color: #ff6600;
 }
-ul li:nth-child(n+10) {
+ul li:nth-child(n+9) {
     display:none;
 }
 </style>

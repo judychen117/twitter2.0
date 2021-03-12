@@ -97,7 +97,6 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        //重新render畫面
         const { id } = this.$route.params;
         this.fetchFollowings(id);
       } catch (error) {

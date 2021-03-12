@@ -192,7 +192,6 @@ export default {
           throw new Error(data.message);
         }
         this.likeStatus = true;
-        // TODO:Like數如何即時更新
       } catch (error) {
         Toast.fire({
           icon: "error",

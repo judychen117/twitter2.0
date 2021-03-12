@@ -93,7 +93,6 @@
             <img src="./../../public/img/bell.svg" alt="bell" />
           </div>
           <div class="user-button">
-            <!-- TODO:如何更新畫面 -->
             <button
               type="button"
               class="followers-item-button"
@@ -207,29 +206,7 @@ export default {
       };
     },
   },
-  created() {
-    // this.users = this.info.Tweets;
-    // const { id } = this.$route.params;
-    // this.fetchUsers(id);
-  },
   methods: {
-    // async fetchUsers(id) {
-    //   try {
-    //     const response = await userAPI.getTweet({ id });
-    //     if (response.statusText !== "OK") {
-    //       throw new Error(response.statusText);
-    //     }
-    //     this.users = response.data;
-    //     this.name = response.data.users.name;
-    //     this.id = response.data.users.id;
-    //     console.log(response);
-    //   } catch (e) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: "無法取得使用者頁面，請稍後再試",
-    //     });
-    //   }
-    // },
     editProfile() {
       if (this.isEditing === true) {
         this.isEditing = false;
@@ -308,14 +285,6 @@ export default {
         this.info.cover = imageURL;
       }
     },
-    // checkFollowingId() {
-    //   this.info.Followings.forEach((Following) => {
-    //     if (Following.id === this.currentUser.id) {
-    //       this.isFollowing = true;
-    //       return;
-    //     }
-    //   });
-    // },
   },
   mixins: [fromNowFilter, emptyImageFilter],
 };
@@ -340,7 +309,7 @@ export default {
   right: 1rem;
 }
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none; 
 }
 .edit-button {
   width: 180px;

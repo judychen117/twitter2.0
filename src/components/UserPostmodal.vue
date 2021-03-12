@@ -80,7 +80,6 @@ export default {
       }
     },
     closeModal() {
-      // this.showModal = "none";
       this.$emit("close-post-modal", this.showModal);
     },
   },

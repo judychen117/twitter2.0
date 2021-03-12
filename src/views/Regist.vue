@@ -159,12 +159,6 @@ export default {
         return;
       }
       try {
-        // const form = e.target
-        // console.log(form)
-        // const formData = new FormData(form)
-        // for (let [key, value] of formData.entries()) {
-        //   console.log(`${key}: ${value}`)
-        // }
         const formData = {
           account: this.account,
           name: this.name,

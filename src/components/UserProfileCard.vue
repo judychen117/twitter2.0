@@ -52,8 +52,6 @@
   </div>
 </template>
 <script>
-// import userAPI from "./../apis/user";
-// import { Toast } from "./../utils/helpers";
 
 export default {
   props: {
@@ -67,28 +65,6 @@ export default {
       user: this.info,
     };
   },
-  // created() {
-  //   const { id } = this.$route.params;
-  //   this.fetchUsers(id);
-  // },
-  // methods: {
-  //   async fetchUsers(id) {
-  //     try {
-  //       const response = await userAPI.user.get({ id });
-  //       console.log(response);
-  //       if (response.statusText !== "OK") {
-  //         throw new Error(response.statusText);
-  //       }
-  //       this.user = response.data;
-  //     } catch (e) {
-  //       Toast.fire({
-  //         icon: "error",
-  //         title: "無法取得Users，請稍後再試",
-  //       });
-  //       console.log(e);
-  //     }
-  //   },
-  // },
 };
 </script>
 <style scoped>

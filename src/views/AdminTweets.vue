@@ -14,7 +14,6 @@
 </template>
 
 <script>
-// const dummyData = {};
 import AdminNavBar from "./../components/AdminNavbar";
 import AdminTweetCard from "./../components/AdminTweetCard";
 
@@ -28,7 +27,7 @@ export default {
 
 <style scoped>
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none; 
   color: #000000;
 }
 /* main tweets */
@@ -37,7 +36,6 @@ a {
   height: 100%;
   display: flex;
   justify-content: center;
-  /* padding: 3rem 0;   */
 }
 .tweets-container {
   width: 950px;

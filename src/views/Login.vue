@@ -76,7 +76,6 @@ export default {
           });
           return;
         }
-        //避免做出多次請求
         this.isProcessing = true;
 
         const response = await authorizationAPI.signIn({
@@ -88,10 +87,8 @@ export default {
         const { data } = response;
         console.log("response", data.user);
 
-        // 把token存在application的localstorage
         localStorage.setItem("token", data.token);
 
-        // 修改 currentUser 資料
         this.$store.commit("setCurrentUser", data.user);
 
         this.$router.push("/tweets");

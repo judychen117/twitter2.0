@@ -70,7 +70,6 @@ export default {
           });
           return;
         }
-        //避免做出多次請求
         this.isProcessing = true;
 
         const response = await adminAuthorizationAPI.signIn({
@@ -80,14 +79,11 @@ export default {
         console.log("response", response);
         const { data } = response;
 
-        // 只要不成功就無法進下一個頁面以避免空值
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        // 把token存在application的localstorage
         localStorage.setItem("token", data.token);
 
-        // 修改 currentUser 資料
         this.$store.commit("setCurrentUser", data.user);
 
         this.$router.push("/admin_tweets");

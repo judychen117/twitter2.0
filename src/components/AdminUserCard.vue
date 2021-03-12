@@ -78,7 +78,7 @@ export default {
 
 <style scoped>
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none;
   color: #000000;
 }
 .user-cards {

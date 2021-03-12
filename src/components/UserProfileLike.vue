@@ -276,7 +276,7 @@ export default {
   right: 1rem;
 }
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none; 
 }
 .edit-button {
   width: 180px;

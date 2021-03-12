@@ -6,7 +6,6 @@
       v-show="showModal === 'post'"
       @close-post-modal="closePostModal"
     />
-    <!-- TODO:資料傳遞問題 -->
     <UserReplymodal
       v-show="showModal === 'reply'"
       @close-post-modal="closePostModal"
@@ -82,7 +81,6 @@ export default {
     return {
       tweets: [],
       text: "",
-      // post,reply,none
       showModal: "none",
       replyModalTweet: {},
     };
@@ -149,7 +147,7 @@ export default {
 
 <style scoped>
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none;
   color: #000000;
 }
 /* main tweets */
@@ -233,8 +231,6 @@ textarea {
 
 /* modal */
 .modal-box {
-  /* display: flex;
-  flex-direction: column; */
   width: 600px;
   position: fixed;
   top: 5%;

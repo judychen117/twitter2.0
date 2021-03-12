@@ -99,7 +99,6 @@ export default {
         }
         this.likesLength = this.likesLength + 1;
         this.likeStatus = true;
-        // TODO:Like數如何即時更新
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -144,7 +143,7 @@ export default {
 
 <style scoped>
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none;
   color: #000000;
 }
 .tweets-card {
@@ -194,7 +193,6 @@ a {
 }
 
 #fade {
-  /* position: relative; */
   top: 0%;
   left: 0%;
   width: 100%;

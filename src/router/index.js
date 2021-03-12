@@ -93,25 +93,18 @@ router.beforeEach(async (to, from, next) => {
   let isAuthenticated = store.state.isAuthenticated
   console.log(store.state.isAuthenticated)
 
-  //比較 localStorage 和 store 中的 token 是否一樣
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
   const pathsWithoutAuthentication = ['admin-login', 'login', 'regist']
-
-  //如果 token 無效則轉址到登入頁
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
     next('/login')
     return
   }
-
-  //如果 token 有效則轉址到餐廳首頁
-  if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
-    next('/tweets')
-    return
-  }
+  // if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
+  //   next('/tweets')
+  //   return
+  // }
   next()
 })
-
-
 export default router

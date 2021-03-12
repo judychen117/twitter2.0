@@ -113,11 +113,6 @@ export default {
   methods: {
     async fetchCurrentUser() {
       try {
-        // const { name, email, account, id } = this.currentUser;
-        // this.account = account;
-        // this.name = name;
-        // this.email = email;
-        // this.id = id;
         const { data } = await userAPI.userEdit.getSetting(this.currentUser.id);
         console.log(data);
         const { name, email, account, id } = data;
@@ -165,9 +160,7 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
-  /* flex-direction: row; */
   justify-content: center;
-  /* flex-wrap: wrap; */
   padding: 3rem 0;
 }
 .setting-form {

@@ -187,9 +187,6 @@ export default {
           throw new Error(response.statusText);
         }
         this.users = response.data;
-        // this.tweets = this.tweets.filter(function (el) {
-        //   return el != null;
-        // });
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -271,7 +268,7 @@ export default {
   right: 1rem;
 }
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none; 
 }
 .edit-button {
   width: 180px;

@@ -16,6 +16,7 @@ export default new Vuex.Store({
       role: ''
     },
     isAuthenticated: true,
+    isFirstAuthenticated: false,
     token: ''
   },
   mutations: {

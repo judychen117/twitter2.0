@@ -18,7 +18,6 @@
             </p>
           </div>
           <div class="tweet-delete">
-            <!-- TODO:修改連結 -->
             <a href="#" @click.stop.prevent="deleteTweets(tweet.id)">
               <img
                 src="../../public/img/cancel.svg"
@@ -89,7 +88,7 @@ export default {
 
 <style scoped>
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none; 
   color: #000000;
 }
 .tweet-card {

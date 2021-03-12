@@ -125,7 +125,6 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        // this.showModal = false;
         const description = this.text;
         const { data } = await TweetsAPI.tweets.post({ description });
         if (data.status !== "success") {
@@ -163,7 +162,7 @@ export default {
   left: 1.5rem;
 }
 a {
-  text-decoration: none; /* 拿掉底線 */
+  text-decoration: none;
   color: #000000;
 }
 .tweets-card {

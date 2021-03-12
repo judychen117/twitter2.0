@@ -31,7 +31,7 @@ export default {
   methods: {
     logout() {
       this.$store.commit("revokeAuthentication");
-      this.$router.push("/admin");
+      this.$router.push("/login");
     },
   },
 };
@@ -42,7 +42,6 @@ export default {
   width: 235px;
   height: 100%;
   position: relative;
-  /* border: 2px solid red; */
   padding-top: 3rem;
 }
 .nav-logo {
@@ -56,14 +55,12 @@ export default {
   margin-top: 100px;
 }
 .nav-item {
-  /* border: 2px solid wheat; */
   font-size: 18px;
 }
 .nav-item > a {
   width: 235px;
   height: 60px;
   display: flex;
-  /* border: 2px solid red; */
   align-items: center;
 }
 .nav-icon {
