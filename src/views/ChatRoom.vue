@@ -2,7 +2,10 @@
   <div class="main-tweets" id="main">
     <NavBar class="cartroom-nav" />
     <div class="online-users">
-      <div class="online-users-nav nav">上線的使用者</div>
+      <div class="online-users-nav nav">
+        <span>{{ numberUser }}</span
+        >上線的使用者
+      </div>
       <ul class="online-users-list">
         <li class="online-users-item">
           <img
@@ -38,15 +41,22 @@
       <div class="open-chatroom-nav nav">公開聊天室</div>
       <div class="open-chatroom-content">
         <ul class="open-chatroom-content-list">
-          <li class="open-chatroom-item">
-            <img
+          <li
+            class="open-chatroom-item"
+            v-for="(message, index) in messages"
+            :key="index"
+            :class="{ 'currentuser-item': message.type === 0 }"
+          >
+            <!-- <img
               :src="currentUser.avatar"
               alt="avatar"
               class="open-chatroom-avatar avatar"
-            />
-            <!-- <div class="open-chatroom-name">
-              <p>{{ currentUser.name }}</p>
-            </div> -->
+            /> -->
+            <div class="open-chatroom-name">
+              <p>
+                {{ current }}
+              </p>
+            </div>
             <div class="open-chatroom-user-content">
               <p>安安你好</p>
             </div>
@@ -66,20 +76,32 @@
           </li>
         </ul>
       </div>
-      <form class="open-chatroom-form" @submit.stop.prevent="handleSubmit">
+      <form @submit.stop.prevent="handleSubmit">
         <div class="open-chatroom-text">
-          <label for="text"></label>
+          <!-- <label for="newMessage"></label>
           <textarea
             class="open-chatroom-form-control"
             rows="3"
-            name="text"
-            v-model="text"
+            name="newMessage"
+            v-model="newMessage"
             placeholder="輸入訊息..."
           >
-          </textarea>
+          </textarea> -->
+          <input
+            type="text"
+            class="open-chatroom-form-control"
+            v-model="newMessage"
+            placeholder="輸入訊息..."
+          />
         </div>
         <div class="open-chatroom-submit">
-          <button type="submit" class="open-chatroom-button" @click="pingServer()">推文</button>
+          <button
+            type="submit"
+            class="open-chatroom-button"
+            @click="pingServer()"
+          >
+            推文
+          </button>
         </div>
       </form>
     </div>
@@ -92,28 +114,71 @@ import { io } from "socket.io-client";
 const socket = io("https://twitterkiller-backend.herokuapp.com/"); // 接受後端的 message event 的 emit
 
 export default {
+  data() {
+    return {
+      messages: [],
+      newMessage: null,
+      current: "",
+      numberUser: "",
+      userLeave: "",
+    };
+  },
   components: {
     NavBar,
   },
   computed: {
     ...mapState(["currentUser"]),
   },
+  created() {
+    this.current = this.currentUser.name;
+    socket.emit("add user", this.current);
+    socket.on("login", (data) => {
+      console.log(data);
+      this.numberUser = data.numUsers;
+    });
+    socket.on("user join public chat", (data) => {
+      console.log(data);
+    });
+
+    socket.on("message", (message) => {
+      this.messages.push(message);
+    });
+    // for other users
+    socket.on("new message", (data) => {
+      console.log(data);
+      this.messages.push(data);
+    });
+    socket.on('user left')
+  },
   methods: {
     pingServer() {
-      console.log();
-      socket.on("message", (message) => {
-        console.log(message);
-      });
-      socket.emit('judy','this is judy');
+      // for myself: type 0--> receiving
+      this.messages.push({ message: this.newMessage, type: 0 });
+      socket.emit("new message", { message: this.newMessage, type: 1 });
+      this.newMessage = "";
     },
+    // socket.on('sendMessage',(data)=>{
+    //   socket.broadcast.emit('sendMessage', data)
+    // })
+  },
+  beforeRouteLeave(to, from, next) {
+    const answer = window.confirm(
+      "Do you really want to leave? you have unsaved changes!"
+    );
+    console.log(answer);
+    if (answer) {
+      this.userLeave = this.currentUser.id;
+      console.log("user leaves");
+      socket.emit('disconnect', this.userLeave);
+      // socket.on('user left',(data)=>{
+      //   console.log(data)
+      // })
+      next();
+    } else {
+      next(false);
+    }
   },
 };
-
-// import socketio from 'socket.io';
-// import VueSocketIO from 'vue-socket.io';
-
-// export const SocketInstance = socketio('https://twitterkiller-backend.herokuapp.com/');
-// Vue.use(VueSocketIO, SocketInstance)
 </script>
 
 <style scoped>
@@ -170,6 +235,7 @@ a {
 }
 .currentuser-item {
   justify-content: flex-end;
+  color: red;
 }
 
 .open-chatroom-user-content {
