@@ -3,8 +3,8 @@
     <NavBar class="cartroom-nav" />
     <div class="online-users">
       <div class="online-users-nav nav">
-        <span>{{ numberUser }}</span
-        >上線的使用者
+        上線的使用者
+        <span>({{ numberUser }})</span>
       </div>
       <ul class="online-users-list">
         <li class="online-users-item">
@@ -47,11 +47,11 @@
             :key="index"
             :class="{ 'currentuser-item': message.type === 0 }"
           >
-            <!-- <img
+            <img
               :src="currentUser.avatar"
               alt="avatar"
               class="open-chatroom-avatar avatar"
-            /> -->
+            />
             <div class="open-chatroom-name">
               <p>
                 {{ current }}
@@ -67,16 +67,14 @@
               alt="avatar"
               class="open-chatroom-avatar avatar"
             />
-            <!-- <div class="open-chatroom-name">
-              <p>{{ currentUser.name }}</p>
-            </div> -->
+
             <div class="open-chatroom-user-content currentuser-content">
               <p>安安</p>
             </div>
           </li>
         </ul>
       </div>
-      <form @submit.stop.prevent="handleSubmit">
+      <form @submit.stop.prevent="handleSubmit" class="open-chatroom-form">
         <div class="open-chatroom-text">
           <!-- <label for="newMessage"></label>
           <textarea
@@ -100,7 +98,7 @@
             class="open-chatroom-button"
             @click="pingServer()"
           >
-            推文
+            <i class="fas fa-paper-plane" id="send-messages"></i>
           </button>
         </div>
       </form>
@@ -148,7 +146,7 @@ export default {
       console.log(data);
       this.messages.push(data);
     });
-    socket.on('user left')
+    socket.on("user left");
   },
   methods: {
     pingServer() {
@@ -169,7 +167,7 @@ export default {
     if (answer) {
       this.userLeave = this.currentUser.id;
       console.log("user leaves");
-      socket.emit('disconnect', this.userLeave);
+      socket.emit("disconnect", this.userLeave);
       // socket.on('user left',(data)=>{
       //   console.log(data)
       // })
@@ -228,11 +226,16 @@ a {
 .open-chatroom {
   width: 50rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .open-chatroom-item {
   margin: 10px;
   display: flex;
+  justify-content: flex-start;
 }
+
 .currentuser-item {
   justify-content: flex-end;
   color: red;
@@ -241,13 +244,27 @@ a {
 .open-chatroom-user-content {
   width: auto;
   background: #b6b8b9;
-  border-radius: 40% 40% 40% 10%;
+  border-radius: 40% 40% 40% 0%;
 }
 .currentuser-content {
-  border-radius: 40% 40% 10% 40%;
+  border-radius: 40% 50% 0% 40%;
+  background: #ff6600;
+}
+.currentuser-content > p {
+  color: white;
 }
 .open-chatroom-user-content > p {
   margin: 20px;
+}
+.open-chatroom-content {
+  height: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.open-chatroom-content-list {
+  overflow: scroll;
+  overflow-x: hidden;
 }
 
 /* open-chatroom-form */
@@ -259,7 +276,7 @@ a {
   right: 0;
   width: 100%;
   height: auto;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-evenly;
 }
 .open-chatroom-text {
@@ -284,5 +301,13 @@ a {
 .nav {
   border-bottom: 1px solid #e6ecf0;
   padding: 10px;
+}
+button {
+  border: 0;
+  background: none;
+  font-size: 25px;
+}
+#send-messages {
+  color: #ff6600;
 }
 </style>
