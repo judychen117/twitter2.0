@@ -80,8 +80,8 @@ const router = new Router({
       component: () => import('./../views/AdminUsers.vue')
     },
     {
-      path: '/cartroom',
-      name: 'cartroom',
+      path: '/chatroom',
+      name: 'chatroom',
       component: () => import('./../views/ChatRoom.vue')
     },
     {

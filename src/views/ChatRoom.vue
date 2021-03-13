@@ -83,11 +83,16 @@
         </div>
       </form>
     </div>
+    <div id="app">
+      <button @pingServer>PRESS ME</button>
+    </div>
   </div>
 </template>
 <script>
 import NavBar from "./../components/Navbar";
 import { mapState } from "vuex";
+import { io } from "socket.io-client";
+const socket = io("https://twitterkiller-backend.herokuapp.com/"); // 接受後端的 message event 的 emit
 
 export default {
   components: {
@@ -96,7 +101,21 @@ export default {
   computed: {
     ...mapState(["currentUser"]),
   },
+  methods: {
+    pingServer() {
+      console.log();
+      socket.on("message", (message) => {
+        console.log(message);
+      });
+    },
+  },
 };
+
+// import socketio from 'socket.io';
+// import VueSocketIO from 'vue-socket.io';
+
+// export const SocketInstance = socketio('https://twitterkiller-backend.herokuapp.com/');
+// Vue.use(VueSocketIO, SocketInstance)
 </script>
 
 <style scoped>
