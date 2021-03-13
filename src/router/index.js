@@ -80,6 +80,11 @@ const router = new Router({
       component: () => import('./../views/AdminUsers.vue')
     },
     {
+      path: '/cartroom',
+      name: 'cartroom',
+      component: () => import('./../views/ChatRoom.vue')
+    },
+    {
       path: '*',
       name: 'not-found',
       component: NotFound
