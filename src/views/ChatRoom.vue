@@ -2,7 +2,10 @@
   <div class="main-tweets" id="main">
     <NavBar class="cartroom-nav" />
     <div class="online-users">
-      <div class="online-users-nav nav">上線的使用者</div>
+      <div class="online-users-nav nav">
+        <span>{{ numberUser }}</span
+        >上線的使用者
+      </div>
       <ul class="online-users-list">
         <li class="online-users-item">
           <img
@@ -42,6 +45,7 @@
             class="open-chatroom-item"
             v-for="(message, index) in messages"
             :key="index"
+            :class="{ 'currentuser-item': message.type === 0 }"
           >
             <!-- <img
               :src="currentUser.avatar"
@@ -49,14 +53,8 @@
               class="open-chatroom-avatar avatar"
             /> -->
             <div class="open-chatroom-name">
-              <!-- <p>{{ message.name }}</p> -->
-              <p
-                :class="{
-                  'float-right': message.type === 0,
-                  'currentuser-item': message.type === 0,
-                }"
-              >
-                {{ message }}
+              <p>
+                {{ current }}
               </p>
             </div>
             <div class="open-chatroom-user-content">
@@ -121,6 +119,8 @@ export default {
       messages: [],
       newMessage: null,
       current: "",
+      numberUser: "",
+      userLeave: "",
     };
   },
   components: {
@@ -131,27 +131,52 @@ export default {
   },
   created() {
     this.current = this.currentUser.name;
-    socket.emit("add user", { username: this.current });
+    socket.emit("add user", this.current);
+    socket.on("login", (data) => {
+      console.log(data);
+      this.numberUser = data.numUsers;
+    });
+    socket.on("user join public chat", (data) => {
+      console.log(data);
+    });
+
     socket.on("message", (message) => {
       this.messages.push(message);
     });
     // for other users
-    socket.on("sendMessage", (data) => {
+    socket.on("new message", (data) => {
+      console.log(data);
       this.messages.push(data);
     });
+    socket.on('user left')
   },
   methods: {
     pingServer() {
-      console.log("sending new message");
-
       // for myself: type 0--> receiving
-      // this.messages.push({message: this.newMessage, type: 0})
-      // socket.emit({message: data, type: 1});
-      // this.newMessage = "";
+      this.messages.push({ message: this.newMessage, type: 0 });
+      socket.emit("new message", { message: this.newMessage, type: 1 });
+      this.newMessage = "";
     },
     // socket.on('sendMessage',(data)=>{
     //   socket.broadcast.emit('sendMessage', data)
     // })
+  },
+  beforeRouteLeave(to, from, next) {
+    const answer = window.confirm(
+      "Do you really want to leave? you have unsaved changes!"
+    );
+    console.log(answer);
+    if (answer) {
+      this.userLeave = this.currentUser.id;
+      console.log("user leaves");
+      socket.emit('disconnect', this.userLeave);
+      // socket.on('user left',(data)=>{
+      //   console.log(data)
+      // })
+      next();
+    } else {
+      next(false);
+    }
   },
 };
 </script>
@@ -210,6 +235,7 @@ a {
 }
 .currentuser-item {
   justify-content: flex-end;
+  color: red;
 }
 
 .open-chatroom-user-content {

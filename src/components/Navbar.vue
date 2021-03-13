@@ -25,6 +25,12 @@
             <p>設定</p>
           </router-link>
         </li>
+        <li class="nav-item ">
+          <router-link :to="{ name: 'chatroom' }">
+            <img src="./../../public/img/chat.svg" alt="chat" class="nav-icon icon-chat">
+            <p>公開聊天室</p>
+          </router-link>
+        </li>
         <li>
           <button
             class="nav-teweet-button button"
@@ -117,5 +123,13 @@ export default {
   bottom: 0px;
   left: 0px;
   margin-bottom: 10px;
+}
+.icon-chat{
+  width: 18px;
+  height: 18px;
+}
+button{
+  position: relative;
+  top: 2rem;
 }
 </style>
