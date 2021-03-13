@@ -79,12 +79,9 @@
           </textarea>
         </div>
         <div class="open-chatroom-submit">
-          <button type="submit" class="open-chatroom-button">推文</button>
+          <button type="submit" class="open-chatroom-button" @click="pingServer()">推文</button>
         </div>
       </form>
-    </div>
-    <div id="app">
-      <button @pingServer>PRESS ME</button>
     </div>
   </div>
 </template>
@@ -107,6 +104,7 @@ export default {
       socket.on("message", (message) => {
         console.log(message);
       });
+      socket.emit('judy','this is judy');
     },
   },
 };
