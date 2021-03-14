@@ -4,35 +4,24 @@
     <div class="online-users">
       <div class="online-users-nav nav">
         上線的使用者
-        <span>({{ numberUser }})</span>
+        <span>({{ newUsers.length }})</span>
       </div>
       <ul class="online-users-list">
-        <li class="online-users-item">
+        <li
+          class="online-users-item"
+          v-for="(newUser, index) in newUsers"
+          :key="index"
+        >
           <img
-            :src="currentUser.avatar"
+            :src="newUser.avatar"
             alt="avatar"
             class="online-users-avatar avatar"
           />
           <div class="online-users-name">
-            <p>{{ currentUser.name }}</p>
+            <p>{{ newUser.name }}</p>
           </div>
           <div class="online-users-id">
-            <p>{{ currentUser.account }}</p>
-          </div>
-        </li>
-      </ul>
-      <ul class="online-users-list">
-        <li class="online-users-item">
-          <img
-            :src="currentUser.avatar"
-            alt="avatar"
-            class="online-users-avatar avatar"
-          />
-          <div class="online-users-name">
-            <p>{{ currentUser.name }}</p>
-          </div>
-          <div class="online-users-id">
-            <p>{{ currentUser.account }}</p>
+            <p>{{ newUser.account }}</p>
           </div>
         </li>
       </ul>
@@ -62,6 +51,17 @@
               :class="{ 'currentuser-content': message.type === 0 }"
             >
               <p>安安你好</p>
+            </div>
+          </li>
+          <li class="open-chatroom-item currentuser-item">
+            <img
+              :src="currentUser.avatar"
+              alt="avatar"
+              class="open-chatroom-avatar avatar"
+            />
+
+            <div class="open-chatroom-user-content currentuser-content">
+              <p>安安</p>
             </div>
           </li>
         </ul>
@@ -97,6 +97,7 @@
     </div>
   </div>
 </template>
+<script src="/socket.io/socket.io.js"></script>
 <script>
 import NavBar from "./../components/Navbar";
 import { mapState } from "vuex";
@@ -110,8 +111,10 @@ export default {
       newMessage: null,
       currentName: "",
       currentId: "",
+      currentAccount: "",
+      currentAvatar: "",
       numberUser: "",
-      userAvatar: "",
+      newUsers: [],
     };
   },
   components: {
@@ -121,15 +124,28 @@ export default {
     ...mapState(["currentUser"]),
   },
   created() {
+    this.newUsers = this.currentUser;
     this.currentName = this.currentUser.name;
     this.currentId = this.currentUser.id;
-    socket.emit("add user", { name: this.currentName, id: this.currentId });
-    socket.on("login", (data) => {
-      console.log(data);
-      this.numberUser = data.numUsers;
+    this.currentAccount = this.currentUser.account;
+    this.currentAvatar = this.currentUser.avatar;
+    socket.emit("add user", {
+      name: this.currentName,
+      id: this.currentId,
+      account: this.currentAccount,
+      avatar: this.currentAvatar,
     });
+    // socket.on("login", (data) => {
+    //   console.log(data);
+    //   this.numberUser = data.numUsers;
+    // });
     socket.on("user join public chat", (data) => {
       console.log(data);
+      console.log(data.user.id);
+      this.newUsers = this.newUsers.filter(
+        (newUser) => newUser.name != data.user.name
+      );
+      this.newUsers.push(data.user);
     });
 
     socket.on("message", (message) => {
@@ -143,35 +159,47 @@ export default {
     socket.on("user left");
   },
   methods: {
+    // joinServer: function () {
+    //   this.socket.on("loggedIn", (data) => {
+    //     this.messages = data.messages;
+    //     this.users = data.users;
+    //     this.socket.emit("newuser", this.username);
+    //   });
+    //   this.listen();
+    // },
+    // listen: function () {
+    //   this.socket.on("userOnline", (user) => {
+    //     this.users.push(user);
+    //   });
+    //   this.socket.on("userLeft", (user) => {
+    //     this.users.splice(this.users.indexOf(user), 1);
+    //   });
+    // },
     pingServer() {
-      // for myself: type 0--> receiving
       this.messages.push({ message: this.newMessage, type: 0 });
       socket.emit("new message", { message: this.newMessage, type: 1 });
       this.newMessage = "";
     },
-    // socket.on('sendMessage',(data)=>{
-    //   socket.broadcast.emit('sendMessage', data)
-    // })
   },
-  beforeRouteLeave(to, from, next) {
-    const answer = window.confirm(
-      "Do you really want to leave? you have unsaved changes!"
-    );
-    console.log(answer);
-    if (answer) {
-      socket.on("user left", (data) => {
-        console.log(data);
-      });
-      socket.on("disconnect", () => {
-        console.log("disconnected");
-        socket.emit("disconnect", this.currentId);
-        console.log("happy oscar");
-      });
-      next();
-    } else {
-      next(false);
-    }
-  },
+  // beforeRouteLeave() {
+  //   socket.on("user left", () => {
+  //     console.log("HELLO");
+  //   });
+  // const answer = window.confirm(
+  //   "Do you really want to leave? you have unsaved changes!"
+  // );
+  // console.log(answer);
+  // if (answer) {
+  //   socket.on("disconnect", () => {
+  //     console.log("disconnected");
+  //     socket.emit("disconnect", this.currentId);
+  //     console.log("happy oscar");
+  //   });
+  //   next();
+  // } else {
+  //   next(false);
+  // }
+  // },
 };
 </script>
 
@@ -229,7 +257,6 @@ a {
   display: flex;
   justify-content: flex-start;
 }
-
 .currentuser-item {
   justify-content: flex-end;
   color: red;
