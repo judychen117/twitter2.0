@@ -3,39 +3,30 @@
     <NavBar class="cartroom-nav" />
     <div class="online-users">
       <div class="online-users-nav nav">
-        <span>{{ numberUser }}</span
-        >上線的使用者
+        上線的使用者
+        <span>({{ newUsers.length }})</span>
       </div>
-      <ul class="online-users-list">
-        <li class="online-users-item">
-          <img
-            :src="currentUser.avatar"
-            alt="avatar"
-            class="online-users-avatar avatar"
-          />
-          <div class="online-users-name">
-            <p>{{ currentUser.name }}</p>
-          </div>
-          <div class="online-users-id">
-            <p>{{ currentUser.account }}</p>
-          </div>
-        </li>
-      </ul>
-      <ul class="online-users-list">
-        <li class="online-users-item">
-          <img
-            :src="currentUser.avatar"
-            alt="avatar"
-            class="online-users-avatar avatar"
-          />
-          <div class="online-users-name">
-            <p>{{ currentUser.name }}</p>
-          </div>
-          <div class="online-users-id">
-            <p>{{ currentUser.account }}</p>
-          </div>
-        </li>
-      </ul>
+      <div class="online-users-list-content">
+        <ul class="online-users-list">
+          <li
+            class="online-users-item"
+            v-for="(newUser, index) in newUsers"
+            :key="index"
+          >
+            <img
+              :src="newUser.avatar"
+              alt="avatar"
+              class="online-users-avatar avatar"
+            />
+            <div class="online-users-name">
+              <p>{{ newUser.name }}</p>
+            </div>
+            <div class="online-users-id">
+              <p>{{ newUser.account }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="open-chatroom">
       <div class="open-chatroom-nav nav">公開聊天室</div>
@@ -45,48 +36,44 @@
             class="open-chatroom-item"
             v-for="(message, index) in messages"
             :key="index"
-            :class="{ 'currentuser-item': message.type === 0 }"
+            :class="{
+              'currentuser-item': message.type === 0,
+              'online-item': message.type === 3,
+            }"
           >
-            <!-- <img
-              :src="currentUser.avatar"
-              alt="avatar"
-              class="open-chatroom-avatar avatar"
-            /> -->
-            <div class="open-chatroom-name">
-              <p>
-                {{ current }}
-              </p>
+            <div class="online-item" v-if="message.type === 3">
+              <p>上線了</p>
             </div>
-            <div class="open-chatroom-user-content">
-              <p>安安你好</p>
+            <div class="open-chatroom-item" v-else>
+              <img
+                :src="currentUser.avatar"
+                alt="avatar"
+                class="open-chatroom-avatar avatar"
+                v-if="message.type === 1"
+              />
+              <div
+                class="open-chatroom-user-content"
+                :class="{ 'currentuser-content': message.type === 0 }"
+              >
+                <p>{{ message.message }}</p>
+              </div>
             </div>
           </li>
-          <li class="open-chatroom-item currentuser-item">
+          <!-- <li class="open-chatroom-item currentuser-item">
             <img
               :src="currentUser.avatar"
               alt="avatar"
               class="open-chatroom-avatar avatar"
             />
-            <!-- <div class="open-chatroom-name">
-              <p>{{ currentUser.name }}</p>
-            </div> -->
+
             <div class="open-chatroom-user-content currentuser-content">
               <p>安安</p>
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
-      <form @submit.stop.prevent="handleSubmit">
+      <form class="open-chatroom-form">
         <div class="open-chatroom-text">
-          <!-- <label for="newMessage"></label>
-          <textarea
-            class="open-chatroom-form-control"
-            rows="3"
-            name="newMessage"
-            v-model="newMessage"
-            placeholder="輸入訊息..."
-          >
-          </textarea> -->
           <input
             type="text"
             class="open-chatroom-form-control"
@@ -100,13 +87,14 @@
             class="open-chatroom-button"
             @click="pingServer()"
           >
-            推文
+            <i class="fas fa-paper-plane" id="send-messages"></i>
           </button>
         </div>
       </form>
     </div>
   </div>
 </template>
+<script src="/socket.io/socket.io.js"></script>
 <script>
 import NavBar from "./../components/Navbar";
 import { mapState } from "vuex";
@@ -118,9 +106,13 @@ export default {
     return {
       messages: [],
       newMessage: null,
-      current: "",
+      currentName: "",
+      currentId: "",
+      currentAccount: "",
+      currentAvatar: "",
       numberUser: "",
-      userLeave: "",
+      newUsers: [],
+      IncomingAlert: "",
     };
   },
   components: {
@@ -130,54 +122,83 @@ export default {
     ...mapState(["currentUser"]),
   },
   created() {
-    this.current = this.currentUser.name;
-    socket.emit("add user", this.current);
-    socket.on("login", (data) => {
-      console.log(data);
-      this.numberUser = data.numUsers;
+    // this.newUsers.forEach = this.currentUser;
+    this.currentName = this.currentUser.name;
+    this.currentId = this.currentUser.id;
+    this.currentAccount = this.currentUser.account;
+    this.currentAvatar = this.currentUser.avatar;
+    socket.emit("add user", {
+      name: this.currentName,
+      id: this.currentId,
+      account: this.currentAccount,
+      avatar: this.currentAvatar,
     });
+    // socket.on("login", (data) => {
+    //   console.log(data);
+    //   this.numberUser = data.numUsers;
+    // });
     socket.on("user join public chat", (data) => {
-      console.log(data);
+      // this.IncomingAlert = this.data.user
+      this.newUsers = [];
+      this.newUsers = data.onlineUserList;
+      this.newUsers = this.newUsers.filter(
+        (newUser) => newUser.name != data.user.name
+      );
     });
-
-    socket.on("message", (message) => {
-      this.messages.push(message);
+    socket.emit("reconnect", this.currentUser);
+    socket.on("user reconnect", (data) => {
+      this.newUsers = [];
+      console.log("LOOK:", data);
+      this.newUsers = data.onlineUserList;
     });
     // for other users
     socket.on("new message", (data) => {
       console.log(data);
-      this.messages.push(data);
+      this.messages.push({ message: data.message, type: 1 });
     });
-    socket.on('user left')
   },
   methods: {
+    // joinServer: function () {
+    //   this.socket.on("loggedIn", (data) => {
+    //     this.messages = data.messages;
+    //     this.users = data.users;
+    //     this.socket.emit("newuser", this.username);
+    //   });
+    //   this.listen();
+    // },
+    // listen: function () {
+    //   this.socket.on("userOnline", (user) => {
+    //     this.users.push(user);
+    //   });
+    //   this.socket.on("userLeft", (user) => {
+    //     this.users.splice(this.users.indexOf(user), 1);
+    //   });
+    // },
     pingServer() {
-      // for myself: type 0--> receiving
       this.messages.push({ message: this.newMessage, type: 0 });
-      socket.emit("new message", { message: this.newMessage, type: 1 });
+      socket.emit("new message", this.newMessage);
       this.newMessage = "";
     },
-    // socket.on('sendMessage',(data)=>{
-    //   socket.broadcast.emit('sendMessage', data)
-    // })
   },
-  beforeRouteLeave(to, from, next) {
-    const answer = window.confirm(
-      "Do you really want to leave? you have unsaved changes!"
-    );
-    console.log(answer);
-    if (answer) {
-      this.userLeave = this.currentUser.id;
-      console.log("user leaves");
-      socket.emit('disconnect', this.userLeave);
-      // socket.on('user left',(data)=>{
-      //   console.log(data)
-      // })
-      next();
-    } else {
-      next(false);
-    }
-  },
+  // beforeRouteLeave() {
+  //   socket.on("user left", () => {
+  //     console.log("HELLO");
+  //   });
+  // const answer = window.confirm(
+  //   "Do you really want to leave? you have unsaved changes!"
+  // );
+  // console.log(answer);
+  // if (answer) {
+  //   socket.on("disconnect", () => {
+  //     console.log("disconnected");
+  //     socket.emit("disconnect", this.currentId);
+  //     console.log("happy oscar");
+  //   });
+  //   next();
+  // } else {
+  //   next(false);
+  // }
+  // },
 };
 </script>
 
@@ -197,16 +218,22 @@ a {
 .cartroom-nav {
   margin-left: 50px;
 }
-
 /* online-users */
 .online-users {
   width: 30rem;
   border-left: 2px solid #e6ecf0;
   border-right: 2px solid #e6ecf0;
 }
+.online-users-list-content {
+  height: 94%;
+  display: flex;
+  flex-direction: column;
+}
 .online-users-list {
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .online-users-item {
   display: flex;
@@ -223,33 +250,50 @@ a {
 .online-users-id {
   color: #afb2b4;
 }
-
 /* open-chatroom */
 .open-chatroom {
   width: 50rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .open-chatroom-item {
   margin: 10px;
   display: flex;
+  justify-content: flex-start;
 }
 .currentuser-item {
   justify-content: flex-end;
   color: red;
 }
-
 .open-chatroom-user-content {
   width: auto;
   background: #b6b8b9;
-  border-radius: 40% 40% 40% 10%;
-}
-.currentuser-content {
-  border-radius: 40% 40% 10% 40%;
+  border-radius: 10% 10% 10% 0%;
 }
 .open-chatroom-user-content > p {
-  margin: 20px;
+  margin: 10px;
+  line-height: 50px;
+}
+.currentuser-content {
+  border-radius: 10% 10% 0% 10%;
+  background: #ff6600;
+}
+.currentuser-content > p {
+  color: white;
 }
 
+.open-chatroom-content {
+  height: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.open-chatroom-content-list {
+  overflow: scroll;
+  overflow-x: hidden;
+}
 /* open-chatroom-form */
 .open-chatroom-form {
   border-top: 2px solid #e6ecf0;
@@ -259,7 +303,7 @@ a {
   right: 0;
   width: 100%;
   height: auto;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-evenly;
 }
 .open-chatroom-text {
@@ -273,6 +317,7 @@ a {
   border: 0px;
   border-radius: 100px;
   line-height: 40px;
+  outline: none;
 }
 .tweets-container {
   width: 600px;
@@ -284,5 +329,20 @@ a {
 .nav {
   border-bottom: 1px solid #e6ecf0;
   padding: 10px;
+}
+button {
+  border: 0;
+  background: none;
+  font-size: 25px;
+}
+#send-messages {
+  color: #ff6600;
+}
+.online-item {
+  justify-content: center;
+}
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 </style>

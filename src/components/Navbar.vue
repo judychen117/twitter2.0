@@ -2,13 +2,43 @@
   <div class="nav-bar">
     <div class="mt-3">
       <router-link :to="{ name: 'tweets-main' }" class="nav-logo">
-        <img src="../../public/img/alphaCampIcon.svg" alt="logo"  class="logo">
+        <img src="../../public/img/alphaCampIcon.svg" alt="logo" class="logo" />
       </router-link>
       <ul class="nav-list">
         <li class="nav-item nav-home">
           <router-link :to="{ name: 'tweets-main' }">
             <i class="nav-icon fas fa-home"></i>
             <p>首頁</p>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'chatroom' }">
+            <img
+              src="./../../public/img/Notice.svg"
+              alt="chat"
+              class="nav-icon"
+            />
+            <p>通知</p>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'chatroom' }">
+            <img
+              src="./../../public/img/chat.svg"
+              alt="chat"
+              class="nav-icon"
+            />
+            <p>公開聊天室</p>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'chatroom' }">
+            <img
+              src="./../../public/img/chat.svg"
+              alt="chat"
+              class="nav-icon"
+            />
+            <p>私人訊息</p>
           </router-link>
         </li>
         <li class="nav-item nav-profile">
@@ -25,12 +55,7 @@
             <p>設定</p>
           </router-link>
         </li>
-        <li class="nav-item ">
-          <router-link :to="{ name: 'chatroom' }">
-            <img src="./../../public/img/chat.svg" alt="chat" class="nav-icon icon-chat">
-            <p>公開聊天室</p>
-          </router-link>
-        </li>
+
         <li>
           <button
             class="nav-teweet-button button"
@@ -87,7 +112,7 @@ export default {
   top: 0px;
   left: 0px;
 }
-.logo{
+.logo {
   margin-top: 20px;
 }
 .nav-list {
@@ -105,6 +130,8 @@ export default {
 .nav-icon {
   margin-right: 20px;
   color: #1c1c1c;
+  width: 18px;
+  height: 18px;
 }
 .nav-teweet-button {
   width: 210px;
@@ -124,11 +151,7 @@ export default {
   left: 0px;
   margin-bottom: 10px;
 }
-.icon-chat{
-  width: 18px;
-  height: 18px;
-}
-button{
+button {
   position: relative;
   top: 2rem;
 }
