@@ -57,19 +57,11 @@
                 {{ current }}
               </p>
             </div>
-            <div class="open-chatroom-user-content">
+            <div
+              class="open-chatroom-user-content"
+              :class="{ 'currentuser-content': message.type === 0 }"
+            >
               <p>安安你好</p>
-            </div>
-          </li>
-          <li class="open-chatroom-item currentuser-item">
-            <img
-              :src="currentUser.avatar"
-              alt="avatar"
-              class="open-chatroom-avatar avatar"
-            />
-
-            <div class="open-chatroom-user-content currentuser-content">
-              <p>安安</p>
             </div>
           </li>
         </ul>
@@ -116,9 +108,10 @@ export default {
     return {
       messages: [],
       newMessage: null,
-      current: "",
+      currentName: "",
+      currentId: "",
       numberUser: "",
-      userLeave: "",
+      userAvatar: "",
     };
   },
   components: {
@@ -128,8 +121,9 @@ export default {
     ...mapState(["currentUser"]),
   },
   created() {
-    this.current = this.currentUser.name;
-    socket.emit("add user", this.current);
+    this.currentName = this.currentUser.name;
+    this.currentId = this.currentUser.id;
+    socket.emit("add user", { name: this.currentName, id: this.currentId });
     socket.on("login", (data) => {
       console.log(data);
       this.numberUser = data.numUsers;
@@ -165,12 +159,14 @@ export default {
     );
     console.log(answer);
     if (answer) {
-      this.userLeave = this.currentUser.id;
-      console.log("user leaves");
-      socket.emit("disconnect", this.userLeave);
-      // socket.on('user left',(data)=>{
-      //   console.log(data)
-      // })
+      socket.on("user left", (data) => {
+        console.log(data);
+      });
+      socket.on("disconnect", () => {
+        console.log("disconnected");
+        socket.emit("disconnect", this.currentId);
+        console.log("happy oscar");
+      });
       next();
     } else {
       next(false);
@@ -195,7 +191,6 @@ a {
 .cartroom-nav {
   margin-left: 50px;
 }
-
 /* online-users */
 .online-users {
   width: 30rem;
@@ -221,7 +216,6 @@ a {
 .online-users-id {
   color: #afb2b4;
 }
-
 /* open-chatroom */
 .open-chatroom {
   width: 50rem;
@@ -240,7 +234,6 @@ a {
   justify-content: flex-end;
   color: red;
 }
-
 .open-chatroom-user-content {
   width: auto;
   background: #b6b8b9;
@@ -266,7 +259,6 @@ a {
   overflow: scroll;
   overflow-x: hidden;
 }
-
 /* open-chatroom-form */
 .open-chatroom-form {
   border-top: 2px solid #e6ecf0;
