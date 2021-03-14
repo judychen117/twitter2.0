@@ -3,39 +3,30 @@
     <NavBar class="cartroom-nav" />
     <div class="online-users">
       <div class="online-users-nav nav">
-        <span>{{ numberUser }}</span
-        >上線的使用者
+        上線的使用者
+        <span>({{ newUsers.length }})</span>
       </div>
-      <ul class="online-users-list">
-        <li class="online-users-item">
-          <img
-            :src="currentUser.avatar"
-            alt="avatar"
-            class="online-users-avatar avatar"
-          />
-          <div class="online-users-name">
-            <p>{{ currentUser.name }}</p>
-          </div>
-          <div class="online-users-id">
-            <p>{{ currentUser.account }}</p>
-          </div>
-        </li>
-      </ul>
-      <ul class="online-users-list">
-        <li class="online-users-item">
-          <img
-            :src="currentUser.avatar"
-            alt="avatar"
-            class="online-users-avatar avatar"
-          />
-          <div class="online-users-name">
-            <p>{{ currentUser.name }}</p>
-          </div>
-          <div class="online-users-id">
-            <p>{{ currentUser.account }}</p>
-          </div>
-        </li>
-      </ul>
+      <div class="online-users-list-content">
+        <ul class="online-users-list">
+          <li
+            class="online-users-item"
+            v-for="(newUser, index) in newUsers"
+            :key="index"
+          >
+            <img
+              :src="newUser.avatar"
+              alt="avatar"
+              class="online-users-avatar avatar"
+            />
+            <div class="online-users-name">
+              <p>{{ newUser.name }}</p>
+            </div>
+            <div class="online-users-id">
+              <p>{{ newUser.account }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="open-chatroom">
       <div class="open-chatroom-nav nav">公開聊天室</div>
@@ -45,48 +36,46 @@
             class="open-chatroom-item"
             v-for="(message, index) in messages"
             :key="index"
-            :class="{ 'currentuser-item': message.type === 0 }"
+            :class="{
+              'currentuser-item': message.type === 0,
+              'online-item': message.type === 3 || message.type === 4,
+            }"
           >
-            <!-- <img
-              :src="currentUser.avatar"
-              alt="avatar"
-              class="open-chatroom-avatar avatar"
-            /> -->
-            <div class="open-chatroom-name">
-              <p>
-                {{ current }}
-              </p>
+            <div class="online-item" v-if="message.type === 3">
+              <p>{{ message.message }}上線了</p>
             </div>
-            <div class="open-chatroom-user-content">
-              <p>安安你好</p>
+            <div class="online-item" v-else-if="message.type === 4">
+              <p>{{ message.message }}離線</p>
+            </div>
+            <div class="open-chatroom-item" v-else>
+              <img
+                :src="message.avatar"
+                alt="avatar"
+                class="open-chatroom-avatar avatar"
+                v-if="message.type === 1"
+              />
+              <div
+                class="open-chatroom-user-content"
+                :class="{ 'currentuser-content': message.type === 0 }"
+              >
+                <p>{{ message.message }}</p>
+              </div>
             </div>
           </li>
-          <li class="open-chatroom-item currentuser-item">
+          <!-- <li class="open-chatroom-item currentuser-item">
             <img
               :src="currentUser.avatar"
               alt="avatar"
               class="open-chatroom-avatar avatar"
             />
-            <!-- <div class="open-chatroom-name">
-              <p>{{ currentUser.name }}</p>
-            </div> -->
             <div class="open-chatroom-user-content currentuser-content">
               <p>安安</p>
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
-      <form @submit.stop.prevent="handleSubmit">
+      <form class="open-chatroom-form">
         <div class="open-chatroom-text">
-          <!-- <label for="newMessage"></label>
-          <textarea
-            class="open-chatroom-form-control"
-            rows="3"
-            name="newMessage"
-            v-model="newMessage"
-            placeholder="輸入訊息..."
-          >
-          </textarea> -->
           <input
             type="text"
             class="open-chatroom-form-control"
@@ -100,14 +89,16 @@
             class="open-chatroom-button"
             @click="pingServer()"
           >
-            推文
+            <i class="fas fa-paper-plane" id="send-messages"></i>
           </button>
         </div>
       </form>
     </div>
   </div>
 </template>
+<script src="/socket.io/socket.io.js"></script>
 <script>
+import { Toast } from "./../utils/helpers";
 import NavBar from "./../components/Navbar";
 import { mapState } from "vuex";
 import { io } from "socket.io-client";
@@ -118,8 +109,13 @@ export default {
     return {
       messages: [],
       newMessage: null,
-      current: "",
+      currentName: "",
+      currentId: "",
+      currentAccount: "",
+      currentAvatar: "",
       numberUser: "",
+      newUsers: [],
+      IncomingAlert: "",
       userLeave: "",
     };
   },
@@ -130,53 +126,71 @@ export default {
     ...mapState(["currentUser"]),
   },
   created() {
-    this.current = this.currentUser.name;
-    socket.emit("add user", this.current);
-    socket.on("login", (data) => {
-      console.log(data);
-      this.numberUser = data.numUsers;
+    this.currentName = this.currentUser.name;
+    this.currentId = this.currentUser.id;
+    this.currentAccount = this.currentUser.account;
+    this.currentAvatar = this.currentUser.avatar;
+    socket.emit("add user", {
+      name: this.currentName,
+      id: this.currentId,
+      account: this.currentAccount,
+      avatar: this.currentAvatar,
     });
     socket.on("user join public chat", (data) => {
-      console.log(data);
+      this.newUsers = [];
+      this.newUsers = data.onlineUserList;
+      this.newUsers = this.newUsers.filter(
+        (newUser) => newUser.name != data.user.name
+      );
+      this.IncomingAlert = data.user.account;
+      this.messages.push({ message: this.IncomingAlert, type: 3 });
     });
 
-    socket.on("message", (message) => {
-      this.messages.push(message);
-    });
-    // for other users
-    socket.on("new message", (data) => {
+    socket.on("user left", (data) => {
       console.log(data);
-      this.messages.push(data);
+      this.userLeave = data.user.account;
+      this.messages.push({ message: this.userLeave, type: 4 });
     });
-    socket.on('user left')
+
+    socket.emit("reconnect", this.currentUser);
+    socket.on("user reconnect", (data) => {
+      this.newUsers = [];
+      console.log("LOOK:", data);
+      this.newUsers = data.onlineUserList;
+    });
+
+    socket.on("new message", (data) => {
+      console.log(this.messages);
+      this.messages.push({
+        message: data.message,
+        avatar: data.avatar,
+        id: data.id,
+        type: 1,
+      });
+    });
   },
   methods: {
     pingServer() {
-      // for myself: type 0--> receiving
-      this.messages.push({ message: this.newMessage, type: 0 });
-      socket.emit("new message", { message: this.newMessage, type: 1 });
+      if (this.newMessage.replace(/\s*/g, "") === "") {
+        Toast.fire({
+          icon: "error",
+          title: "推文內容不能空白,請輸入內容",
+        });
+        return;
+      }
+      this.messages.push({
+        message: this.newMessage,
+        avatar: this.currentAvatar,
+        id: this.currentId,
+        type: 0,
+      });
+      socket.emit("new message", {
+        message: this.newMessage,
+        avatar: this.currentAvatar,
+        id: this.currentId,
+      });
       this.newMessage = "";
     },
-    // socket.on('sendMessage',(data)=>{
-    //   socket.broadcast.emit('sendMessage', data)
-    // })
-  },
-  beforeRouteLeave(to, from, next) {
-    const answer = window.confirm(
-      "Do you really want to leave? you have unsaved changes!"
-    );
-    console.log(answer);
-    if (answer) {
-      this.userLeave = this.currentUser.id;
-      console.log("user leaves");
-      socket.emit('disconnect', this.userLeave);
-      // socket.on('user left',(data)=>{
-      //   console.log(data)
-      // })
-      next();
-    } else {
-      next(false);
-    }
   },
 };
 </script>
@@ -197,16 +211,22 @@ a {
 .cartroom-nav {
   margin-left: 50px;
 }
-
 /* online-users */
 .online-users {
   width: 30rem;
   border-left: 2px solid #e6ecf0;
   border-right: 2px solid #e6ecf0;
 }
+.online-users-list-content {
+  height: 94%;
+  display: flex;
+  flex-direction: column;
+}
 .online-users-list {
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .online-users-item {
   display: flex;
@@ -223,33 +243,49 @@ a {
 .online-users-id {
   color: #afb2b4;
 }
-
 /* open-chatroom */
 .open-chatroom {
   width: 50rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .open-chatroom-item {
   margin: 10px;
   display: flex;
+  justify-content: flex-start;
 }
 .currentuser-item {
   justify-content: flex-end;
   color: red;
 }
-
 .open-chatroom-user-content {
   width: auto;
   background: #b6b8b9;
-  border-radius: 40% 40% 40% 10%;
-}
-.currentuser-content {
-  border-radius: 40% 40% 10% 40%;
+  border-radius: 10% 10% 10% 0%;
 }
 .open-chatroom-user-content > p {
-  margin: 20px;
+  margin: 10px;
+  line-height: 50px;
 }
-
+.currentuser-content {
+  border-radius: 10% 10% 0% 10%;
+  background: #ff6600;
+}
+.currentuser-content > p {
+  color: white;
+}
+.open-chatroom-content {
+  height: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.open-chatroom-content-list {
+  overflow: scroll;
+  overflow-x: hidden;
+}
 /* open-chatroom-form */
 .open-chatroom-form {
   border-top: 2px solid #e6ecf0;
@@ -259,7 +295,7 @@ a {
   right: 0;
   width: 100%;
   height: auto;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-evenly;
 }
 .open-chatroom-text {
@@ -273,6 +309,7 @@ a {
   border: 0px;
   border-radius: 100px;
   line-height: 40px;
+  outline: none;
 }
 .tweets-container {
   width: 600px;
@@ -284,5 +321,23 @@ a {
 .nav {
   border-bottom: 1px solid #e6ecf0;
   padding: 10px;
+}
+button {
+  border: 0;
+  background: none;
+  font-size: 25px;
+}
+#send-messages {
+  color: #ff6600;
+}
+.online-item {
+  justify-content: center;
+}
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+input {
+  padding-left: 1rem;
 }
 </style>
