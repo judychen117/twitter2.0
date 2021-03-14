@@ -41,19 +41,14 @@
               alt="avatar"
               class="open-chatroom-avatar avatar"
             />
-            <div class="open-chatroom-name">
-              <p>
-                {{ current }}
-              </p>
-            </div>
             <div
               class="open-chatroom-user-content"
               :class="{ 'currentuser-content': message.type === 0 }"
             >
-              <p>安安你好</p>
+              <p>{{ message.message }}</p>
             </div>
           </li>
-          <li class="open-chatroom-item currentuser-item">
+          <!-- <li class="open-chatroom-item currentuser-item">
             <img
               :src="currentUser.avatar"
               alt="avatar"
@@ -63,7 +58,7 @@
             <div class="open-chatroom-user-content currentuser-content">
               <p>安安</p>
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
       <form @submit.stop.prevent="handleSubmit" class="open-chatroom-form">
@@ -115,6 +110,7 @@ export default {
       currentAvatar: "",
       numberUser: "",
       newUsers: [],
+      IncomingAlert: "",
     };
   },
   components: {
@@ -124,7 +120,7 @@ export default {
     ...mapState(["currentUser"]),
   },
   created() {
-    this.newUsers = this.currentUser;
+    // this.newUsers.forEach = this.currentUser;
     this.currentName = this.currentUser.name;
     this.currentId = this.currentUser.id;
     this.currentAccount = this.currentUser.account;
@@ -140,23 +136,24 @@ export default {
     //   this.numberUser = data.numUsers;
     // });
     socket.on("user join public chat", (data) => {
-      console.log(data);
-      console.log(data.user.id);
+      // this.IncomingAlert = this.data.user
+      this.newUsers = [];
+      this.newUsers = data.onlineUserList;
       this.newUsers = this.newUsers.filter(
         (newUser) => newUser.name != data.user.name
       );
-      this.newUsers.push(data.user);
     });
-
-    socket.on("message", (message) => {
-      this.messages.push(message);
+    socket.emit("reconnect", this.currentUser);
+    socket.on("user reconnect", (data) => {
+      this.newUsers = [];
+      console.log("LOOK:", data);
+      this.newUsers = data.onlineUserList;
     });
     // for other users
     socket.on("new message", (data) => {
       console.log(data);
-      this.messages.push(data);
+      this.messages.push({ message: data.message, type: 1 });
     });
-    socket.on("user left");
   },
   methods: {
     // joinServer: function () {
@@ -177,7 +174,7 @@ export default {
     // },
     pingServer() {
       this.messages.push({ message: this.newMessage, type: 0 });
-      socket.emit("new message", { message: this.newMessage, type: 1 });
+      socket.emit("new message", this.newMessage);
       this.newMessage = "";
     },
   },
