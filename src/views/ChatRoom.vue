@@ -38,15 +38,18 @@
             :key="index"
             :class="{
               'currentuser-item': message.type === 0,
-              'online-item': message.type === 3,
+              'online-item': message.type === 3 || message.type === 4,
             }"
           >
             <div class="online-item" v-if="message.type === 3">
-              <p>上線了</p>
+              <p>{{ message.message }}上線了</p>
+            </div>
+            <div class="online-item" v-else-if="message.type === 4">
+              <p>{{ message.message }}離線</p>
             </div>
             <div class="open-chatroom-item" v-else>
               <img
-                :src="currentUser.avatar"
+                :src="message.avatar"
                 alt="avatar"
                 class="open-chatroom-avatar avatar"
                 v-if="message.type === 1"
@@ -95,6 +98,7 @@
 </template>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+import { Toast } from "./../utils/helpers";
 import NavBar from "./../components/Navbar";
 import { mapState } from "vuex";
 import { io } from "socket.io-client";
@@ -111,7 +115,8 @@ export default {
       currentAvatar: "",
       numberUser: "",
       newUsers: [],
-      IncomingAlert:''
+      IncomingAlert: "",
+      userLeave: "",
     };
   },
   components: {
@@ -131,37 +136,30 @@ export default {
       account: this.currentAccount,
       avatar: this.currentAvatar,
     });
-    // socket.on("login", (data) => {
-    //   console.log(data);
-    //   this.numberUser = data.numUsers;
-    // });
     socket.on("user join public chat", (data) => {
-      // this.IncomingAlert = this.data.user
-      console.log("OHH NOOOOOOOOO");
       this.newUsers = [];
       this.newUsers = data.onlineUserList;
       this.newUsers = this.newUsers.filter(
         (newUser) => newUser.name != data.user.name
       );
-      this.IncomingAlert = data.user.name
-      let WHO = this.IncomingAlert
-      this.messages.push({message: this.IncomingAlert, type: 3})
+      this.IncomingAlert = data.user.account;
+      this.messages.push({ message: this.IncomingAlert, type: 3 });
     });
+
+    socket.on("user left", (data) => {
+      console.log(data);
+      this.userLeave = data.user.account;
+      this.messages.push({ message: this.userLeave, type: 4 });
+    });
+
     socket.emit("reconnect", this.currentUser);
     socket.on("user reconnect", (data) => {
       this.newUsers = [];
       console.log("LOOK:", data);
       this.newUsers = data.onlineUserList;
     });
-    // socket.on("message", (message) => {
-    //   this.messages.push(message);
-    // });
-    // for other users
+
     socket.on("new message", (data) => {
-      // this.messages = data;
-      // this.messages = this.messages.filter(
-      //   (message) => message.id !== this.currentId
-      // );
       console.log(this.messages);
       this.messages.push({
         message: data.message,
@@ -173,6 +171,13 @@ export default {
   },
   methods: {
     pingServer() {
+      if (this.newMessage.replace(/\s*/g, "") === "") {
+        Toast.fire({
+          icon: "error",
+          title: "推文內容不能空白,請輸入內容",
+        });
+        return;
+      }
       this.messages.push({
         message: this.newMessage,
         avatar: this.currentAvatar,
@@ -187,25 +192,6 @@ export default {
       this.newMessage = "";
     },
   },
-  // beforeRouteLeave() {
-  //   socket.on("user left", () => {
-  //     console.log("HELLO");
-  //   });
-  // const answer = window.confirm(
-  //   "Do you really want to leave? you have unsaved changes!"
-  // );
-  // console.log(answer);
-  // if (answer) {
-  //   socket.on("disconnect", () => {
-  //     console.log("disconnected");
-  //     socket.emit("disconnect", this.currentId);
-  //     console.log("happy oscar");
-  //   });
-  //   next();
-  // } else {
-  //   next(false);
-  // }
-  // },
 };
 </script>
 
@@ -350,5 +336,8 @@ button {
 ::-webkit-scrollbar {
   width: 0;
   background: transparent;
+}
+input {
+  padding-left: 1rem;
 }
 </style>
