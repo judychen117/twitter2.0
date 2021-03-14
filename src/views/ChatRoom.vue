@@ -6,25 +6,27 @@
         上線的使用者
         <span>({{ newUsers.length }})</span>
       </div>
-      <ul class="online-users-list">
-        <li
-          class="online-users-item"
-          v-for="(newUser, index) in newUsers"
-          :key="index"
-        >
-          <img
-            :src="newUser.avatar"
-            alt="avatar"
-            class="online-users-avatar avatar"
-          />
-          <div class="online-users-name">
-            <p>{{ newUser.name }}</p>
-          </div>
-          <div class="online-users-id">
-            <p>{{ newUser.account }}</p>
-          </div>
-        </li>
-      </ul>
+      <div class="online-users-list-content">
+        <ul class="online-users-list">
+          <li
+            class="online-users-item"
+            v-for="(newUser, index) in newUsers"
+            :key="index"
+          >
+            <img
+              :src="newUser.avatar"
+              alt="avatar"
+              class="online-users-avatar avatar"
+            />
+            <div class="online-users-name">
+              <p>{{ newUser.name }}</p>
+            </div>
+            <div class="online-users-id">
+              <p>{{ newUser.account }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="open-chatroom">
       <div class="open-chatroom-nav nav">公開聊天室</div>
@@ -34,18 +36,27 @@
             class="open-chatroom-item"
             v-for="(message, index) in messages"
             :key="index"
-            :class="{ 'currentuser-item': message.type === 0 }"
+            :class="{
+              'currentuser-item': message.type === 0,
+              'online-item': message.type === 3,
+            }"
           >
-            <img
-              :src="currentUser.avatar"
-              alt="avatar"
-              class="open-chatroom-avatar avatar"
-            />
-            <div
-              class="open-chatroom-user-content"
-              :class="{ 'currentuser-content': message.type === 0 }"
-            >
-              <p>{{ message.message }}</p>
+            <div class="online-item" v-if="message.type === 3">
+              <p>上線了</p>
+            </div>
+            <div class="open-chatroom-item" v-else>
+              <img
+                :src="currentUser.avatar"
+                alt="avatar"
+                class="open-chatroom-avatar avatar"
+                v-if="message.type === 1"
+              />
+              <div
+                class="open-chatroom-user-content"
+                :class="{ 'currentuser-content': message.type === 0 }"
+              >
+                <p>{{ message.message }}</p>
+              </div>
             </div>
           </li>
           <!-- <li class="open-chatroom-item currentuser-item">
@@ -54,24 +65,14 @@
               alt="avatar"
               class="open-chatroom-avatar avatar"
             />
-
             <div class="open-chatroom-user-content currentuser-content">
               <p>安安</p>
             </div>
           </li> -->
         </ul>
       </div>
-      <form @submit.stop.prevent="handleSubmit" class="open-chatroom-form">
+      <form class="open-chatroom-form">
         <div class="open-chatroom-text">
-          <!-- <label for="newMessage"></label>
-          <textarea
-            class="open-chatroom-form-control"
-            rows="3"
-            name="newMessage"
-            v-model="newMessage"
-            placeholder="輸入訊息..."
-          >
-          </textarea> -->
           <input
             type="text"
             class="open-chatroom-form-control"
@@ -110,7 +111,7 @@ export default {
       currentAvatar: "",
       numberUser: "",
       newUsers: [],
-      IncomingAlert: "",
+      IncomingAlert:''
     };
   },
   components: {
@@ -120,7 +121,6 @@ export default {
     ...mapState(["currentUser"]),
   },
   created() {
-    // this.newUsers.forEach = this.currentUser;
     this.currentName = this.currentUser.name;
     this.currentId = this.currentUser.id;
     this.currentAccount = this.currentUser.account;
@@ -137,11 +137,15 @@ export default {
     // });
     socket.on("user join public chat", (data) => {
       // this.IncomingAlert = this.data.user
+      console.log("OHH NOOOOOOOOO");
       this.newUsers = [];
       this.newUsers = data.onlineUserList;
       this.newUsers = this.newUsers.filter(
         (newUser) => newUser.name != data.user.name
       );
+      this.IncomingAlert = data.user.name
+      let WHO = this.IncomingAlert
+      this.messages.push({message: this.IncomingAlert, type: 3})
     });
     socket.emit("reconnect", this.currentUser);
     socket.on("user reconnect", (data) => {
@@ -149,32 +153,37 @@ export default {
       console.log("LOOK:", data);
       this.newUsers = data.onlineUserList;
     });
+    // socket.on("message", (message) => {
+    //   this.messages.push(message);
+    // });
     // for other users
     socket.on("new message", (data) => {
-      console.log(data);
-      this.messages.push({ message: data.message, type: 1 });
+      // this.messages = data;
+      // this.messages = this.messages.filter(
+      //   (message) => message.id !== this.currentId
+      // );
+      console.log(this.messages);
+      this.messages.push({
+        message: data.message,
+        avatar: data.avatar,
+        id: data.id,
+        type: 1,
+      });
     });
   },
   methods: {
-    // joinServer: function () {
-    //   this.socket.on("loggedIn", (data) => {
-    //     this.messages = data.messages;
-    //     this.users = data.users;
-    //     this.socket.emit("newuser", this.username);
-    //   });
-    //   this.listen();
-    // },
-    // listen: function () {
-    //   this.socket.on("userOnline", (user) => {
-    //     this.users.push(user);
-    //   });
-    //   this.socket.on("userLeft", (user) => {
-    //     this.users.splice(this.users.indexOf(user), 1);
-    //   });
-    // },
     pingServer() {
-      this.messages.push({ message: this.newMessage, type: 0 });
-      socket.emit("new message", this.newMessage);
+      this.messages.push({
+        message: this.newMessage,
+        avatar: this.currentAvatar,
+        id: this.currentId,
+        type: 0,
+      });
+      socket.emit("new message", {
+        message: this.newMessage,
+        avatar: this.currentAvatar,
+        id: this.currentId,
+      });
       this.newMessage = "";
     },
   },
@@ -222,9 +231,16 @@ a {
   border-left: 2px solid #e6ecf0;
   border-right: 2px solid #e6ecf0;
 }
+.online-users-list-content {
+  height: 94%;
+  display: flex;
+  flex-direction: column;
+}
 .online-users-list {
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .online-users-item {
   display: flex;
@@ -261,17 +277,18 @@ a {
 .open-chatroom-user-content {
   width: auto;
   background: #b6b8b9;
-  border-radius: 40% 40% 40% 0%;
+  border-radius: 10% 10% 10% 0%;
+}
+.open-chatroom-user-content > p {
+  margin: 10px;
+  line-height: 50px;
 }
 .currentuser-content {
-  border-radius: 40% 50% 0% 40%;
+  border-radius: 10% 10% 0% 10%;
   background: #ff6600;
 }
 .currentuser-content > p {
   color: white;
-}
-.open-chatroom-user-content > p {
-  margin: 20px;
 }
 .open-chatroom-content {
   height: 85%;
@@ -306,6 +323,7 @@ a {
   border: 0px;
   border-radius: 100px;
   line-height: 40px;
+  outline: none;
 }
 .tweets-container {
   width: 600px;
@@ -325,5 +343,12 @@ button {
 }
 #send-messages {
   color: #ff6600;
+}
+.online-item {
+  justify-content: center;
+}
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 </style>
