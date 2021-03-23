@@ -1,5 +1,5 @@
-# Simple social platform inspired by Twitter
---> Explore the website at: https://judychen117.github.io/twitter2.0/
+# Simple Twitter
+--> https://judychen117.github.io/twitter2.0/
 
 ## User Interface
 
@@ -21,14 +21,12 @@
 ## Features
 
 **As a visitor, you can:**
-* Sign up for an account and join this platform
+* Sign up for an account and join the platform
 * Explore tweets on this platform, including the content tweeted by yourself
 * Interact with users by Follow, Like, Reply and Chat
-* Customize your profile by an avatar, cover, and self-introduction
-* Chat with users at an online chatroom
-* Send private messages to the users
-* Subscribe users and get notifications when they tweet, also you will receive notifications when your tweets get any response
-* Here is a user account you can use:
+* Customize your profile with your own avatar, cover, self-introduction, and more
+* Intereact with other users in the public chatroom
+Here is a user account you can use:
 
 email  | password
 ------------- | -------------
@@ -37,9 +35,9 @@ user1@example.com	  | 12345678
 
 **As an admin, you can:**
 
-* Manage all tweets on this platform, deleting the tweet is available for the admin
-* Dashboard for observing all users, easy to find out who is an active user
-* Here is an admin account you can use:
+* Manage all tweets on this platform, including deleting tweets of any users
+* Manage all users, easy to find the number of likes and tweets a user has
+Here is an admin account you can use:
  
 email  | password
 ------------- | -------------
@@ -48,10 +46,9 @@ root@example.com	  | 12345678
 **Third-party APIs and Open source used in this project:**
 * Using Vue-cli for Vue.js project management
 * Using Vuex for storing the user's state
-* Using Socket io for for send message to back-end
+* Using Socket io to send instant messages
 * Using moment.js for parsing time and display the date range from now
-* Using Sweetalert2 to give tips to the user when they meet some problems
-
+* Using Sweetalert2 to give alerts to possible errors with the web interface
 
 # forum-front-end-vue
 
