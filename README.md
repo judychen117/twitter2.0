@@ -50,8 +50,6 @@ root@example.com	  | 12345678
 * Using moment.js for parsing time and display the date range from now
 * Using Sweetalert2 to give alerts to possible errors with the web interface
 
-# forum-front-end-vue
-
 ## Project setup
 ```
 npm install
